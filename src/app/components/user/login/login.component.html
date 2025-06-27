@@ -1,0 +1,33 @@
+<div style="padding: 20px; background-color: #3f51b5; height: 100%">
+    <mat-card style="display: flex; flex-direction: column; margin: 100px auto; max-width: 500px; padding: 12px;">
+
+        <mat-card-header style="text-align: -webkit-center; justify-content: center; padding: 20px;">
+            <mat-card-title>Employee Management System</mat-card-title>
+        </mat-card-header>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="loginform">
+            <mat-form-field appearance="outline">
+                <mat-icon matSuffix>account_circle</mat-icon>
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" formControlName="email"/>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-icon matSuffix>password</mat-icon>
+                <mat-label>Password</mat-label>
+                <input matInput type="password" placeholder="Password" formControlName="password"/>
+            </mat-form-field>
+
+            <div class="resetpassword">
+                <mat-checkbox formControlName="rememberMe">Remember Me</mat-checkbox>
+    
+                <!-- <div style="height: 86px;"></div> -->
+                <a (click)="onForgotPassword()" mat-button>Forgot Password?</a>
+            </div>
+           
+            <button mat-flat-button class="example-full-width btn">Login</button>
+        </form>
+        
+
+    </mat-card>
+</div>

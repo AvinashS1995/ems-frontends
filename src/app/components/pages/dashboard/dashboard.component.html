@@ -1,0 +1,57 @@
+<div class="attendance-container">
+  <h2>Dashboard</h2>
+  <mat-divider></mat-divider>
+
+  <div class="summary-cards">
+    <mat-card class="summary-card">
+      <h3>Total Employee</h3>
+      <p>11</p>
+
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <h3>Present Employee</h3>
+      <p>4</p>
+
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <h3>Absent Employee</h3>
+      <p>3</p>
+
+    </mat-card>
+    {{pendingLeaveCount}}
+    <mat-card class="summary-card notification-card">
+      <div class="notification-icon" [matBadge]="pendingLeaveCount" matBadgeColor="warn" matBadgePosition="above after"
+        matBadgeOverlap="false" (click)="navigateToRequestList()">
+        <img src="assets/mail.png" alt="Mail" class="mail-image" />
+      </div>
+      <div class="notification-label">Notification</div>
+    </mat-card>
+
+
+  </div>
+  <div class="dashboard-content">
+    <div class="upcoming-holiday-card">
+      <mat-card class="summary-card">
+        <div class="holidays-section">
+          <h3>Upcoming Holidays</h3>
+          <div class="holiday-list">
+            <div [@scrollUp]="animationState" (@scrollUp.done)="onAnimationDone($event)" class="scroll-list">
+              <div class="scroll-item" *ngFor="let holiday of upcomingHolidays">
+                <div class="holiday-info">
+                  <strong>{{ holiday.name }}</strong>
+                  <small>{{ holiday.date | date: 'fullDate' }}</small>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+    </div>
+  </div>
+
+
+</div>
