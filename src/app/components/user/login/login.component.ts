@@ -30,6 +30,7 @@ export class LoginComponent {
 
   ngOnInit() {
     this.buildForm();
+    this.setFormValue();
   }
 
   buildForm() {
@@ -40,6 +41,17 @@ export class LoginComponent {
       password: ['', [Validators.required]],
       rememberMe: [false],
     });
+  }
+
+  setFormValue() {
+    const rememberedEmail = this.storageService.getItem('rememberedEmail');
+    if (rememberedEmail) {
+      this.loginForm.patchValue({
+        email: rememberedEmail,
+        rememberMe: true
+      });
+    }
+
   }
 
   onLoginSubmit() {
@@ -57,8 +69,10 @@ export class LoginComponent {
 
             const storage = rememberMe ? 'local' : 'session';
 
+            if (rememberMe) {
+              this.storageService.setItem('rememberedEmail', resp.user.email, storage);
+            }
             this.storageService.setItem('token', resp.token, storage);
-            this.storageService.setItem('role', resp.user.role, storage);
             // this.storageService.setEncrypted('key', resp.secretKey, storage);
             this.commonService.setUserDetailsFromToken();
             this.keyService.setKey(this.commonService.userDetails.loginUserSecretkey);

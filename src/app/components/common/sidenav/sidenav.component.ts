@@ -47,11 +47,12 @@ export class SidenavComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.commonService.getCurrentUserDetails()
-      this.RoleName = this.storageService.getItem('role', 'session');
+    this.commonService.setUserDetailsFromToken();
+    const currentUser = this.commonService.getCurrentUserDetails();
+    this.RoleName = currentUser.role;
 
     if (typeof window !== 'undefined') {
-      this.token = this.storageService.getItem('token', 'session');
+      this.token = this.storageService.getItem('token', 'session') || this.storageService.getItem('token', 'local');
       // console.log(token);
     }
     
@@ -63,7 +64,7 @@ export class SidenavComponent implements OnInit {
   loadRoleBasedMenus() {
     console.log(this.commonService.userDetails);
     const payload = {
-      role: this.commonService.userDetails.role || this.RoleName || '',
+      role: this.RoleName || '',
     };
     this.apiService
       .menuApiCall(API_ENDPOINTS.SERVICE_ROLEWISEMENUS, payload)
@@ -159,10 +160,8 @@ export class SidenavComponent implements OnInit {
     this.apiService.authApiCall(API_ENDPOINTS.SERVICE_LOG_OUT, {}).subscribe({
       next: (res: any) => {
         this.checkOutEmployeeAttendence();
-        localStorage.removeItem('token');
         sessionStorage.removeItem('token');
         sessionStorage.clear();
-        localStorage.clear();
         this.commonService.openSnackbar(res.message, 'success');
         this.router.navigate(['/login']);
       },

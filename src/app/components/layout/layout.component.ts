@@ -17,7 +17,7 @@ export class LayoutComponent {
   constructor(private router: Router, private commonService: CommonService) {}
 
   ngOnInit() {
-      this.commonService.setUserDetailsFromToken();
+      this.commonService.getCurrentUserDetails();
     this.commonService.userDetails$.subscribe(user => {
   console.log("commonService",user);
 });

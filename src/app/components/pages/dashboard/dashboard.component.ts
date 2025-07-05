@@ -137,8 +137,8 @@ export class DashboardComponent {
 
   getEmployeeLeaveRequestList() {
     const paylaod = {
-      empNo: this.EmployeeNo ? this.EmployeeNo : '',
-      role: this.RoleName ? this.RoleName : '',
+      empNo: this.commonService.getCurrentUserDetails().empNo ? this.commonService.getCurrentUserDetails().empNo : '',
+      role: this.commonService.getCurrentUserDetails().role ? this.commonService.getCurrentUserDetails().role : '',
     };
     console.log('SERVICE_GET_USER_ATTENDENCE paylaod', paylaod);
 

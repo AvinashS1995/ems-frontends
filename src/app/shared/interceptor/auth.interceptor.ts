@@ -1,5 +1,4 @@
 import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { CommonService } from '../service/common/common.service';
 import { inject } from '@angular/core';
 import { StorageService } from '../service/common/storage.service';
 
@@ -10,7 +9,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
   let token: string | null = null;
 
   if (typeof window !== 'undefined') {
-    token = storageService.getDecrypted<string>('token');
+    token = storageService.getItem<string>('token', 'session') || storageService.getItem<string>('token', 'local');
     // console.log(token);
     
   }

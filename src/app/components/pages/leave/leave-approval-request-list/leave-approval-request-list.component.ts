@@ -77,9 +77,10 @@ export class LeaveApprovalRequestListComponent {
   }
 
   getEmployeeLeaveRequestList() {
+    debugger
     const paylaod = {
-      empNo: this.commonService.userDetails.empNo ? this.commonService.userDetails.empNo : '',
-      role: this.commonService.userDetails.role ? this.commonService.userDetails.role : '',
+      empNo: this.commonService.getCurrentUserDetails().empNo ? this.commonService.getCurrentUserDetails().empNo : '',
+      role: this.commonService.getCurrentUserDetails().role? this.commonService.getCurrentUserDetails().role : '',
     };
     console.log('SERVICE_GET_USER_ATTENDENCE paylaod', paylaod);
 
