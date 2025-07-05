@@ -1,0 +1,147 @@
+.leave-container {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .title h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .title span {
+    font-size: 14px;
+    color: gray;
+  }
+  
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    margin-top: 24px;
+  }
+  
+  .filters mat-form-field {
+    width: 200px;
+  }
+
+  
+  
+  .table-container {
+    overflow-x: auto;
+    
+  }
+  
+  
+  .link {
+    color: #4f46e5;
+    // color: #3dcf53;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  mat-chip {
+    font-size: 12px;
+  }
+
+  .example-full-width {
+    margin-top: 10px;
+    border-radius: 5px;
+
+  }
+  
+  .filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    // padding: 16px 0;
+  }
+  
+  .filter-field {
+    flex: 1 1 200px;
+    min-width: 200px;
+  }
+  
+  .filter-actions {
+    display: flex;
+    gap: 12px; 
+    margin-top: 16px; 
+  }
+  
+
+  mat-expansion-panel {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border-radius: 5px;
+  }
+  
+
+  .table-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  table {
+    min-width: 1000px;
+    width: 100%;
+  }
+  
+  mat-header-row, mat-row {
+    display: table-row;
+  }
+  
+  mat-header-cell, mat-cell {
+    padding: 16px;
+  }
+  
+  mat-header-row {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+  
+  .table-main {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    overflow-x: auto; 
+  }
+
+  .custom-primary {
+    color: #1976d2 !important; 
+  }
+  
+  .custom-warn {
+    color: #d32f2f !important; 
+  }
+
+  
+  mat-icon {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.approved-icon {
+  color: green;
+}
+
+.pending-icon {
+  color: red;
+}
+
+.rejected-icon {
+  color: red;
+}

@@ -34,10 +34,10 @@ export class SidenavComponent implements OnInit {
   expandedMenus = new Set<string>();
 
   UserName: string = '';
-  RoleName: string = '';
   UserEmail: string = '';
 
   token: string | null = null;
+  RoleName: any;
 
   constructor(
     private apiService: ApiService,
@@ -47,57 +47,67 @@ export class SidenavComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    
+    this.commonService.getCurrentUserDetails()
+      this.RoleName = this.storageService.getItem('role', 'session');
 
     if (typeof window !== 'undefined') {
-      this.token = this.storageService.getDecrypted('token');
+      this.token = this.storageService.getItem('token', 'session');
       // console.log(token);
     }
-
+    
     if (this.token) {
-      this.loadRoleBasedMenus();
+        this.loadRoleBasedMenus();
     }
-
   }
 
   loadRoleBasedMenus() {
-    
+    console.log(this.commonService.userDetails);
     const payload = {
-      role: this.commonService.userDetails.role || '',
+      role: this.commonService.userDetails.role || this.RoleName || '',
     };
     this.apiService
       .menuApiCall(API_ENDPOINTS.SERVICE_ROLEWISEMENUS, payload)
       .subscribe((res: any) => {
         if (res?.status === 'success') {
-          
-          const menus = res.data.filteredMenus
+          const menus = res.data.filteredMenus;
 
-            console.log(menus) 
+          console.log(menus);
 
-          const nestedMenus = menus.map((menu: any) => this.transformMenu(menu));
-          console.log(nestedMenus)
-        this.menuItems.set(nestedMenus.sort((a: { sequence: number; }, b: { sequence: number; }) => a.sequence - b.sequence));
+          const nestedMenus = menus.map((menu: any) =>
+            this.transformMenu(menu)
+          );
+          console.log(nestedMenus);
+          this.menuItems.set(
+            nestedMenus.sort(
+              (a: { sequence: number }, b: { sequence: number }) =>
+                a.sequence - b.sequence
+            )
+          );
         }
       });
   }
 
   transformMenu(menu: any): Sidenav {
-  const transformed: Sidenav = {
-    id: menu._id,
-    title: menu.title,
-    icon: menu.icon,
-    route: menu.path,
-    sequence: menu.sequence,
-    children: menu.childMenu?.map((child: any) => this.transformMenu(child)) || []
-  };
-  return transformed; 
-}
+    const transformed: Sidenav = {
+      id: menu._id,
+      title: menu.title,
+      icon: menu.icon,
+      route: menu.path,
+      sequence: menu.sequence,
+      children:
+        menu.childMenu?.map((child: any) => this.transformMenu(child)) || [],
+    };
+    return transformed;
+  }
 
   buildMenuTree(flat: any[]) {
     const map = new Map<string, any>();
     const roots: any[] = [];
-    flat.forEach(item => { item.children = []; map.set(item.id, item); });
-    flat.forEach(item => {
+    flat.forEach((item) => {
+      item.children = [];
+      map.set(item.id, item);
+    });
+    flat.forEach((item) => {
       if (item.parentId && map.has(item.parentId)) {
         map.get(item.parentId).children.push(item);
       } else {
@@ -117,18 +127,16 @@ export class SidenavComponent implements OnInit {
 
   isExpanded(menuId: string): boolean {
     return this.expandedMenus.has(menuId);
-  } 
+  }
 
   trackById(index: number, item: any): string {
-  return item.id;
-}
-
+    return item.id;
+  }
 
   navigateTO(url: string) {
     // debugger
     this.navigateEvent.emit(url);
   }
-
 
   confirmLogout() {
     this.commonService
@@ -166,21 +174,28 @@ export class SidenavComponent implements OnInit {
 
   checkOutEmployeeAttendence() {
     const paylaod = {
-      email: this.commonService.userDetails.email ? this.commonService.userDetails.email : '',
-    }
+      email: this.commonService.userDetails.email
+        ? this.commonService.userDetails.email
+        : '',
+    };
 
-    this.apiService.postApiCall(API_ENDPOINTS.SERVICE_CHECK_OUT_ATTENDENCE, paylaod).subscribe({
-      next: (res: any) => {
-        console.log(`${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `, res);
-        
-        this.commonService.openSnackbar(res.message, 'success');
-        // setTimeout(() => {
-        //   this.logout();
-        // }, 3000);
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_CHECK_OUT_ATTENDENCE, paylaod)
+      .subscribe({
+        next: (res: any) => {
+          console.log(
+            `${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `,
+            res
+          );
+
+          this.commonService.openSnackbar(res.message, 'success');
+          // setTimeout(() => {
+          //   this.logout();
+          // }, 3000);
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 }

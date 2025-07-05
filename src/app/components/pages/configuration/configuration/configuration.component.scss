@@ -1,0 +1,62 @@
+.configuration-container {
+    padding: 20px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .title h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .example-full-width {
+    margin-top: 10px;
+    border-radius: 5px;
+
+  }
+
+  .filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  mat-expansion-panel {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border-radius: 5px;
+  }
+
+  mat-form-field {
+    flex: 1 1 24vw !important;
+    max-width: 24vw !important;
+  }
+
+
+  .filter-actions {
+    display: flex;
+    gap: 12px; 
+    margin-top: 16px; 
+  }
+  
+  .configuration-table {
+    overflow-x: auto;
+  }
+
+  .custom-primary {
+    color: #1976d2 !important; 
+  }
+  
+  .custom-warn {
+    color: #d32f2f !important; 
+  }
+
+  

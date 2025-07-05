@@ -1,0 +1,101 @@
+<div class="configuration-container">
+  <div class="header">
+    <div class="title">
+      <h1>Configuration</h1>
+    </div>
+    <button mat-flat-button class="example-full-width" (click)="addRoleType()">+ Add New Role Type</button>
+  </div>
+
+
+  <mat-divider></mat-divider>
+      
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Filter / Search
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+    
+        <form [formGroup]="roleTypeFilterForm">
+          <div class="filters">
+            <mat-form-field appearance="outline" class="filter-field">
+              <mat-label>Role</mat-label>
+              <mat-select formControlName="role">
+                <mat-option *ngFor="let role of filterRole" [value]="role.label">{{ role.label }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline" class="filter-field">
+              <mat-label>Role Type</mat-label>
+              <mat-select formControlName="roleType">
+                <mat-option *ngFor="let roleType of fiterRoleTypes" [value]="roleType.label">{{ roleType.label
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+    
+          </div>
+        </form>
+    
+        <div>
+          <div class="filter-actions">
+            <button mat-flat-button class="example-full-width" (click)="applyFilter()">Apply</button>
+            <button mat-flat-button class="example-full-width" (click)="clearFilter()">Clear</button>
+          </div>
+    
+        </div>
+    
+    
+      </mat-expansion-panel>
+    
+    
+    
+      <div class="configuration-table">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    
+          <!-- Sr No Column -->
+          <ng-container matColumnDef="srno">
+            <th mat-header-cell *matHeaderCellDef>Sr No</th>
+            <td mat-cell *matCellDef="let row; let i = index"> {{ (paginator.pageIndex * paginator.pageSize) + i + 1 }}</td>
+          </ng-container>
+    
+          <!-- Role Column -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let element">{{element.entityValue}}</td>
+          </ng-container>
+    
+          <!-- Employment Type Column -->
+          <ng-container matColumnDef="roleType">
+            <th mat-header-cell *matHeaderCellDef>Role Type</th>
+            <td mat-cell *matCellDef="let element">{{element.typeLabel}}</td>
+          </ng-container>
+    
+          <!-- Status Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let element">{{element.description}}</td>
+          </ng-container>
+    
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="primary" (click)="editRoleType(element)">
+                <mat-icon class="custom-primary">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteRoleType(element)">
+                <mat-icon class="custom-warn">delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+    
+    
+    
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    
+        <mat-paginator  [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+      </div>
+</div>

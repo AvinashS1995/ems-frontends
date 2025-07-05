@@ -1,0 +1,65 @@
+<div class="menu-configuration-container">
+    <div class="header">
+        <div class="title">
+            <h2>Create Menu</h2>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+
+    <mat-card>
+        <form [formGroup]="createMenuForm">
+            <div class="create-menu-form-container">
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input matInput formControlName="menuTitle">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Route</mat-label>
+                    <input matInput formControlName="menuRoute">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Component Name</mat-label>
+                    <input matInput formControlName="menuComponentName">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="parent-menu-field">
+                    <mat-label>Menu Icon</mat-label>
+                    <input matInput formControlName="menuIcon">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="parent-menu-field">
+                    <mat-label>Parent Menu</mat-label>
+                    <mat-select formControlName="parentMenu">
+                        <mat-option *ngIf="createMenuForm.get('parentMenu')?.value" [value]="''">
+                            -- None --
+                        </mat-option>
+                        <mat-option *ngFor="let menu of menuList" [value]="menu.label">{{ menu.label }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="menuDescription" rows="3" maxlength="200"
+                    (input)="updateDescriptionLength()"></textarea>
+                    <mat-hint align="end">{{ descriptionLength }}/200</mat-hint>
+                </mat-form-field>
+
+            </div>
+
+            <div class="form-buttons    ">
+                <button mat-flat-button color="primary" type="submit" [disabled]="createMenuForm.invalid"
+                (click)="onSubmitMenuForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
+                </button>
+                <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
+                    Cancel
+                </button>
+            </div>
+
+        </form>
+
+    </mat-card>
+</div>

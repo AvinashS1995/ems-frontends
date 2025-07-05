@@ -1,0 +1,173 @@
+.attendance-container {
+  padding: 20px;
+}
+
+.summary-cards {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.summary-card {
+  flex: 1;
+  text-align: center;
+}
+
+.summary-card h3 {
+  margin: 5px 0;
+  font-size: 18px;
+}
+
+.summary-card p {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+mat-expansion-panel {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  border-radius: 5px;
+}
+
+.filter-field {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.filter-button,
+.export-button {
+  height: 56px;
+  border-radius: 5px;
+}
+
+.attendance-table {
+  overflow-x: auto;
+}
+
+.employee-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.Full-Time {
+  background: #d9eafd;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #007BFF;
+}
+
+.Part-Time {
+  background: #fce7e7;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #d32f2f;
+}
+
+.Present {
+  background: #e5f9e7;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #388e3c;
+  font-weight: 500;
+}
+
+.Absent {
+  background: #fde2e2;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.Late {
+  background: #fff8e1;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #fbc02d;
+  font-weight: 500;
+}
+
+.Half-day {
+  background: #fff8e1;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #d3540b;
+  font-weight: 500;
+}
+
+.example-full-width {
+  margin-top: 10px;
+  border-radius: 5px;
+
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px; /* Add gap between Apply and Clear button */
+  margin-top: 16px; /* Optional: Space from fields */
+}
+
+.start-day-card {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  .time-inputs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+
+    .time-box:first-child {
+      margin-left: 8px;
+
+    }
+
+    .time-box {
+      background-color: #d5d7e0;
+      font-size: 24px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .time-label {
+      font-weight: 500;
+      margin-left: 8px;
+      margin-right: 8px;
+      font-size: 14px;
+      color: #444;
+    }
+  }
+}

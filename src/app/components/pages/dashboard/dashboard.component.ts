@@ -14,6 +14,7 @@ import { SHARED_MATERIAL_MODULES } from '../../../shared/common/shared-material'
 import { ApiService } from '../../../shared/service/api/api.service';
 import { CommonService } from '../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../shared/common/api-contant';
+import { CheckInsComponent } from '../attendence/check-ins/check-ins.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -68,20 +69,20 @@ export class DashboardComponent {
       this.hasCheckedIn = sessionStorage.getItem('checkIns');
     }
 
-    // if (!this.hasCheckedIn) {
-    //   const dialogRef = this.dialog.open(CheckInsComponent, {
-    //     width: '600px',
-    //     disableClose: true,
-    //     data: { mode: 'checkins' }
-    //   });
+    if (!this.hasCheckedIn) {
+      const dialogRef = this.dialog.open(CheckInsComponent, {
+        width: '600px',
+        disableClose: true,
+        data: { mode: 'checkins' }
+      });
 
-    //   dialogRef.afterClosed().subscribe((result) => {
-    //     if (result === 'checkins') {
-    //       // this.commonService.openSnackbar('Check-in required to continue', 'error');
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result === 'checkins') {
+          // this.commonService.openSnackbar('Check-in required to continue', 'error');
 
-    //     }
-    //   });
-    // }
+        }
+      });
+    }
   }
 
   onAnimationDone(event: AnimationEvent) {

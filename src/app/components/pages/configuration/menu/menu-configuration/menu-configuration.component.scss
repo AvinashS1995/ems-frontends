@@ -1,0 +1,91 @@
+.menu-configuration-container {
+     background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .title h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+
+  .filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+mat-expansion-panel {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  border-radius: 5px;
+}
+
+.filter-field {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.example-full-width {
+  margin-top: 10px;
+  border-radius: 5px;
+
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px; 
+  margin-top: 16px; 
+}
+
+.menu-table {
+  .plain-menu-row {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+
+    .menu-id, .menu-title, .menu-path, .menu-component, .menu-action {
+      flex: 1;
+    }
+
+    .menu-action {
+      display: flex;
+      gap: 8px;
+      justify-content: end;
+    }
+  }
+
+  mat-expansion-panel {
+    margin-bottom: 12px;
+  }
+
+  table {
+    width: 100%;
+  }
+}
+
+  .custom-primary {
+    color: #1976d2 !important; 
+  }
+
+  .visibility-icon {
+    color: red;
+  }
+
+.table-container {
+    overflow-x: auto;
+    
+  }

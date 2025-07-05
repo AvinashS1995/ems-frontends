@@ -1,0 +1,118 @@
+<div class="container">
+    <h1 mat-dialog-title>{{isEditMode ? 'Update Employee' : 'Add New Employee'}}</h1>
+    <mat-dialog-content>
+        <form [formGroup]="employeeForm">
+
+            <div class="image-container">
+                <label class="hoverable" for="fileInput">
+                    <span matTooltip="Tap here to select your picture" matTooltipPosition="above"></span>
+                    <img [src]="previewUrl ? previewUrl : 'https://www.w3schools.com/howto/img_avatar.png'" />
+                   
+                    <div class="background"></div>
+                </label>
+                <br />
+                <input id="fileInput" type="file" (change)="onSelectFile($event)" class="select-profile-picture" />
+               
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" formControlName="name">
+                <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">Employee Name is required</mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email">
+                <mat-error *ngIf="employeeForm.get('email')?.hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="employeeForm.get('email')?.hasError('pattern')">Invalid email format</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Mobile</mat-label>
+                <input matInput type="text" formControlName="mobile">
+                <mat-error *ngIf="employeeForm.get('mobile')?.hasError('required')">Mobile number is
+                    required</mat-error>
+                <mat-error *ngIf="employeeForm.get('mobile')?.hasError('pattern')">Invalid mobile number</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role">
+                    <mat-option *ngFor="let role of roles" [value]="role.label">{{ role.label }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Designation</mat-label>
+                <mat-select formControlName="designation">
+                    <mat-option *ngFor="let designation of designationList" [value]="designation.label">{{
+                        designation.label }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Team Leader</mat-label>
+                <input matInput formControlName="teamLeader">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Manager</mat-label>
+                <input matInput formControlName="manager">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>HR</mat-label>
+                <input matInput formControlName="hr">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Type</mat-label>
+                <mat-select formControlName="type">
+                    <mat-option *ngFor="let type of experienceTypeList" [value]="type.label">{{ type.label
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Joining Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="joiningDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                    <mat-option *ngFor="let status of statuses" [value]="status.label">{{ status.label }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Salary</mat-label>
+                <input matInput type="number" formControlName="salary">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Work Type</mat-label>
+                <mat-select formControlName="workType">
+                    <mat-option *ngFor="let workType of workTypeList" [value]="workType.label">{{ workType.label
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </form>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <div class="actions">
+            <button mat-flat-button color="primary" type="submit" class="example-full-width"
+                [disabled]="employeeForm.invalid" (click)="saveEmployee()">{{isEditMode ? 'Update' : 'Save'}}</button>
+            <button mat-flat-button color="warn" type="button" class="example-full-width"
+                (click)="cancel()">Cancel</button>
+        </div>
+    </mat-dialog-actions>
+
+</div>

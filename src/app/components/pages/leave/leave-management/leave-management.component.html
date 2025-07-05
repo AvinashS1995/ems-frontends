@@ -1,0 +1,123 @@
+<div class="leave-container">
+    <div class="header">
+        <div class="title">
+            <h1>Leave Management</h1>
+        </div>
+        <button mat-flat-button class="example-full-width" (click)="applyLeave()">+ Apply Leave</button>
+    </div>
+
+
+    <mat-divider></mat-divider>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Filter Employees
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="employeeLeaveFilterForm">
+            <div class="filter-container">
+
+                <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="leaveStatus">
+                        <mat-option *ngFor="let status of leaveStatusList" [value]="status.label">{{ status.label
+                            }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="fromPicker" placeholder="DD/MM/YYYY" formControlName="startDate">
+                    <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #fromPicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="toPicker" placeholder="DD/MM/YYYY" formControlName="endDate">
+                    <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #toPicker></mat-datepicker>
+                </mat-form-field>
+
+            </div>
+
+        </form>
+
+
+
+        <div class="filter-actions">
+            <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
+            <button mat-flat-button class="example-full-width" (click)="clearFilters()">Clear</button>
+        </div>
+
+    </mat-expansion-panel>
+
+
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource">
+
+            <!-- Sr No Column -->
+            <ng-container matColumnDef="srno">
+                <th mat-header-cell *matHeaderCellDef>Sr No</th>
+                <td mat-cell *matCellDef="let row; let i = index"> {{ i + 1 }}</td>
+            </ng-container>
+
+            <!-- Leave Type -->
+            <ng-container matColumnDef="leaveType">
+                <th mat-header-cell *matHeaderCellDef> Leave Type</th>
+                <td mat-cell *matCellDef="let element"> {{element.leaveType}} </td>
+            </ng-container>
+
+            <!-- Leave Duration -->
+            <ng-container matColumnDef="leaveDuration">
+                <th mat-header-cell *matHeaderCellDef> Leave Duration </th>
+                <td mat-cell *matCellDef="let element"> {{element.leaveDuration}} </td>
+            </ng-container>
+
+            <!-- Start Date -->
+            <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef> From </th>
+                <td mat-cell *matCellDef="let element"> {{element.fromDate | date:'mediumDate'}} </td>
+            </ng-container>
+
+            <!-- End Date -->
+            <ng-container matColumnDef="endDate">
+                <th mat-header-cell *matHeaderCellDef> To </th>
+                <td mat-cell *matCellDef="let element"> {{element.toDate | date:'mediumDate'}} </td>
+            </ng-container>
+
+            <!-- Status -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let element">
+                    <span [ngClass]="element.status"> {{element.status}} </span>
+                    <mat-icon class="status-icon" [ngClass]="getStatusIconClass(element.status)" 
+                    (click)="openApprovalFlowDialog(element._id)">
+                        visibility
+                    </mat-icon>
+                </td>
+            </ng-container>
+
+            <ng-container>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="displayedColumns.length" style="text-align: center;">
+                        <strong>No records found</strong>
+                    </td>
+                </tr>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+    </div>
+
+    <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPageChange($event)"></mat-paginator>
+
+
+
+
+</div>

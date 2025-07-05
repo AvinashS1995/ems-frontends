@@ -1,0 +1,148 @@
+<div class="employee-profile-container">
+    <div class="header">
+        <div class="title">
+            <h1>Profile</h1>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <mat-card class="parent-card">
+        <form [formGroup]="updateEmployeeProfileForm">
+            <div class="create-menu-form-container">
+
+                <!-- Personal Details -->
+                <mat-card class="profile-card">
+                    <h3 class="card-title">Employee Personal Details</h3>
+                    <div class="form-section">
+
+                        <div class="form-fields">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Name</mat-label>
+                                <input matInput type="text" formControlName="name">
+                                <mat-error *ngIf="updateEmployeeProfileForm.get('name')?.hasError('required')">
+                                    Employee Name is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput type="email" formControlName="email">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Mobile</mat-label>
+                                <input matInput type="text" formControlName="mobile">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Role</mat-label>
+                                <mat-select formControlName="role">
+                                    <mat-option *ngFor="let role of roleList" [value]="role.label">{{ role.label
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Designation</mat-label>
+                                <mat-select formControlName="designation">
+                                    <mat-option *ngFor="let designation of designationList" [value]="designation.label">
+                                        {{ designation.label }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Type</mat-label>
+                                <mat-select formControlName="type">
+                                    <mat-option *ngFor="let type of experienceTypeList" [value]="type.label">
+                                        {{ type.label }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Joining Date</mat-label>
+                                <input matInput [matDatepicker]="picker" formControlName="joiningDate">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Status</mat-label>
+                                <mat-select formControlName="status">
+                                    <mat-option *ngFor="let status of statusList" [value]="status.label">{{ status.label
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Salary</mat-label>
+                                <input matInput type="number" formControlName="salary">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Work Type</mat-label>
+                                <mat-select formControlName="workType">
+                                    <mat-option *ngFor="let workType of workTypeList" [value]="workType.label">
+                                        {{ workType.label }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Profile Upload Section -->
+                        <div class="profile-image">
+                            <div class="photo-upload">
+                                <label for="profilePhoto">
+                                    <img [src]="uploadedPhotoUrl ? uploadedPhotoUrl : 'https://www.w3schools.com/howto/img_avatar.png'"
+                                        class="profile-image" alt="Profile Photo" />
+                                </label>
+                                <input type="file" id="profilePhoto" (change)="onFileSelected($event)" accept="image/*"
+                                    hidden />
+                                
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </mat-card>
+
+
+                <!-- Reporting -->
+                <mat-card class="profile-card">
+                    <h3 class="card-title">Employee Reporting</h3>
+                    <div class="reporting-form-section">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Team Leader</mat-label>
+                            <input matInput formControlName="teamLeader">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Manager</mat-label>
+                            <input matInput formControlName="manager">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>HR</mat-label>
+                            <input matInput formControlName="hr">
+                        </mat-form-field>
+                    </div>
+                </mat-card>
+
+            </div>
+
+            <div class="form-buttons">
+                <button mat-flat-button color="primary" type="submit" [disabled]="updateEmployeeProfileForm.invalid"
+                    (click)="onSubmitEmployeeProfileForm()"> Update
+                </button>
+                <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
+                    Cancel
+                </button>
+            </div>
+
+        </form>
+
+    </mat-card>
+
+</div>

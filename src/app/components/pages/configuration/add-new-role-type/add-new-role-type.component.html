@@ -1,0 +1,37 @@
+<div class="container">
+    <h1 mat-dialog-title>{{isEditMode ? 'Update Role Type' : 'Add New Role Type'}}</h1>
+    <mat-dialog-content>
+        <form [formGroup]="roleTypeForm">
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role">
+                    <mat-option *ngFor="let role of roles" [value]="role.label">{{ role.label }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Role Type</mat-label>
+                <input matInput formControlName="roleType">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Description</mat-label>
+                <input matInput formControlName="description">
+            </mat-form-field>
+
+        </form>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <div class="actions">
+            <button mat-flat-button color="primary" type="submit" class="example-full-width"
+                (click)="onSubmitRoleType()" [disabled]="roleTypeForm.invalid">{{ isEditMode ? 'Update' : 'Save'
+                }}</button>
+            <button mat-flat-button color="warn" type="button" class="example-full-width"
+                (click)="cancel()">Cancel</button>
+        </div>
+    </mat-dialog-actions>
+
+</div>

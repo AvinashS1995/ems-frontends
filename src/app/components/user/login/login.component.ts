@@ -56,8 +56,9 @@ export class LoginComponent {
             
 
             const storage = rememberMe ? 'local' : 'session';
-debugger
+
             this.storageService.setItem('token', resp.token, storage);
+            this.storageService.setItem('role', resp.user.role, storage);
             // this.storageService.setEncrypted('key', resp.secretKey, storage);
             this.commonService.setUserDetailsFromToken();
             this.keyService.setKey(this.commonService.userDetails.loginUserSecretkey);

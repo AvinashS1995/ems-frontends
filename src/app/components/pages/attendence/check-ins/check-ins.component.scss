@@ -1,0 +1,47 @@
+mat-form-field {
+    margin: 8px;
+    
+}
+
+mat-dialog-content {
+    border-radius: 5px;
+}
+
+.example-full-width {
+    // width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+    height: 52px;
+    
+}
+
+.button-example {
+    display: flex;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.button-example {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.action {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -10px;
+}
+
+.btn {
+     width: 100%;
+     margin-top: 10px;
+     border-radius: 5px;
+     height: 52px;
+}
+
+.checkInsForm {
+    display: flex;
+    flex-direction: column;
+}

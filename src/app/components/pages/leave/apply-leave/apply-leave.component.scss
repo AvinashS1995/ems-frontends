@@ -1,0 +1,98 @@
+  
+.container {
+    h2[mat-dialog-title] {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  }
+
+  mat-button-toggle-group, button {
+    border-radius: 5px;
+  }
+
+  mat-button-toggle-group {
+    display: flex;
+    width: 100%; 
+  }
+  
+  mat-button-toggle {
+    flex: 1; 
+    text-align: center;
+  }
+
+
+.mat-button-toggle-overrides .mat-button-toggle-checked {
+  background-color: #1976d2 !important; 
+  color: white !important; 
+}
+
+
+
+  
+  .apply-leave-container {
+    display: flex;
+    // gap: 20px;
+    height: 100%;
+  
+  
+    .form-section {
+      max-width: 400px;
+      padding: 16px;
+      box-sizing: border-box;
+  
+      mat-form-field, mat-button-toggle-group, textarea {
+        width: 100%;
+        margin-bottom: 12px;
+      }
+  
+      .action-buttons {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+      }
+    }
+  
+  }
+  
+  mat-dialog-content {
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mat-dialog-container {
+    padding: 0 !important;
+    max-height: 90vh;
+    overflow: hidden;
+  }
+  
+
+.date-fields {
+  display: flex;
+  gap: 16px;
+  flex-direction: row;
+}
+
+::ng-deep .mat-calendar-body-cell.holiday-date {
+  background-color: #f44336 !important;
+  color: #b71c1c !important; 
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+::ng-deep .mat-calendar-body-cell.sunday-date {
+  background-color: #2196f3 !important;
+  color: #0d47a1 !important; 
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+::ng-deep .mat-calendar-body-cell.saturday-date {
+  background-color: #ff9800 !important;
+  color: #e65100 !important;
+  font-weight: bold;
+  border-radius: 50%;
+}
+
