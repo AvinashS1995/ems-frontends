@@ -55,7 +55,7 @@ export class CheckInsComponent {
   onCheckInsSubmit() {
 
     const payload = {
-      email: this.UserEmail ? this.UserEmail : '',
+      email: this.commonService.getCurrentUserDetails().email || '',
     };
 
     if (this.checkInsForm.valid) {

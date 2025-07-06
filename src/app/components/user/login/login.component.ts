@@ -75,7 +75,7 @@ export class LoginComponent {
             this.storageService.setItem('token', resp.token, storage);
             // this.storageService.setEncrypted('key', resp.secretKey, storage);
             this.commonService.setUserDetailsFromToken();
-            this.keyService.setKey(this.commonService.userDetails.loginUserSecretkey);
+            // this.keyService.setKey(this.commonService.userDetails.loginUserSecretkey);
             this.commonService.openSnackbar(resp.message, 'success');
             // this.commonService.setUserDetails(resp.user.name, resp.user.role);
             this.router.navigateByUrl('/dashboard');

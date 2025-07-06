@@ -8,6 +8,7 @@ import { ApiService } from '../../../shared/service/api/api.service';
 import { CommonService } from '../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../shared/common/api-contant';
 import { StorageService } from '../../../shared/service/common/storage.service';
+import { KeyService } from '../../../shared/service/common/key.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -162,6 +163,7 @@ export class SidenavComponent implements OnInit {
         this.checkOutEmployeeAttendence();
         sessionStorage.removeItem('token');
         sessionStorage.clear();
+        this.commonService.clearUserDetails();
         this.commonService.openSnackbar(res.message, 'success');
         this.router.navigate(['/login']);
       },
@@ -173,8 +175,8 @@ export class SidenavComponent implements OnInit {
 
   checkOutEmployeeAttendence() {
     const paylaod = {
-      email: this.commonService.userDetails.email
-        ? this.commonService.userDetails.email
+      email: this.commonService.getCurrentUserDetails().email
+        ? this.commonService.getCurrentUserDetails().email
         : '',
     };
 

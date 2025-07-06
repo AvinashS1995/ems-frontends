@@ -158,8 +158,8 @@ export class AttendenceManagementComponent {
     const { name, attendenceStatus, startDate, endDate} = this.employeeAttendenceFilterForm.getRawValue();
     const paylaod = {
       name: name ? name : '',
-      email: this.commonService.userDetails.email ? this.commonService.userDetails.email : '',
-      role: this.commonService.userDetails.role ? this.commonService.userDetails.role : '',
+      email: this.commonService.getCurrentUserDetails().email ? this.commonService.getCurrentUserDetails().email : '',
+      role: this.commonService.getCurrentUserDetails().role ? this.commonService.getCurrentUserDetails().role : '',
       status: attendenceStatus ? attendenceStatus : '',
       startDate: startDate ? startDate : '',
       endDate: endDate ? endDate : '',
@@ -221,7 +221,7 @@ console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
   getWorkSummary() {
 
     const paylaod = {
-      email: this.UserEmail ? this.UserEmail : '',
+      email: this.commonService.getCurrentUserDetails().email ? this.commonService.getCurrentUserDetails().email : '',
       date: new Date().toISOString().split('T')[0]
     };
 
@@ -238,7 +238,7 @@ console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
 
           this.startTimerFrom(res.totalWorkSeconds);
 
-          this.commonService.openSnackbar(res.message, 'success');
+          // this.commonService.openSnackbar(res.message, 'success');
         },
         error: (error) => {
           this.commonService.openSnackbar(error.error.message, 'error');

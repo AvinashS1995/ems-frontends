@@ -128,7 +128,7 @@ export class ApplyLeaveComponent {
     }
 
     if (!this.data?.mode) {
-      const EmployeeNoWithName = `${this.commonService.userDetails.name} [${this.commonService.userDetails.empNo}]`;
+      const EmployeeNoWithName = `${this.commonService.getCurrentUserDetails().name} [${this.commonService.getCurrentUserDetails().empNo}]`;
 
       this.leaveForm.patchValue({
         employeeNoWithName: EmployeeNoWithName || '',

@@ -20,7 +20,7 @@ import { UserDetails } from '../../interface/user';
 export class CommonService {
   expandSidenav = signal<boolean>(true);
 
-   userDetails: UserDetails = {
+  userDetails: UserDetails = {
     _id: '',
     empNo: '',
     name: '',
@@ -95,8 +95,7 @@ export class CommonService {
 
   setUserDetailsFromToken() {
     if (typeof window !== 'undefined' && window.sessionStorage) {
-      const token =
-        this.storageService.getItem<string>('token', 'session')
+      const token = this.storageService.getItem<string>('token', 'session');
 
       if (!token) {
         console.warn('Session and Token Is Expired');
@@ -104,18 +103,21 @@ export class CommonService {
 
       if (token) {
         try {
-          const decoded: Partial<UserDetails> =
-            jwtDecodeNamespace.jwtDecode(token);
+          const decoded: any = jwtDecodeNamespace.jwtDecode(token);
+
+          const secretKey =
+            decoded.loginUserSecretKey || decoded.loginUserSecretkey || '';
 
           const updatedUser: UserDetails = {
             ...this.userDetails,
             ...decoded,
-            loginUserSecretkey: decoded.loginUserSecretkey || '',
+            loginUserSecretkey: secretKey,
           };
 
           this.userDetailsSubject.next(updatedUser);
-          // this.keyService.setKey(updatedUser.loginUserSecretkey);
-
+          if (secretKey) {
+            this.keyService.setKey(secretKey);
+          }
         } catch (e) {
           console.error('JWT Decode failed:', e);
         }
@@ -129,5 +131,6 @@ export class CommonService {
 
   clearUserDetails(): void {
     this.userDetailsSubject.next(this.userDetails);
+    this.keyService.clearKey();
   }
 }

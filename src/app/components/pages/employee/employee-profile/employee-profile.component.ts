@@ -82,7 +82,7 @@ export class EmployeeProfileComponent {
     });
 
     const { name, email, mobile, status, type, teamLeader, manager, hr, 
-      role, designation, joiningDate, salary, workType } = this.commonService.userDetails
+      role, designation, joiningDate, salary, workType } = this.commonService.getCurrentUserDetails()
 
       this.updateEmployeeProfileForm.patchValue({
         name: name || '',
