@@ -1,4 +1,4 @@
-<div class="attendance-container">
+<div class="dashboard-container">
   <h2>Dashboard</h2>
   <mat-divider></mat-divider>
 
@@ -35,6 +35,25 @@
     <div class="upcoming-holiday-card">
       <mat-card class="summary-card">
         <div class="holidays-section">
+          <h3>Employee Task</h3>
+          <div class="holiday-list">
+            <div >
+              <div class="scroll-item" *ngFor="let task of employeeTaskList">
+                <div class="holiday-info">
+                  <strong>{{ task.taskname }}</strong>
+                  <small>{{ task.deadlinedate | date: 'fullDate' }}</small>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+    </div>
+    <div class="upcoming-holiday-card">
+      <mat-card class="summary-card">
+        <div class="holidays-section">
           <h3>Upcoming Holidays</h3>
           <div class="holiday-list">
             <div [@scrollUp]="animationState" (@scrollUp.done)="onAnimationDone($event)" class="scroll-list">
@@ -51,6 +70,7 @@
       </mat-card>
 
     </div>
+    
   </div>
 
 

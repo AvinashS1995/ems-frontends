@@ -25,7 +25,7 @@ export class CreateMenuConfigurationResolverService {
       menuDetails = of(decrypted as any)
     }
     const paylaod = {
-      role: this.commonService.userDetails.role || ''
+      role: this.commonService.getCurrentUserDetails().role || ''
     }
     menus = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETMENUS, paylaod);
     

@@ -25,7 +25,7 @@ export class LeaveManagementResolverService {
     leaveReasonType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "leaveReasonType" });
     status = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "Status" });
     const payload = {
-      empNo: this.commonService.userDetails.empNo || ''
+      empNo: this.commonService.getCurrentUserDetails().empNo || ''
     }
     employeeLeaveList = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GET_EMPLOYEE_LEAVE, payload);
     getUpcomingHoliday = this.apiService.getApiCall(API_ENDPOINTS.SERVICE_GET_UPCOMING_HOLIDAYS);

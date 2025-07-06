@@ -42,9 +42,12 @@ export class DashboardComponent {
   pauseAnimation = false;
   upcomingHolidays: Array<any> = [];
   pendingLeaveCount: any;
-  EmployeeNo: any;
-  RoleName: any;
-  UserEmail: any;
+  employeeTaskList = [
+  { taskname: 'Prepare Monthly Report', deadlinedate: new Date('2025-07-10') },
+  { taskname: 'Client Meeting', deadlinedate: new Date('2025-07-08') }
+];
+
+ 
 
   constructor(
     private router: Router,
@@ -58,7 +61,7 @@ export class DashboardComponent {
   ngOnInit(): void {
     this.openCheckIns();
     this.getparams();
-    if (this.commonService.userDetails.role !== 'Employee') {
+    if (this.commonService.getCurrentUserDetails().role !== 'Employee') {
       this.getEmployeeLeaveRequestList();
     }
   }

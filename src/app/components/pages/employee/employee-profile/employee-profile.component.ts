@@ -8,6 +8,7 @@ import { ApiService } from '../../../../shared/service/api/api.service';
 import { CommonService } from '../../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
 import { REGEX } from '../../../../shared/common/constant';
+import { map, pairwise, startWith, Subject, takeUntil } from 'rxjs';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -37,6 +38,8 @@ export const MY_DATE_FORMATS = {
     ],
 })
 export class EmployeeProfileComponent {
+
+   private destroy$ = new Subject<void>();
   updateEmployeeProfileForm!: FormGroup;
 
   roleList: Array<any> = [];
@@ -46,6 +49,8 @@ export class EmployeeProfileComponent {
   workTypeList: Array<any> = [];
 
   uploadedPhotoUrl: string = '';
+  isFormChanged = false;
+  initialFormValue: any;
 
   constructor(
     private fb: FormBuilder,
@@ -99,6 +104,9 @@ export class EmployeeProfileComponent {
         salary: salary || '',
         workType: workType || '',
       })
+
+    this.setSubscription();
+
   }
 
   getparam() {
@@ -153,6 +161,19 @@ export class EmployeeProfileComponent {
     });
   }
 
+  setSubscription() {
+    
+    this.initialFormValue = this.updateEmployeeProfileForm.getRawValue();
+debugger
+    this.updateEmployeeProfileForm.valueChanges
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(currentValue => {
+    this.isFormChanged =
+      JSON.stringify(currentValue) !== JSON.stringify(this.initialFormValue);
+  });
+
+  }
+
   onFileSelected(event: Event): void {
   const file = (event.target as HTMLInputElement)?.files?.[0];
   if (file) {
@@ -169,7 +190,7 @@ export class EmployeeProfileComponent {
 
     console.log(this.updateEmployeeProfileForm.getRawValue())
 
-    const { _id } = this.commonService.userDetails
+    const { _id } = this.commonService.getCurrentUserDetails()
 
     const newEmployee = this.updateEmployeeProfileForm.getRawValue();
 
@@ -190,13 +211,13 @@ export class EmployeeProfileComponent {
         workType: newEmployee.workType ? newEmployee.workType : '',
         profileImage: newEmployee.profileImage ? newEmployee.profileImage : '',
       };
-      debugger
+      
       console.log('Update employee data:', paylaod);
 
       this.apiService.postApiCall(API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST, paylaod).subscribe({
         next: (res: any) => {
           console.log(`${API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST} Response : `, res);
-
+          this.isFormChanged = false;
           this.commonService.openSnackbar(res.message, 'success');
         },
         error: (error) => {
@@ -207,6 +228,11 @@ export class EmployeeProfileComponent {
   }
 
   cancelForm() {
+    this.router.navigateByUrl('/dashboard')
+  }
 
+   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

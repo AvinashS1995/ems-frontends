@@ -50,7 +50,7 @@ export class LeaveManagementComponent {
   ngOnInit(): void {
     this.prepareEmployeeLeaveFilterForm();
     this.getparams();
-    console.log(this.commonService.userDetails.empNo);
+    
   }
 
   getparams() {

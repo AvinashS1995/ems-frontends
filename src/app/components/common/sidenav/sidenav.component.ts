@@ -63,7 +63,7 @@ export class SidenavComponent implements OnInit {
   }
 
   loadRoleBasedMenus() {
-    console.log(this.commonService.userDetails);
+    
     const payload = {
       role: this.RoleName || '',
     };

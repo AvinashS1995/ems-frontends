@@ -83,7 +83,7 @@ export class CheckInsComponent {
     const { otp } = this.checkInsForm.getRawValue();
 
     const payload = {
-      email: this.UserEmail ? this.UserEmail : '',
+      email: this.commonService.getCurrentUserDetails().email ? this.commonService.getCurrentUserDetails().email : '',
       otp:  otp ? otp : ''
     };
 
@@ -118,7 +118,7 @@ export class CheckInsComponent {
 
   onEmployeeCheckout() {
     const paylaod = {
-      email: this.commonService.userDetails.email ? this.commonService.userDetails.email : '',
+      email: this.commonService.getCurrentUserDetails().email ? this.commonService.getCurrentUserDetails().email : '',
     }
 
     this.apiService.postApiCall(API_ENDPOINTS.SERVICE_CHECK_OUT_ATTENDENCE, paylaod).subscribe({

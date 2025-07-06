@@ -134,7 +134,7 @@
 
             <div class="form-buttons">
                 <button mat-flat-button color="primary" type="submit" [disabled]="updateEmployeeProfileForm.invalid"
-                    (click)="onSubmitEmployeeProfileForm()"> Update
+                  [disabled]="updateEmployeeProfileForm.invalid || !isFormChanged"  (click)="onSubmitEmployeeProfileForm()"> Update
                 </button>
                 <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
                     Cancel
@@ -146,3 +146,4 @@
     </mat-card>
 
 </div>
+{{isFormChanged}}

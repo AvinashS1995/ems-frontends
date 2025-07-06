@@ -228,8 +228,8 @@ export class ApplyLeaveComponent {
     } = this.leaveForm.getRawValue();
 
     const payload = {
-      empNo: employeeNoWithName ? this.commonService.userDetails.empNo : '',
-      name: employeeNoWithName ? this.commonService.userDetails.name : '',
+      empNo: employeeNoWithName ? this.commonService.getCurrentUserDetails().empNo : '',
+      name: employeeNoWithName ? this.commonService.getCurrentUserDetails().name : '',
       leaveType: leaveType ? leaveType : '',
       leaveDuration: leaveDuration ? leaveDuration : '',
       fromDate: startDate ? startDate : '',
@@ -265,9 +265,9 @@ export class ApplyLeaveComponent {
       const payload = {
         leaveId: _id || '',
         action: decision || '',
-        role: this.commonService.userDetails.role || '',
+        role: this.commonService.getCurrentUserDetails().role || '',
         approverComment: 'Leave Approved',
-        updatedBy: `${this.commonService.userDetails.name} [${this.commonService.userDetails.empNo}]` || '',
+        updatedBy: `${this.commonService.getCurrentUserDetails().name} [${this.commonService.getCurrentUserDetails().empNo}]` || '',
       };
       this.sendDecision(payload);
     }
@@ -282,9 +282,9 @@ export class ApplyLeaveComponent {
           const payload = {
             leaveId: _id || '',
             action: decision || '',
-            role: this.commonService.userDetails.role || '',
+            role: this.commonService.getCurrentUserDetails().role || '',
             approverComment: comment,
-            updatedBy: `${this.commonService.userDetails.name} [${this.commonService.userDetails.empNo}]` || '',
+            updatedBy: `${this.commonService.getCurrentUserDetails().name} [${this.commonService.getCurrentUserDetails().empNo}]` || '',
           };
           this.sendDecision(payload);
         }
