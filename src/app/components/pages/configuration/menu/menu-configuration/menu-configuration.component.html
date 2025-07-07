@@ -16,12 +16,12 @@
 
     <form [formGroup]="menuFilterForm">
       <div class="filters">
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" >
           <mat-label>Search</mat-label>
           <input matInput placeholder="Search by Menu" formControlName="menuName">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" >
           <mat-label>Status</mat-label>
           <mat-select formControlName="menuStatus">
             <mat-option *ngFor="let status of menuStatusList" [value]="status.label">{{ status.label }}</mat-option>

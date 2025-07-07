@@ -19,7 +19,7 @@
         <form [formGroup]="employeeLeaveFilterForm">
             <div class="filter-container">
 
-                <mat-form-field appearance="outline" class="filter-field">
+                <mat-form-field appearance="outline" >
                     <mat-label>Status</mat-label>
                     <mat-select formControlName="leaveStatus">
                         <mat-option *ngFor="let status of leaveStatusList" [value]="status.label">{{ status.label
@@ -27,14 +27,14 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="filter-field">
+                <mat-form-field appearance="outline" >
                     <mat-label>From Date</mat-label>
                     <input matInput [matDatepicker]="fromPicker" placeholder="DD/MM/YYYY" formControlName="startDate">
                     <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
                     <mat-datepicker #fromPicker></mat-datepicker>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="filter-field">
+                <mat-form-field appearance="outline" >
                     <mat-label>To Date</mat-label>
                     <input matInput [matDatepicker]="toPicker" placeholder="DD/MM/YYYY" formControlName="endDate">
                     <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>

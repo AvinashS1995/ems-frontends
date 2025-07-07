@@ -60,6 +60,7 @@ export class SidenavComponent implements OnInit {
     this.commonService.setUserDetailsFromToken();
     const currentUser = this.commonService.getCurrentUserDetails();
     this.RoleName = currentUser.role;
+    this.UserName = currentUser.name;
 
     if (typeof window !== 'undefined') {
       this.token = this.storageService.getItem('token', 'session') || this.storageService.getItem('token', 'local');
@@ -199,9 +200,7 @@ export class SidenavComponent implements OnInit {
           );
 
           this.commonService.openSnackbar(res.message, 'success');
-          // setTimeout(() => {
-          //   this.logout();
-          // }, 3000);
+      
         },
         error: (error) => {
           this.commonService.openSnackbar(error.error.message, 'error');
@@ -209,7 +208,7 @@ export class SidenavComponent implements OnInit {
       });
   }
 
-  // Expose toggle() to layout
+  
   toggle() {
     if (this.sidenav) {
       this.sidenav.toggle();
@@ -222,7 +221,7 @@ export class SidenavComponent implements OnInit {
       this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
 
       if (this.sidenav && this.isSmallScreen) {
-        this.sidenav.close(); // close by default on small screen
+        this.sidenav.close(); 
       }
     });
   }

@@ -11,7 +11,7 @@
     <mat-card class="filter-card">
         <form [formGroup]="roleWiseMenuFilterForm">
 
-            <mat-form-field appearance="outline" class="filter-field">
+            <mat-form-field appearance="outline">
                 <mat-label>Role</mat-label>
                 <mat-select [(ngModel)]="selectedRole" (selectionChange)="onRoleChange()" formControlName="role">
                     <mat-option *ngFor="let role of employeeRoleList" [value]="role.label">{{ role.label }}</mat-option>
