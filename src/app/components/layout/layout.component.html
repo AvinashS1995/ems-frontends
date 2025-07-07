@@ -1,5 +1,5 @@
-<app-header></app-header>
+<app-header (toggleSidenav)="onToggleSidenav()"></app-header>
 
-<app-sidenav (navigateEvent)="navigateToUrl($event)"> 
+<app-sidenav #sidenav (navigateEvent)="navigateToUrl($event)"> 
     <router-outlet></router-outlet>
 </app-sidenav>

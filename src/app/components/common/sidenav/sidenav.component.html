@@ -1,39 +1,6 @@
-<!-- <mat-sidenav-container class="sidenav-container" [autosize]="true">
-    <mat-sidenav mode="side" opened [ngClass]="commonService.expandSidenav() ? 'expand' : 'colaps'">
-        <div class="sidenav-header">
-            <img src="assets/profile-img.png" alt="">
-            <div class="header-text">
-                <h2>{{ UserName }}</h2>
-                <p>{{ RoleName }}</p>
-            </div>
-        </div>
-        <mat-nav-list>
-            @for(item of menuItems(); track item.title) {
-            <a mat-list-item [ngClass]="item.title === 'Logout' ? 'logout-item' : ''" (click)="navigateTO(item.route)">
-                <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-                @if (commonService.expandSidenav()) {
-                <span matListItemTitle>{{item.title}}</span>
-                }
-            </a>
-            }
-            <a mat-list-item (click)="confirmLogout()">
-                <mat-icon matListItemIcon>logout</mat-icon>
-                @if (commonService.expandSidenav()) {
-                <span matListItemTitle>Logout</span>
-                }
-            </a>
-
-        </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-        <ng-content></ng-content>
-    </mat-sidenav-content>
-
-</mat-sidenav-container> -->
-
-
 <mat-sidenav-container class="sidenav-container" [autosize]="true">
-  <mat-sidenav mode="side" opened [ngClass]="commonService.expandSidenav() ? 'expand' : 'colaps'">
+  <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="!isSmallScreen"
+    [ngClass]="commonService.expandSidenav() ? 'expand' : 'colaps'">
     <div class="sidenav-header">
       <img src="assets/profile-img.png" alt="">
       <div class="header-text">
@@ -43,13 +10,13 @@
     </div>
 
     <mat-nav-list>
-      <!-- Main Menu Rendering -->
+
       <ng-container *ngFor="let item of menuItems(); trackBy: trackById">
         <ng-template [ngTemplateOutlet]="renderMenu" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
       </ng-container>
 
-      <!-- Logout -->
-      <a mat-list-item  (click)="confirmLogout()">
+
+      <a mat-list-item (click)="confirmLogout()">
         <mat-icon matListItemIcon>logout</mat-icon>
         <span *ngIf="commonService.expandSidenav()">Logout</span>
       </a>
@@ -61,7 +28,7 @@
   </mat-sidenav-content>
 </mat-sidenav-container>
 
-<!-- Recursive Template -->
+
 <ng-template #renderMenu let-item>
   <a mat-list-item (click)="item.children.length ? toggleSubMenu(item.id) : navigateTO(item.route)">
     <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
@@ -73,10 +40,10 @@
     </div>
   </a>
 
-  <!-- Nested Children -->
+
   <div class="child-menu-container" *ngIf="item.children.length && isExpanded(item.id)" [@expandCollapseAnimation]>
     <ng-container *ngFor="let child of item.children">
-      <!-- Recursively call same template for grandchildren -->
+
       <ng-template [ngTemplateOutlet]="renderMenu" [ngTemplateOutletContext]="{ $implicit: child }"></ng-template>
     </ng-container>
   </div>

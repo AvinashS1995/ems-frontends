@@ -10,8 +10,6 @@ export class AttendenceManagementResolverService {
 
   constructor(private apiService: ApiService) {}
 
-  
-
   resolve(): Observable<any> {
 
     let attendenceStatus = of({});

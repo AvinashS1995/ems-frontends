@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -9,6 +9,8 @@ import { CommonService } from '../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../shared/common/api-contant';
 import { StorageService } from '../../../shared/service/common/storage.service';
 import { KeyService } from '../../../shared/service/common/key.service';
+import { MatSidenav } from '@angular/material/sidenav';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-sidenav',
@@ -40,14 +42,21 @@ export class SidenavComponent implements OnInit {
   token: string | null = null;
   RoleName: any;
 
+  @ViewChild(MatSidenav) sidenav!: MatSidenav;
+
+  sidenavMode: 'side' | 'over' = 'side';
+  isSmallScreen = false;
+
   constructor(
     private apiService: ApiService,
     public commonService: CommonService,
     private storageService: StorageService,
-    private router: Router
+    private router: Router,
+     private breakpointObserver: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
+    this.observeScreenSize()
     this.commonService.setUserDetailsFromToken();
     const currentUser = this.commonService.getCurrentUserDetails();
     this.RoleName = currentUser.role;
@@ -198,5 +207,23 @@ export class SidenavComponent implements OnInit {
           this.commonService.openSnackbar(error.error.message, 'error');
         },
       });
+  }
+
+  // Expose toggle() to layout
+  toggle() {
+    if (this.sidenav) {
+      this.sidenav.toggle();
+    }
+  }
+
+  observeScreenSize() {
+    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).subscribe(result => {
+      this.isSmallScreen = result.matches;
+      this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
+
+      if (this.sidenav && this.isSmallScreen) {
+        this.sidenav.close(); // close by default on small screen
+      }
+    });
   }
 }
