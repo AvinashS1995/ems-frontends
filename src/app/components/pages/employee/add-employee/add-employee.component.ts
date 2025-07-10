@@ -2,8 +2,16 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-material';
 import { ApiService } from '../../../../shared/service/api/api.service';
@@ -51,44 +59,39 @@ export class AddEmployeeComponent {
   isEditMode: Boolean = false;
 
   previewUrl: string | ArrayBuffer | null = null;
-  selectedFile: File | null = null; 
+  defaultAvatar = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
+  selectedFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
-        private router: Router,
-        private apiService: ApiService,
-        private commonService: CommonService,
-        private dialog: MatDialog,
-        private dialogRef: MatDialogRef<AddEmployeeComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
-
-  ) {
-
-  }
+    private router: Router,
+    private apiService: ApiService,
+    private commonService: CommonService,
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<AddEmployeeComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   ngOnInit(): void {
     this.prepareAddEmployeeForm();
     // console.log(this.data);
 
-    this.roles = this.data.Roles || []
-    
-    this.statuses = this.data.Status.filter((role:any) => role.value !== 'All') || []
+    this.roles = this.data.Roles || [];
+
+    this.statuses =
+      this.data.Status.filter((role: any) => role.value !== 'All') || [];
 
     this.experienceTypeList = this.data.experienceLevel || [];
 
-    console.log("Experience Level", this.experienceTypeList);
+    console.log('Experience Level', this.experienceTypeList);
 
     this.designationList = this.data.designations || [];
 
-    console.log("Designations", this.designationList);
-    
+    console.log('Designations', this.designationList);
 
     this.workTypeList = this.data.workType || [];
 
-    console.log("Designations", this.designationList);
-
-    
-    
+    console.log('Designations', this.designationList);
   }
 
   prepareAddEmployeeForm() {
@@ -96,7 +99,10 @@ export class AddEmployeeComponent {
       profileImage: [''],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL_REGEX)]],
-      mobile: ['', [Validators.required, Validators.pattern(REGEX.MOBILE_NUMBER_REGEX)]],
+      mobile: [
+        '',
+        [Validators.required, Validators.pattern(REGEX.MOBILE_NUMBER_REGEX)],
+      ],
       status: ['', Validators.required],
       type: [''],
       teamLeader: [''],
@@ -108,7 +114,7 @@ export class AddEmployeeComponent {
       salary: [0],
       workType: [''],
     });
-
+debugger
     if (this.data.editData) {
       this.isEditMode = true;
       // debugger
@@ -125,25 +131,26 @@ export class AddEmployeeComponent {
         designation: this.data.editData.designation,
         joiningDate: this.data.editData.joiningDate,
         salary: this.data.editData.salary,
-        workType: this.data.editData.workType
+        workType: this.data.editData.workType,
+        profileImage: this.data.editData.profileImage
 
       });
-// debugger
+      // debugger
       // this.employeeForm.controls['email'].disable();
       // this.employeeForm.controls['mobile'].disable();
+      this.previewUrl = encodeURI(this.data.editData.profileImage || this.defaultAvatar);
 
-      console.log("Form---->", this.employeeForm.getRawValue());
-      
+
+      console.log('Form---->', this.employeeForm.getRawValue());
     }
   }
-
 
   saveEmployee() {
     // debugger
     if (this.employeeForm.valid) {
       const newEmployee = this.employeeForm.getRawValue();
 
-      console.log(newEmployee)
+      console.log(newEmployee);
 
       const paylaod = {
         id: this.isEditMode ? this.data.editData?._id : 0,
@@ -162,7 +169,7 @@ export class AddEmployeeComponent {
         workType: newEmployee.workType ? newEmployee.workType : '',
         profileImage: newEmployee.profileImage ? newEmployee.profileImage : '',
       };
-      debugger
+      debugger;
       console.log('New employee data:', paylaod);
 
       const ENDPOINT = this.data.editData
@@ -180,25 +187,50 @@ export class AddEmployeeComponent {
           this.commonService.openSnackbar(error.error.message, 'error');
         },
       });
-
     } else {
       this.employeeForm.markAllAsTouched();
     }
   }
 
   onSelectFile(event: Event): void {
-    // debugger
-    const input = event.currentTarget as HTMLInputElement;
-    const file = input.files?.[0];
-    if (file && ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-    
-      const formData = new FormData()
-      
-      formData.append('file', file);
+      const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
 
+  if (!file || !file.type.startsWith('image/')) {
+    this.commonService.openSnackbar('Only image files are allowed', 'error');
+    return;
   }
-}
 
+  if (file.size > 2 * 1024 * 1024) { // 2 MB limit
+    this.commonService.openSnackbar('Image must be less than 2MB', 'error');
+    return;
+  }
+
+  // // Instant preview (optional, UX-friendly)
+  // const reader = new FileReader();
+  // reader.onload = () => {
+  //   this.previewUrl = reader.result; // show preview immediately
+  // };
+  // reader.readAsDataURL(file);
+
+  // Upload to backend (Filebase)
+  const formData = new FormData();
+  formData.append('file', file);
+
+  this.apiService.postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData).subscribe({
+    next: (res) => {
+      const uploadedUrl = res?.data?.fileUrl;
+      this.previewUrl = uploadedUrl;
+      this.employeeForm.patchValue({ profileImage: uploadedUrl });
+      this.commonService.openSnackbar(res.message, 'success');
+    },
+    error: (error) => {
+      console.error('Upload error:', error);
+      this.commonService.openSnackbar(error.error.message, 'error');
+    }
+  });
+    
+  }
 
   cancel() {
     this.dialogRef.close();

@@ -31,4 +31,5 @@ export const API_ENDPOINTS = {
   SERVICE_GET_EMPLOYEE_LEAVE_REQUEST_LIST: 'leave/get-empployee-leave-request-list',
   SERVICE_SAVE_EMPLOYEE_LEAVE_APPLICATION_APPROVE_REJECT: 'leave/employee-leave-application-approve-reject',
   SERVICE_APPLICATION_APPROVAL_FLOW: 'leave/application-approval-flow',
+  SERVICE_UPLOADFILE: 'file/upload-file',
 };

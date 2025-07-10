@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../http/http.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,4 +24,8 @@ export class ApiService {
   postApiCall(endPoint: string, request: any) {
     return this.http.post<any>(`${endPoint}`, request);
   }
+
+  postFormDataApi(url: string, formData: FormData): Observable<any> {
+  return this.http.post(url, formData); 
+}
 }

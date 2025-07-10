@@ -110,7 +110,7 @@ export class LeaveManagementComponent {
 
   applyLeave() {
     const dialogRef = this.dialog.open(ApplyLeaveComponent, {
-      width: '500px',
+      width: '450px',
       // minHeight: '75vh',
       disableClose: true,
       data: {

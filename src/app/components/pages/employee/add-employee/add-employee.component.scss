@@ -51,32 +51,32 @@
   }
 
   
-.image-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  // margin-bottom: 20px;
-  position: relative;
-}
+// .image-container {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   // margin-bottom: 20px;
+//   position: relative;
+// }
 
-img {
-  height: 100px;
-  width: 100px;
-  border: 5px solid #000;
-  border-radius: 50%;
-}
+// img {
+//   height: 100px;
+//   width: 100px;
+//   border: 5px solid #000;
+//   border-radius: 50%;
+// }
 
 
-.select-profile-picture {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
+// .select-profile-picture {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   z-index: 999;
+//   opacity: 0;
+//   width: 100%;
+//   height: 100%;
+//   cursor: pointer;
+// }
 
 
 button {
@@ -87,3 +87,97 @@ button {
   width: 100%;
   height: auto;
 }
+
+
+.avatar-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  grid-column: 1 / -1;
+}
+
+.image-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: #f0f0f0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  border: 3px solid #ccc;
+}
+
+.icon-wrapper {
+  position: absolute;
+  bottom: 5px;
+  right: 36%;
+  background-color: #3f51b5;
+  color: #fff;
+  border-radius: 50%;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+
+  input[type='file'] {
+    display: none;
+  }
+
+  &:hover {
+    background-color: #303f9f;
+  }
+
+  // mat-icon {
+  //   font-size: 20px;
+  // }
+}
+
+.form-container {
+  max-width: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+
+/* Target all mat-form-fields inside the form */
+.form-grid > mat-form-field {
+  width: 100%;
+  
+}
+
+
+/* Action buttons at the bottom */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+// /* Optional media queries for control */
+// @media (max-width: 600px) {
+//   .form-grid {
+//     grid-template-columns: 1fr;
+//   }
+// }
+
+// @media (min-width: 601px) and (max-width: 960px) {
+//   .form-grid {
+//     grid-template-columns: repeat(2, 1fr);
+//   }
+// }
+
+// @media (min-width: 961px) {
+//   .form-grid {
+//     grid-template-columns: repeat(3, 1fr);
+//   }
+// }

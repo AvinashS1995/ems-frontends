@@ -158,7 +158,7 @@ export class EmployeeManagementComponent {
   addEmployee(employeeTypeData?: any) {
     // debugger
     const dialogRef = this.dialog.open(AddEmployeeComponent, {
-      width: '600px',
+      width: '500px',
       disableClose: true,
       data: {
         editData: employeeTypeData || null,

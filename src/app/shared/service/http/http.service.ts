@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoaderService } from './loader.service';
 import { finalize, map, Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +10,8 @@ import { environment } from '../../../../environments/environment.prod';
 export class HttpService {
 
   // private baseUrl = 'http://localhost:3000/api/' ;
-  private baseUrl = 'https://ems-backend-api.onrender.com/api/';
-  // private baseUrl = environment.apiUrl; // Live 
+  // private baseUrl = 'https://ems-backend-api.onrender.com/api/';
+  private baseUrl = environment.apiUrl; 
 
   constructor(
     private http: HttpClient,
