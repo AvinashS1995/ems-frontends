@@ -1,4 +1,11 @@
-import { Component, EventEmitter, OnInit, Output, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -47,33 +54,41 @@ export class SidenavComponent implements OnInit {
   sidenavMode: 'side' | 'over' = 'side';
   isSmallScreen = false;
 
+  profileImage: string = '';
+  defaultAvatar: string =
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
+
   constructor(
     private apiService: ApiService,
     public commonService: CommonService,
     private storageService: StorageService,
     private router: Router,
-     private breakpointObserver: BreakpointObserver,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
-    this.observeScreenSize()
+    this.observeScreenSize();
     this.commonService.setUserDetailsFromToken();
     const currentUser = this.commonService.getCurrentUserDetails();
     this.RoleName = currentUser.role;
     this.UserName = currentUser.name;
+    this.profileImage = currentUser.profileImage
+      ? currentUser.profileImage
+      : this.defaultAvatar;
 
     if (typeof window !== 'undefined') {
-      this.token = this.storageService.getItem('token', 'session') || this.storageService.getItem('token', 'local');
+      this.token =
+        this.storageService.getItem('token', 'session') ||
+        this.storageService.getItem('token', 'local');
       // console.log(token);
     }
-    
+
     if (this.token) {
-        this.loadRoleBasedMenus();
+      this.loadRoleBasedMenus();
     }
   }
 
   loadRoleBasedMenus() {
-    
     const payload = {
       role: this.RoleName || '',
     };
@@ -200,7 +215,6 @@ export class SidenavComponent implements OnInit {
           );
 
           this.commonService.openSnackbar(res.message, 'success');
-      
         },
         error: (error) => {
           this.commonService.openSnackbar(error.error.message, 'error');
@@ -208,7 +222,6 @@ export class SidenavComponent implements OnInit {
       });
   }
 
-  
   toggle() {
     if (this.sidenav) {
       this.sidenav.toggle();
@@ -216,13 +229,15 @@ export class SidenavComponent implements OnInit {
   }
 
   observeScreenSize() {
-    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).subscribe(result => {
-      this.isSmallScreen = result.matches;
-      this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .subscribe((result) => {
+        this.isSmallScreen = result.matches;
+        this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
 
-      if (this.sidenav && this.isSmallScreen) {
-        this.sidenav.close(); 
-      }
-    });
+        if (this.sidenav && this.isSmallScreen) {
+          this.sidenav.close();
+        }
+      });
   }
 }

@@ -132,14 +132,15 @@ debugger
         joiningDate: this.data.editData.joiningDate,
         salary: this.data.editData.salary,
         workType: this.data.editData.workType,
-        profileImage: this.data.editData.profileImage
+        // profileImage: this.data.editData.profileImage
 
       });
+      console.log(this.data.editData.profileImage)
+      this.previewUrl = this.data.editData.profileImage;
+       this.employeeForm.patchValue({ profileImage: this.previewUrl });
       // debugger
       // this.employeeForm.controls['email'].disable();
       // this.employeeForm.controls['mobile'].disable();
-      this.previewUrl = encodeURI(this.data.editData.profileImage || this.defaultAvatar);
-
 
       console.log('Form---->', this.employeeForm.getRawValue());
     }
@@ -149,6 +150,7 @@ debugger
     // debugger
     if (this.employeeForm.valid) {
       const newEmployee = this.employeeForm.getRawValue();
+
 
       console.log(newEmployee);
 
@@ -167,7 +169,7 @@ debugger
         joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
         salary: newEmployee.salary ? newEmployee.salary : 0,
         workType: newEmployee.workType ? newEmployee.workType : '',
-        profileImage: newEmployee.profileImage ? newEmployee.profileImage : '',
+        profileImage: newEmployee ? newEmployee.profileImage : '',
       };
       debugger;
       console.log('New employee data:', paylaod);
@@ -219,9 +221,10 @@ debugger
 
   this.apiService.postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData).subscribe({
     next: (res) => {
-      const uploadedUrl = res?.data?.fileUrl;
+      const uploadedUrl = res?.data?.presignFileUrl;
       this.previewUrl = uploadedUrl;
-      this.employeeForm.patchValue({ profileImage: uploadedUrl });
+      const fileKey = res?.data?.fileKey
+      this.employeeForm.patchValue({ profileImage: fileKey });
       this.commonService.openSnackbar(res.message, 'success');
     },
     error: (error) => {

@@ -194,7 +194,7 @@ export class EmployeeManagementComponent {
       next: (res: any) => {
         console.log(`${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `, res);
 
-        this.dataSource = res?.data?.users || [];
+        this.dataSource = res?.data?.userList || [];
         this.totalRecords = res.data.totalRecords || 0;
         
         this.commonService.openSnackbar(res.message, 'success');

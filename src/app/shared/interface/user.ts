@@ -14,5 +14,6 @@ export interface UserDetails {
   joiningDate: string;
   salary: number;
   workType: string;
+  profileImage: string,
   loginUserSecretkey: string;
 }

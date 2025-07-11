@@ -36,6 +36,7 @@ export class CommonService {
     joiningDate: '',
     salary: 0,
     workType: '',
+    profileImage: '',
     loginUserSecretkey: '',
   };
 

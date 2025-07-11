@@ -2,7 +2,7 @@
   <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="!isSmallScreen"
     [ngClass]="commonService.expandSidenav() ? 'expand' : 'colaps'">
     <div class="sidenav-header">
-      <img src="assets/profile-img.png" alt="">
+      <img [src]="profileImage" alt="">
       <div class="header-text">
         <h2>{{ UserName }}</h2>
         <p>{{ RoleName }}</p>
