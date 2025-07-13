@@ -1,8 +1,4 @@
-
-
-
 <div class="container">
-    <!-- <h1 mat-dialog-title>{{isEditMode ? 'Update Employee' : 'Add New Employee'}}</h1> -->
     <mat-dialog-content>
         <form [formGroup]="checkInsForm" class="checkInsForm">
             @if (mode === 'checkins') {
@@ -11,20 +7,20 @@
                 <button mat-flat-button class="btn" (click)="onCheckInsSubmit()">
                     Check Ins
                 </button>
-            }
+                }
             </div>
-        
+
             @if (currentStep >= CheckInsStep.SEND_OTP) {
-                <ng-container>
-                    <mat-form-field appearance="outline">
-                        <mat-icon matSuffix>password</mat-icon>
-                        <mat-label>Check Ins OTP</mat-label>
-                        <input matInput type="password" placeholder="OTP" formControlName="otp" />
-                    </mat-form-field>    
-                </ng-container>
+            <ng-container>
+                <mat-form-field appearance="outline">
+                    <mat-icon matSuffix>password</mat-icon>
+                    <mat-label>Check Ins OTP</mat-label>
+                    <input matInput type="password" placeholder="OTP" formControlName="otp" />
+                </mat-form-field>
+            </ng-container>
             }
-        }
-            
+            }
+
         </form>
 
     </mat-dialog-content>
@@ -32,13 +28,13 @@
     <mat-dialog-actions [attr.align]="currentStep >= CheckInsStep.SEND_OTP || mode === 'checkout' ? 'center' : 'end'">
         <div class="actions">
             @if (currentStep >= CheckInsStep.SEND_OTP && mode === 'checkins') {
-            <button mat-flat-button color="primary" type="submit"
-                [disabled]="checkInsForm.invalid" class="example-full-width" (click)="onVerifyCheckInsOtp()">Verify Check Ins OTP</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="checkInsForm.invalid"
+                class="example-full-width" (click)="onVerifyCheckInsOtp()">Verify Check Ins OTP</button>
             }
 
             @if (mode === 'checkout') {
-            <button mat-flat-button color="primary" type="submit"
-                 class="example-full-width" (click)="onEmployeeCheckout()">Check Out</button>
+            <button mat-flat-button color="primary" type="submit" class="example-full-width"
+                (click)="onEmployeeCheckout()">Check Out</button>
             }
 
             <button mat-flat-button color="warn" type="button" class="example-full-width"

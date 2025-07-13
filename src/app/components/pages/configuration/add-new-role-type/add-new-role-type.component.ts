@@ -1,12 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-material';
 import { ApiService } from '../../../../shared/service/api/api.service';
 import { CommonService } from '../../../../shared/service/common/common.service';
@@ -28,10 +22,8 @@ export class AddNewRoleTypeComponent {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     private apiService: ApiService,
     private commonService: CommonService,
-    private dialog: MatDialog,
     private dialogRef: MatDialogRef<AddNewRoleTypeComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -43,10 +35,10 @@ export class AddNewRoleTypeComponent {
   }
 
   prepareRoleTypeForm() {
-    
     this.roleTypeForm = this.fb.group({
       role: ['', Validators.required],
       roleType: [''],
+      department: [''],
       description: [''],
     });
 
@@ -55,14 +47,15 @@ export class AddNewRoleTypeComponent {
       this.roleTypeForm.patchValue({
         role: this.data.editData.entityValue,
         roleType: this.data.editData.typeLabel,
+        department: this.data.editData.departmentType,
         description: this.data.editData.description,
       });
     }
   }
 
   onSubmitRoleType() {
-
-    const { role, roleType, description } = this.roleTypeForm.getRawValue();
+    const { role, roleType, department, description } =
+      this.roleTypeForm.getRawValue();
 
     if (this.roleTypeForm.valid) {
       // debugger
@@ -70,6 +63,7 @@ export class AddNewRoleTypeComponent {
         id: this.isEditMode ? this.data.editData?._id : 0,
         entityValue: role ? role : '',
         typeLabel: roleType ? roleType : '',
+        departmentType: department ? department : '',
         description: description ? description : '',
       };
 

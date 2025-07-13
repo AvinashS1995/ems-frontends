@@ -10,6 +10,7 @@ import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-materi
 import { ApiService } from '../../../../shared/service/api/api.service';
 import { CommonService } from '../../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-leave-management',
@@ -19,6 +20,8 @@ import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
   styleUrl: './leave-management.component.scss',
 })
 export class LeaveManagementComponent {
+  private destroy$ = new Subject<void>();
+
   leaveType: Array<any> = [];
   leaveReasonType: Array<any> = [];
   leaveStatusList: Array<any> = [];
@@ -38,6 +41,7 @@ export class LeaveManagementComponent {
   ];
   dataSource: Array<any> = [];
   upcomingHolidays: Array<any> = [];
+  approvalFlowDetails: any;
 
   constructor(
     private fb: FormBuilder,
@@ -50,7 +54,7 @@ export class LeaveManagementComponent {
   ngOnInit(): void {
     this.prepareEmployeeLeaveFilterForm();
     this.getparams();
-    
+    this.applyFilters();
   }
 
   getparams() {
@@ -90,18 +94,20 @@ export class LeaveManagementComponent {
         console.log('Leave Application Status Type--->', this.leaveStatusList);
 
         this.dataSource = params['data'].employeeLeaveList?.data?.leaves || [];
-        this.totalRecords = params['data'].employeeLeaveList?.data?.totalRecords || 0
+        this.totalRecords =
+          params['data'].employeeLeaveList?.data?.totalRecords || 0;
 
         console.log('Leave Application List--->', this.dataSource);
 
         this.upcomingHolidays =
-            params['data'].getUpcomingHoliday?.data?.upComingHolidays || [];
+          params['data'].getUpcomingHoliday?.data?.upComingHolidays || [];
       }
     });
   }
 
   prepareEmployeeLeaveFilterForm() {
     this.employeeLeaveFilterForm = this.fb.group({
+      empNo: [''],
       leaveStatus: [''],
       startDate: [''],
       endDate: [''],
@@ -116,7 +122,7 @@ export class LeaveManagementComponent {
       data: {
         leaveType: this.leaveType,
         leaveReasonType: this.leaveReasonType,
-        upcomingHolidays: this.upcomingHolidays
+        upcomingHolidays: this.upcomingHolidays,
       },
     });
 
@@ -128,8 +134,19 @@ export class LeaveManagementComponent {
   }
 
   getEmployeesLeave() {
+    const { empNo, leaveStatus, startDate, endDate } =
+      this.employeeLeaveFilterForm.getRawValue();
+
+    const paylaod = {
+      empNo: empNo || '',
+      status: leaveStatus || '',
+      fromDate: startDate || '',
+      toDate: endDate || '',
+    };
+
     this.apiService
-      .postApiCall(API_ENDPOINTS.SERVICE_GET_EMPLOYEE_LEAVE, {})
+      .postApiCall(API_ENDPOINTS.SERVICE_GET_EMPLOYEE_LEAVE, paylaod)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: any) => {
           console.log(
@@ -155,7 +172,6 @@ export class LeaveManagementComponent {
   clearFilters() {}
 
   getStatusIconClass(status: string): string {
-
     if (status?.toLowerCase().includes('approved')) {
       return 'approved-icon';
     } else if (status?.toLowerCase().includes('pending')) {
@@ -164,19 +180,45 @@ export class LeaveManagementComponent {
       return 'rejected-icon';
     }
     return '';
-
   }
 
   openApprovalFlowDialog(leaveId: string): void {
-  this.dialog.open(ApprovalFlowDialogComponent, {
-    width: '500px',
-    data: { leaveId }
-  });
-}
+    const paylaod = {
+      leaveId: leaveId || '',
+    };
+
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_APPLICATION_APPROVAL_FLOW, paylaod)
+      .subscribe({
+        next: (res: any) => {
+          console.log(
+            `${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `,
+            res
+          );
+
+          this.approvalFlowDetails = res?.data?.stepperData || [];
+
+          this.commonService.openSnackbar(res.message, 'success');
+
+          this.dialog.open(ApprovalFlowDialogComponent, {
+            width: '500px',
+            data: { stepperData: this.approvalFlowDetails },
+          });
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
+  }
 
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex + 1;
     this.pageSize = event.pageSize;
     this.getEmployeesLeave();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

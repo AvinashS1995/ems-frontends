@@ -55,12 +55,18 @@ export class AddEmployeeComponent {
   experienceTypeList: Array<any> = [];
   designationList: Array<any> = [];
   workTypeList: Array<any> = [];
+  genderTypeList: Array<any> = [];
+  departmentTypeList: Array<any> = [];
+  reportedByTypeList: Array<any> = [];
 
   isEditMode: Boolean = false;
 
   previewUrl: string | ArrayBuffer | null = null;
-  defaultAvatar = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
+  defaultAvatar =
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
   selectedFile: File | null = null;
+  fileName: any;
+  fileKey: any;
 
   constructor(
     private fb: FormBuilder,
@@ -92,52 +98,71 @@ export class AddEmployeeComponent {
     this.workTypeList = this.data.workType || [];
 
     console.log('Designations', this.designationList);
+
+    this.genderTypeList = this.data.genderType || [];
+
+    console.log('Gender', this.genderTypeList);
+
+    this.departmentTypeList = this.data.departmentType || [];
+
+    console.log('Department', this.departmentTypeList);
+
+    this.reportedByTypeList = this.data.reportedEmployee || [];
+
+    console.log('Reported Employeee', this.reportedByTypeList);
   }
 
   prepareAddEmployeeForm() {
     this.employeeForm = this.fb.group({
       profileImage: [''],
-      name: ['', Validators.required],
+      firstName: ['', Validators.required],
+      middleName: [''],
+      lastName: ['', Validators.required],
+      dob: ['', Validators.required],
+      gender: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL_REGEX)]],
       mobile: [
         '',
         [Validators.required, Validators.pattern(REGEX.MOBILE_NUMBER_REGEX)],
       ],
+      address: ['', Validators.required],
       status: ['', Validators.required],
       type: [''],
-      teamLeader: [''],
-      manager: [''],
-      hr: [''],
+      reportedBy: [''],
+      department: [''],
       role: [''],
       designation: [''],
       joiningDate: [''],
       salary: [0],
       workType: [''],
     });
-debugger
+    // debugger
     if (this.data.editData) {
       this.isEditMode = true;
       // debugger
       this.employeeForm.patchValue({
-        name: this.data.editData.name,
+        firstName: this.data.editData.firstName,
+        middleName: this.data.editData.middleName,
+        lastName: this.data.editData.lastName,
+        dob: this.data.editData.dob,
+        gender: this.data.editData.gender,
         email: this.data.editData.email,
         mobile: this.data.editData.mobile,
+        address: this.data.editData.address,
         status: this.data.editData.status,
         type: this.data.editData.type,
-        teamLeader: this.data.editData.teamLeader,
-        manager: this.data.editData.manager,
-        hr: this.data.editData.hr,
+        reportedBy: this.data.editData.reportedBy,
         role: this.data.editData.role,
         designation: this.data.editData.designation,
+        department: this.data.editData.department,
         joiningDate: this.data.editData.joiningDate,
         salary: this.data.editData.salary,
         workType: this.data.editData.workType,
         // profileImage: this.data.editData.profileImage
-
       });
-      console.log(this.data.editData.profileImage)
+      console.log(this.data.editData.profileImage);
       this.previewUrl = this.data.editData.profileImage;
-       this.employeeForm.patchValue({ profileImage: this.previewUrl });
+      this.employeeForm.patchValue({ profileImage: this.previewUrl });
       // debugger
       // this.employeeForm.controls['email'].disable();
       // this.employeeForm.controls['mobile'].disable();
@@ -151,21 +176,24 @@ debugger
     if (this.employeeForm.valid) {
       const newEmployee = this.employeeForm.getRawValue();
 
-
       console.log(newEmployee);
 
       const paylaod = {
         id: this.isEditMode ? this.data.editData?._id : 0,
-        name: newEmployee.name ? newEmployee.name : '',
+        firstName: newEmployee.firstName ? newEmployee.firstName : '',
+        middleName: newEmployee.middleName ? newEmployee.middleName : '',
+        lastName: newEmployee.lastName ? newEmployee.lastName : '',
         email: newEmployee.email ? newEmployee.email : '',
+        dob: newEmployee.dob ? newEmployee.dob : '',
+        gender: newEmployee.gender ? newEmployee.gender : '',
         mobile: newEmployee.mobile ? newEmployee.mobile : '',
+        address: newEmployee.address ? newEmployee.address : '',
         role: newEmployee.role ? newEmployee.role : '',
         status: newEmployee.status ? newEmployee.status : '',
         type: newEmployee.type ? newEmployee.type : '',
-        teamLeader: newEmployee.teamLeader ? newEmployee.teamLeader : '',
-        manager: newEmployee.manager ? newEmployee.manager : '',
-        hr: newEmployee.hr ? newEmployee.hr : '',
+        reportedBy: newEmployee.reportedBy ? newEmployee.reportedBy : '',
         designation: newEmployee.designation ? newEmployee.designation : '',
+        department: newEmployee.department ? newEmployee.department : '',
         joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
         salary: newEmployee.salary ? newEmployee.salary : 0,
         workType: newEmployee.workType ? newEmployee.workType : '',
@@ -195,44 +223,39 @@ debugger
   }
 
   onSelectFile(event: Event): void {
-      const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
 
-  if (!file || !file.type.startsWith('image/')) {
-    this.commonService.openSnackbar('Only image files are allowed', 'error');
-    return;
-  }
-
-  if (file.size > 2 * 1024 * 1024) { // 2 MB limit
-    this.commonService.openSnackbar('Image must be less than 2MB', 'error');
-    return;
-  }
-
-  // // Instant preview (optional, UX-friendly)
-  // const reader = new FileReader();
-  // reader.onload = () => {
-  //   this.previewUrl = reader.result; // show preview immediately
-  // };
-  // reader.readAsDataURL(file);
-
-  // Upload to backend (Filebase)
-  const formData = new FormData();
-  formData.append('file', file);
-
-  this.apiService.postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData).subscribe({
-    next: (res) => {
-      const uploadedUrl = res?.data?.presignFileUrl;
-      this.previewUrl = uploadedUrl;
-      const fileKey = res?.data?.fileKey
-      this.employeeForm.patchValue({ profileImage: fileKey });
-      this.commonService.openSnackbar(res.message, 'success');
-    },
-    error: (error) => {
-      console.error('Upload error:', error);
-      this.commonService.openSnackbar(error.error.message, 'error');
+    if (!file || !file.type.startsWith('image/')) {
+      this.commonService.openSnackbar('Only image files are allowed', 'error');
+      return;
     }
-  });
-    
+
+    if (file.size > 2 * 1024 * 1024) {
+      // 2 MB limit
+      this.commonService.openSnackbar('Image must be less than 2MB', 'error');
+      return;
+    }
+
+    // Upload to backend (Filebase)
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.apiService
+      .postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData)
+      .subscribe({
+        next: (res) => {
+          const uploadedUrl = res?.data?.presignFileUrl;
+          this.previewUrl = uploadedUrl;
+          this.fileKey = res?.data?.fileKey;
+          this.employeeForm.patchValue({ profileImage: this.fileKey });
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (error) => {
+          console.error('Upload error:', error);
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   cancel() {

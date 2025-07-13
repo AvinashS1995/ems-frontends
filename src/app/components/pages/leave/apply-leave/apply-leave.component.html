@@ -29,18 +29,19 @@
                     <div class="date-fields">
                         <mat-form-field appearance="outline">
                             <mat-label>From Date</mat-label>
-                            <input matInput [matDatepicker]="fromPicker" [matDatepickerFilter]="dateFilter" placeholder="DD/MM/YYYY"
-                               formControlName="startDate">
+                            <input matInput [matDatepicker]="fromPicker" [matDatepickerFilter]="dateFilter"
+                                placeholder="DD/MM/YYYY" formControlName="startDate">
                             <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
                             <mat-datepicker #fromPicker [dateClass]="dateClass"></mat-datepicker>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
                             <mat-label>To Date</mat-label>
-                            <input matInput [matDatepicker]="toPicker" [matDatepickerFilter]="dateFilter" placeholder="DD/MM/YYYY"
-                               [min]="leaveForm.get('startDate')?.value" formControlName="endDate">
+                            <input matInput [matDatepicker]="toPicker" [matDatepickerFilter]="dateFilter"
+                                placeholder="DD/MM/YYYY" [min]="leaveForm.get('startDate')?.value"
+                                formControlName="endDate">
                             <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-                            <mat-datepicker #toPicker [dateClass]="dateClass" ></mat-datepicker>
+                            <mat-datepicker #toPicker [dateClass]="dateClass"></mat-datepicker>
                         </mat-form-field>
                     </div>
 
@@ -67,16 +68,15 @@
     <mat-dialog-actions align="end">
         <div class="action-buttons">
             <ng-container *ngIf="!isViewMode">
-            <button mat-flat-button color="primary" type="submit" (click)="ApplyLeave()">Submit</button>
-            <button mat-stroked-button color="warn" (click)="closeDialog()">Cancel</button>
+                <button mat-flat-button color="primary" type="submit" (click)="ApplyLeave()">Submit</button>
+                <button mat-stroked-button color="warn" (click)="closeDialog()">Cancel</button>
             </ng-container>
 
             <ng-container *ngIf="isViewMode">
-      <button mat-flat-button color="primary"
-              (click)="approveReject('Approved')">Approve</button>
-      <button mat-flat-button color="warn"
-              (click)="approveReject('Rejected')">Reject</button>
-    </ng-container>
+                <button mat-flat-button color="primary" (click)="approveReject('Approved')"
+                    type="button">Approve</button>
+                <button mat-flat-button color="warn" (click)="approveReject('Rejected')" type="button">Reject</button>
+            </ng-container>
 
 
         </div>

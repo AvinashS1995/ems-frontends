@@ -1,25 +1,31 @@
 <h2 mat-dialog-title>Approval Flow</h2>
 
-<mat-dialog-content *ngIf="!isLoading">
+<mat-dialog-content>
   <mat-vertical-stepper linear>
-    <!-- [completed]="step.status.includes('Approved') || step.status.includes('Rejected')" -->
-    <mat-step *ngFor="let step of approvalSteps; let i = index" >
+    <mat-step *ngFor="let step of approvalSteps; let i = index">
       <ng-template matStepLabel>{{ step.label }}</ng-template>
-      <p *ngIf="i === 0"><strong>Created By:</strong> {{ step.createdBy }}</p>
-      <p *ngIf="i > 0 && step.updatedBy"><strong>Updated By:</strong> {{ step.updatedBy || 'N/A' }}</p>
-      <p *ngIf="step.status"><strong>Status:</strong> {{ step.status }}</p>
-      <p *ngIf="step.date"><strong>Date:</strong> {{ step.date | date:'medium' }}</p>
-       <p *ngIf="step.status?.includes('Rejected') && step.comment">
+
+      <p *ngIf="i === 0">
+        <strong>Created By:</strong> {{ step.createdBy }}
+      </p>
+
+      <p *ngIf="i > 0">
+        <strong>Updated By:</strong> {{ step.updatedBy || 'N/A' }}
+      </p>
+
+      <p><strong>Status:</strong> {{ step.status }}</p>
+
+      <p *ngIf="step.date">
+        <strong>Date:</strong> {{ step.date | date: 'medium' }}
+      </p>
+
+      <p *ngIf="step.comment">
         <strong>Comment:</strong> {{ step.comment }}
       </p>
     </mat-step>
   </mat-vertical-stepper>
 </mat-dialog-content>
 
-<mat-dialog-content *ngIf="isLoading">
-  <p>Loading approval flow...</p>
-</mat-dialog-content>
-
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button (click)="close()">Close</button>
 </mat-dialog-actions>

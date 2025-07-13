@@ -71,7 +71,7 @@ export class SidenavComponent implements OnInit {
     this.commonService.setUserDetailsFromToken();
     const currentUser = this.commonService.getCurrentUserDetails();
     this.RoleName = currentUser.role;
-    this.UserName = currentUser.name;
+    this.UserName = `${currentUser.firstName} ${currentUser.lastName}`;
     this.profileImage = currentUser.profileImage
       ? currentUser.profileImage
       : this.defaultAvatar;

@@ -10,7 +10,6 @@ import {
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RejectCommentDialogComponent } from '../../../../shared/widget/dialog/reject-comment-dialog/reject-comment-dialog.component';
 import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
@@ -68,7 +67,7 @@ export class ApplyLeaveComponent {
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     console.log(this.data);
@@ -79,9 +78,9 @@ export class ApplyLeaveComponent {
 
     this.leaveReasonTypeList = this.data.leaveReasonType || [];
 
-    this.holidayDates = this.data?.upcomingHolidays
+    this.holidayDates = this.data?.upcomingHolidays || [];
 
-    console.log(this.holidayDates)
+    console.log(this.holidayDates);
 
     // console.log(this.leaveReasonTypeList);
     this.setsubcription();
@@ -101,6 +100,8 @@ export class ApplyLeaveComponent {
     if (this.data?.mode === 'view' && this.data?.leaveRequest) {
       this.isViewMode = true;
       this.dialogTitle = 'View Leave Details';
+
+      console.log(this.data.leaveRequest);
 
       const {
         empNo,
@@ -123,12 +124,13 @@ export class ApplyLeaveComponent {
         leaveReasonComment: reasonComment,
       });
 
-      
       this.leaveForm.disable();
     }
 
     if (!this.data?.mode) {
-      const EmployeeNoWithName = `${this.commonService.getCurrentUserDetails().name} [${this.commonService.getCurrentUserDetails().empNo}]`;
+      const user = this.commonService.getCurrentUserDetails();
+      const EmployeeNoWithName = `${user.firstName} ${user.lastName} [${user.empNo}]`;
+      console.log(EmployeeNoWithName);
 
       this.leaveForm.patchValue({
         employeeNoWithName: EmployeeNoWithName || '',
@@ -139,32 +141,32 @@ export class ApplyLeaveComponent {
   }
 
   setsubcription() {
-    this.leaveForm.controls['endDate'].valueChanges.subscribe(selectedEndDate => {
-      if (selectedEndDate) {
-        const { startDate, endDate } = this.leaveForm.getRawValue();
-        const totalLeaveDays = this.calculateLeaveDays(startDate, endDate);
+    this.leaveForm.controls['endDate'].valueChanges.subscribe(
+      (selectedEndDate) => {
+        if (selectedEndDate) {
+          const { startDate, endDate } = this.leaveForm.getRawValue();
+          const totalLeaveDays = this.calculateLeaveDays(startDate, endDate);
 
-        console.log(totalLeaveDays);
-        
+          console.log(totalLeaveDays);
+        }
       }
-    })
+    );
   }
 
   dateFilter = (d: Date | null): boolean => {
     const date = d ? new Date(d) : new Date();
     const day = date.getDay();
 
-    const isHoliday = this.holidayDates.some(holiday =>
-      new Date(holiday.date).toDateString() === date.toDateString()
+    const isHoliday = this.holidayDates.some(
+      (holiday) => new Date(holiday.date).toDateString() === date.toDateString()
     );
 
-    return day !== 0 && day !== 6 && !isHoliday; 
+    return day !== 0 && day !== 6 && !isHoliday;
   };
 
   dateClass = (d: Date): MatCalendarCellCssClasses => {
-
     const date = new Date(d);
-    const day = date.getDay(); 
+    const day = date.getDay();
     const dateStr = date.toDateString();
 
     // console.log(this.holidayDates)
@@ -174,48 +176,51 @@ export class ApplyLeaveComponent {
     // console.log(holidayDate);
 
     if (holidayDate.includes(dateStr)) {
-      return 'holiday-date'; 
+      return 'holiday-date';
     } else if (day === 0) {
-      return 'sunday-date'; 
+      return 'sunday-date';
     } else if (day === 6) {
-      return 'saturday-date'; 
+      return 'saturday-date';
     } else {
       return '';
     }
   };
 
- calculateLeaveDays(fromDate: Date, toDate: Date): number {
-  if (!fromDate || !toDate || fromDate > toDate) return 0;
+  calculateLeaveDays(fromDate: Date, toDate: Date): number {
+    if (!fromDate || !toDate || fromDate > toDate) return 0;
 
-  const holidayStrings = this.holidayDates.map(d => {
-    const holiday = new Date(d);
-    holiday.setHours(0, 0, 0, 0); // normalize
-    return holiday.getTime();    // use timestamp
-  });
+    const holidayStrings = this.holidayDates.map((d) => {
+      const holiday = new Date(d);
+      holiday.setHours(0, 0, 0, 0);
+      return holiday.getTime();
+    });
 
-  let count = 0;
-  const current = new Date(fromDate);
+    let count = 0;
+    const current = new Date(fromDate);
 
-  while (current <= toDate) {
-    current.setHours(0, 0, 0, 0); // normalize current date
+    while (current <= toDate) {
+      current.setHours(0, 0, 0, 0);
 
-    const day = current.getDay(); // 0 = Sun, 6 = Sat
-    const isWeekend = day === 0 || day === 6;
-    const isHoliday = holidayStrings.includes(current.getTime());
+      const day = current.getDay();
+      const isWeekend = day === 0 || day === 6;
+      const isHoliday = holidayStrings.includes(current.getTime());
 
-    if (!isWeekend && !isHoliday) {
-      count++;
+      if (!isWeekend && !isHoliday) {
+        count++;
+      }
+
+      current.setDate(current.getDate() + 1);
     }
 
-    current.setDate(current.getDate() + 1);
+    return count;
   }
-
-  return count;
-}
-
 
   ApplyLeave() {
     console.log(this.leaveForm.getRawValue());
+
+    const name = `${this.commonService.getCurrentUserDetails().firstName} ${
+      this.commonService.getCurrentUserDetails().lastName
+    }`;
 
     const {
       employeeNoWithName,
@@ -228,8 +233,10 @@ export class ApplyLeaveComponent {
     } = this.leaveForm.getRawValue();
 
     const payload = {
-      empNo: employeeNoWithName ? this.commonService.getCurrentUserDetails().empNo : '',
-      name: employeeNoWithName ? this.commonService.getCurrentUserDetails().name : '',
+      empNo: employeeNoWithName
+        ? this.commonService.getCurrentUserDetails().empNo
+        : '',
+      name: employeeNoWithName ? name : '',
       leaveType: leaveType ? leaveType : '',
       leaveDuration: leaveDuration ? leaveDuration : '',
       fromDate: startDate ? startDate : '',
@@ -256,18 +263,16 @@ export class ApplyLeaveComponent {
       });
   }
 
- 
-
   approveReject(decision: 'Approved' | 'Rejected') {
-    const { _id, name, empNo } = this.data.leaveRequest;
+    const { _id } = this.data.leaveRequest;
+    const currentUser = this.commonService.getCurrentUserDetails();
+
     if (decision === 'Approved') {
-      
       const payload = {
         leaveId: _id || '',
         action: decision || '',
-        role: this.commonService.getCurrentUserDetails().role || '',
-        approverComment: 'Leave Approved',
-        updatedBy: `${this.commonService.getCurrentUserDetails().name} [${this.commonService.getCurrentUserDetails().empNo}]` || '',
+        comments: 'Leave Approved',
+        approverEmpNo: currentUser.empNo || '',
       };
       this.sendDecision(payload);
     }
@@ -282,10 +287,10 @@ export class ApplyLeaveComponent {
           const payload = {
             leaveId: _id || '',
             action: decision || '',
-            role: this.commonService.getCurrentUserDetails().role || '',
-            approverComment: comment,
-            updatedBy: `${this.commonService.getCurrentUserDetails().name} [${this.commonService.getCurrentUserDetails().empNo}]` || '',
+            comments: comment || '',
+            approverEmpNo: currentUser.empNo || '',
           };
+
           this.sendDecision(payload);
         }
       });

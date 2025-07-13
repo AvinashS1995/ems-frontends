@@ -32,4 +32,9 @@ export const API_ENDPOINTS = {
   SERVICE_SAVE_EMPLOYEE_LEAVE_APPLICATION_APPROVE_REJECT: 'leave/employee-leave-application-approve-reject',
   SERVICE_APPLICATION_APPROVAL_FLOW: 'leave/application-approval-flow',
   SERVICE_UPLOADFILE: 'file/upload-file',
+  SERVICE_SAVE_APPROVAL_CONFIGURATION_DETAILS: 'approval/save-approval-configuration-details',
+  SERVICE_GET_ALL_APPROVAL_CONFIGURATION_DETAILS: 'approval/get-all-approval-configuration-details',
+  SERVICE_UPDATE_APPROVAL_CONFIGURATION_DETAILS: 'approval/update-approval-configuration-detail',
+  SERVICE_DELETE_APPROVAL_CONFIGURATION_DETAILS: 'approval/delete-approval-configuration-detail',
+  SERVICE_GET_LEAVE_REQUEST_APPROVER: 'leave/get-leave-request-approver',
 };

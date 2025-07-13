@@ -6,7 +6,6 @@
     </div>
     <mat-divider></mat-divider>
 
-
     <mat-card>
         <form [formGroup]="createMenuForm">
             <div class="create-menu-form-container">
@@ -44,7 +43,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Description</mat-label>
                     <textarea matInput formControlName="menuDescription" rows="3" maxlength="200"
-                    (input)="updateDescriptionLength()"></textarea>
+                        (input)="updateDescriptionLength()"></textarea>
                     <mat-hint align="end">{{ descriptionLength }}/200</mat-hint>
                 </mat-form-field>
 
@@ -52,7 +51,7 @@
 
             <div class="form-buttons    ">
                 <button mat-flat-button color="primary" type="submit" [disabled]="createMenuForm.invalid"
-                (click)="onSubmitMenuForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
+                    (click)="onSubmitMenuForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
                 </button>
                 <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
                     Cancel

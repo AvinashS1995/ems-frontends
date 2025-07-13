@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-material';
 import { ApiService } from '../../../../shared/service/api/api.service';
 import { CommonService } from '../../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
 import { REGEX } from '../../../../shared/common/constant';
-import { map, pairwise, startWith, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -29,17 +33,16 @@ export const MY_DATE_FORMATS = {
   templateUrl: './employee-profile.component.html',
   styleUrl: './employee-profile.component.scss',
   providers: [
-      {
-        provide: DateAdapter,
-        useClass: MomentDateAdapter,
-        deps: [MAT_DATE_LOCALE],
-      },
-      { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
-    ],
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+  ],
 })
 export class EmployeeProfileComponent {
-
-   private destroy$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
   updateEmployeeProfileForm!: FormGroup;
 
   roleList: Array<any> = [];
@@ -51,6 +54,8 @@ export class EmployeeProfileComponent {
   uploadedPhotoUrl: string = '';
   isFormChanged = false;
   initialFormValue: any;
+  previewUrl: string | ArrayBuffer | null = null;
+  defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
   constructor(
     private fb: FormBuilder,
@@ -86,27 +91,53 @@ export class EmployeeProfileComponent {
       workType: [''],
     });
 
-    const { name, email, mobile, status, type, teamLeader, manager, hr, 
-      role, designation, joiningDate, salary, workType } = this.commonService.getCurrentUserDetails()
+    const {
+      firstName,
+      middleName,
+      lastName,
+      dob,
+      gender,
+      email,
+      mobile,
+      address,
+      status,
+      type,
+      reportedBy,
+      role,
+      designation,
+      department,
+      joiningDate,
+      salary,
+      workType,
+      profileImage,
+    } = this.commonService.getCurrentUserDetails();
 
-      this.updateEmployeeProfileForm.patchValue({
-        name: name || '',
-        email: email || '',
-        mobile: mobile || '',
-        status: status || '',
-        type: type || '',
-        teamLeader: teamLeader || '',
-        manager: manager || '',
-        hr: hr || '',
-        role: role || '',
-        designation: designation || '',
-        joiningDate: joiningDate || '',
-        salary: salary || '',
-        workType: workType || '',
-      })
+    this.updateEmployeeProfileForm.patchValue({
+      fistName: firstName || '',
+      middleName: middleName || '',
+      lastName: lastName || '',
+      dob: dob || '',
+      gender: gender || '',
+      email: email || '',
+      mobile: mobile || '',
+      address: address || '',
+      status: status || '',
+      type: type || '',
+      reportedBy: reportedBy || '',
+      role: role || '',
+      designation: designation || '',
+      department: department || '',
+      joiningDate: joiningDate || '',
+      salary: salary || '',
+      workType: workType || '',
+    });
+
+    this.uploadedPhotoUrl = profileImage;
+    this.updateEmployeeProfileForm.patchValue({
+      profileImage: this.updateEmployeeProfileForm,
+    });
 
     this.setSubscription();
-
   }
 
   getparam() {
@@ -142,13 +173,16 @@ export class EmployeeProfileComponent {
           };
         });
 
-        this.experienceTypeList = params['data'].experienceLevel?.data?.types || [];
-        this.experienceTypeList = this.experienceTypeList.map((experienceLevel) => {
-          return {
-            value: experienceLevel.typeValue,
-            label: experienceLevel.typeLabel,
-          };
-        });
+        this.experienceTypeList =
+          params['data'].experienceLevel?.data?.types || [];
+        this.experienceTypeList = this.experienceTypeList.map(
+          (experienceLevel) => {
+            return {
+              value: experienceLevel.typeValue,
+              label: experienceLevel.typeLabel,
+            };
+          }
+        );
 
         this.workTypeList = params['data'].workType?.data?.types || [];
         this.workTypeList = this.workTypeList.map((workType) => {
@@ -162,61 +196,89 @@ export class EmployeeProfileComponent {
   }
 
   setSubscription() {
-    
     this.initialFormValue = this.updateEmployeeProfileForm.getRawValue();
-debugger
-    this.updateEmployeeProfileForm.valueChanges
-  .pipe(takeUntil(this.destroy$))
-  .subscribe(currentValue => {
-    this.isFormChanged =
-      JSON.stringify(currentValue) !== JSON.stringify(this.initialFormValue);
-  });
 
+    this.updateEmployeeProfileForm.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((currentValue) => {
+        this.isFormChanged =
+          JSON.stringify(currentValue) !==
+          JSON.stringify(this.initialFormValue);
+      });
   }
 
   onFileSelected(event: Event): void {
-  const file = (event.target as HTMLInputElement)?.files?.[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.uploadedPhotoUrl = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-    console.log(this.uploadedPhotoUrl)
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file || !file.type.startsWith('image/')) {
+      this.commonService.openSnackbar('Only image files are allowed', 'error');
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      // 2 MB limit
+      this.commonService.openSnackbar('Image must be less than 2MB', 'error');
+      return;
+    }
+
+    // Upload to backend (Filebase)
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.apiService
+      .postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData)
+      .subscribe({
+        next: (res) => {
+          const uploadedUrl = res?.data?.presignFileUrl;
+          this.previewUrl = uploadedUrl;
+          const fileKey = res?.data?.fileKey;
+          debugger;
+          this.updateEmployeeProfileForm.patchValue({ profileImage: fileKey });
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (error) => {
+          console.error('Upload error:', error);
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
-}
 
   onSubmitEmployeeProfileForm() {
+    console.log(this.updateEmployeeProfileForm.getRawValue());
 
-    console.log(this.updateEmployeeProfileForm.getRawValue())
-
-    const { _id } = this.commonService.getCurrentUserDetails()
+    const { _id } = this.commonService.getCurrentUserDetails();
 
     const newEmployee = this.updateEmployeeProfileForm.getRawValue();
 
     const paylaod = {
-        id: _id ? _id  : '',
-        name: newEmployee.name ? newEmployee.name : '',
-        email: newEmployee.email ? newEmployee.email : '',
-        mobile: newEmployee.mobile ? newEmployee.mobile : '',
-        role: newEmployee.role ? newEmployee.role : '',
-        status: newEmployee.status ? newEmployee.status : '',
-        type: newEmployee.type ? newEmployee.type : '',
-        teamLeader: newEmployee.teamLeader ? newEmployee.teamLeader : '',
-        manager: newEmployee.manager ? newEmployee.manager : '',
-        hr: newEmployee.hr ? newEmployee.hr : '',
-        designation: newEmployee.designation ? newEmployee.designation : '',
-        joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
-        salary: newEmployee.salary ? newEmployee.salary : 0,
-        workType: newEmployee.workType ? newEmployee.workType : '',
-        profileImage: newEmployee.profileImage ? newEmployee.profileImage : '',
-      };
-      
-      console.log('Update employee data:', paylaod);
+      id: _id ? _id : '',
+      name: newEmployee.name ? newEmployee.name : '',
+      email: newEmployee.email ? newEmployee.email : '',
+      mobile: newEmployee.mobile ? newEmployee.mobile : '',
+      role: newEmployee.role ? newEmployee.role : '',
+      status: newEmployee.status ? newEmployee.status : '',
+      type: newEmployee.type ? newEmployee.type : '',
+      teamLeader: newEmployee.teamLeader ? newEmployee.teamLeader : '',
+      manager: newEmployee.manager ? newEmployee.manager : '',
+      hr: newEmployee.hr ? newEmployee.hr : '',
+      designation: newEmployee.designation ? newEmployee.designation : '',
+      joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
+      salary: newEmployee.salary ? newEmployee.salary : 0,
+      workType: newEmployee.workType ? newEmployee.workType : '',
+      profileImage: newEmployee.profileImage ? newEmployee.profileImage : '',
+    };
 
-      this.apiService.postApiCall(API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST, paylaod).subscribe({
+    console.log('Update employee data:', paylaod);
+
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST, paylaod)
+      .subscribe({
         next: (res: any) => {
-          console.log(`${API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST} Response : `, res);
+          console.log(
+            `${API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST} Response : `,
+            res
+          );
           this.isFormChanged = false;
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -224,14 +286,13 @@ debugger
           this.commonService.openSnackbar(error.error.message, 'error');
         },
       });
-
   }
 
   cancelForm() {
-    this.router.navigateByUrl('/dashboard')
+    this.router.navigateByUrl('/dashboard');
   }
 
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }

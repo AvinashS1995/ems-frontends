@@ -33,6 +33,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -74,5 +75,6 @@ export const SHARED_MATERIAL_MODULES = [
   MatTreeModule,
   CommonModule,
   ReactiveFormsModule,
-  FormsModule
+  FormsModule,
+  DragDropModule
 ];

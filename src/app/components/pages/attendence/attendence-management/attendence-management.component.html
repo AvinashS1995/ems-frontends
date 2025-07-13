@@ -1,168 +1,153 @@
 <div class="attendance-container">
-    <h2>Employee Attendance</h2>
-    <mat-divider></mat-divider>
-  
-    <div class="summary-cards">
-      <mat-card class="summary-card">
-        <h3>Total Employee</h3>
-        <p>{{ todayAttendenceSummary.totalEmployees }}</p>
-        <!-- <span class="positive">10% vs last month</span> -->
-      </mat-card>
-  
-      <mat-card class="summary-card">
-        <h3>Present Employee</h3>
-        <p>{{ todayAttendenceSummary.presentEmployees }}</p>
-        <!-- <span class="positive">10% vs last month</span> -->
-      </mat-card>
-  
-      <mat-card class="summary-card">
-        <h3>Absent Employee</h3>
-        <p>{{ todayAttendenceSummary.absentEmployees }}</p>
-        <!-- <span class="negative">10% vs last month</span> -->
-      </mat-card>
-  
-      <mat-card class="summary-card">
-        <h3>Late Arrivals</h3>
-        <p>{{ todayAttendenceSummary.lateArrivals }}</p>
-        <!-- <span class="negative">10% vs last month</span> -->
-      </mat-card>
-  
-      <mat-card class="summary-card start-day-card" (click)="openCheckOutsDialog()">
-        <h3>START YOUR DAY!</h3>
-      
-        <div class="time-inputs">
-          <div class="time-box">{{ hours | number: '2.0' }}</div>
-          <div class="time-box">{{ minutes | number: '2.0' }}</div>
-          <div class="time-box">{{ seconds | number: '2.0' }}</div>
-          <span class="time-label">HRS</span>
-        </div>
-      </mat-card>
-      
-    </div>
+  <h2>Employee Attendance</h2>
+  <mat-divider></mat-divider>
 
-    <mat-divider></mat-divider>
+  <div class="summary-cards">
+    <mat-card class="summary-card">
+      <h3>Total Employee</h3>
+      <p>{{ todayAttendenceSummary.totalEmployees }}</p>
+      <!-- <span class="positive">10% vs last month</span> -->
+    </mat-card>
 
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Filter Employees Attendence
-            </mat-panel-title>
-        </mat-expansion-panel-header>
+    <mat-card class="summary-card">
+      <h3>Present Employee</h3>
+      <p>{{ todayAttendenceSummary.presentEmployees }}</p>
+      <!-- <span class="positive">10% vs last month</span> -->
+    </mat-card>
 
-        <form [formGroup]="employeeAttendenceFilterForm">
-          <div class="filters">
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>Search</mat-label>
-              <input matInput placeholder="Search by name, role, department" formControlName="name">
-            </mat-form-field>
-        
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>Status</mat-label>
-              <mat-select formControlName="attendenceStatus">
-                  <mat-option *ngFor="let status of attendenceStatuse" [value]="status.label">{{ status.label }}</mat-option>
-              </mat-select>
-          </mat-form-field>
-        
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>From Date</mat-label>
-              <input matInput [matDatepicker]="fromPicker"  placeholder="DD/MM/YYYY" formControlName="startDate">
-              <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
-              <mat-datepicker #fromPicker></mat-datepicker>
-            </mat-form-field>
+    <mat-card class="summary-card">
+      <h3>Absent Employee</h3>
+      <p>{{ todayAttendenceSummary.absentEmployees }}</p>
+      <!-- <span class="negative">10% vs last month</span> -->
+    </mat-card>
 
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>To Date</mat-label>
-              <input matInput [matDatepicker]="toPicker" placeholder="DD/MM/YYYY" formControlName="endDate">
-              <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-              <mat-datepicker #toPicker></mat-datepicker>
-            </mat-form-field>
+    <mat-card class="summary-card">
+      <h3>Late Arrivals</h3>
+      <p>{{ todayAttendenceSummary.lateArrivals }}</p>
+      <!-- <span class="negative">10% vs last month</span> -->
+    </mat-card>
 
-            <!-- <mat-form-field appearance="fill">
-              <mat-label>From Date</mat-label>
-              <input matInput [matDatepicker]="fromPicker" formControlName="startDate" />
-              <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
-              <mat-datepicker #fromPicker></mat-datepicker>
-            </mat-form-field>
-          
-            <mat-form-field appearance="fill">
-              <mat-label>To Date</mat-label>
-              <input matInput [matDatepicker]="toPicker" formControlName="endDate" />
-              <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-              <mat-datepicker #toPicker></mat-datepicker>
-            </mat-form-field> -->
-        
-          </div>
-        </form>
-        
-        <div class="filter-actions">
-          <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
-          <button mat-flat-button class="example-full-width" (click)="clearFilters()">Clear</button>
+    <mat-card class="summary-card start-day-card" (click)="openCheckOutsDialog()">
+      <h3>START YOUR DAY!</h3>
+
+      <div class="time-inputs">
+        <div class="time-box">{{ hours | number: '2.0' }}</div>
+        <div class="time-box">{{ minutes | number: '2.0' }}</div>
+        <div class="time-box">{{ seconds | number: '2.0' }}</div>
+        <span class="time-label">HRS</span>
       </div>
+    </mat-card>
 
-
-    </mat-expansion-panel>
-  
-    
-    <div class="attendance-table">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  
-        <!-- Date Column -->
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
-          <td mat-cell *matCellDef="let element">{{element.date | date:'dd/MM/yyyy'}}</td>
-        </ng-container>
-  
-        <!-- Employee Column -->
-        <ng-container matColumnDef="employee">
-          <th mat-header-cell *matHeaderCellDef>Employee</th>
-          <td mat-cell *matCellDef="let element">
-            <div class="employee-info">
-              <!-- <img [src]="element.photo" alt="avatar" class="avatar"> -->
-              <span>{{element.name}}</span>
-            </div>
-          </td>
-        </ng-container>
-  
-        <!-- Role Column -->
-        <ng-container matColumnDef="role">
-          <th mat-header-cell *matHeaderCellDef>Role</th>
-          <td mat-cell *matCellDef="let element">{{element.designation}}</td>
-        </ng-container>
-  
-        <!-- Employment Type Column -->
-        <ng-container matColumnDef="employmentType">
-          <th mat-header-cell *matHeaderCellDef>Employment Type</th>
-          <td mat-cell *matCellDef="let element">
-            <span [ngClass]="element.employmentType">{{element.employmentType}}</span>
-          </td>
-        </ng-container>
-  
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let element">
-            <span [ngClass]="element.status">{{element.status}}</span>
-          </td>
-        </ng-container>
-  
-        <!-- Check In Column -->
-        <ng-container matColumnDef="checkIn">
-          <th mat-header-cell *matHeaderCellDef>Check In</th>
-          <td mat-cell *matCellDef="let element">{{element.checkInTime | date:'hh:mm a'}}</td>
-        </ng-container>
-  
-        <!-- Check Out Column -->
-        <ng-container matColumnDef="checkOut">
-          <th mat-header-cell *matHeaderCellDef>Check Out</th>
-          <td mat-cell *matCellDef="let element">{{element.checkOutTime | date:'hh:mm a'}}</td>
-        </ng-container>
-  
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-
-    </div>
-<mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]" (page)="onPageChange($event)">
-      </mat-paginator>
   </div>
-  
+
+  <mat-divider></mat-divider>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Filter Employees Attendence
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <form [formGroup]="employeeAttendenceFilterForm">
+      <div class="filters">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Search</mat-label>
+          <input matInput placeholder="Search by name, role, department" formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="attendenceStatus">
+            <mat-option *ngFor="let status of attendenceStatuse" [value]="status.label">{{ status.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>From Date</mat-label>
+          <input matInput [matDatepicker]="fromPicker" placeholder="DD/MM/YYYY" formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>To Date</mat-label>
+          <input matInput [matDatepicker]="toPicker" placeholder="DD/MM/YYYY" formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+
+      </div>
+    </form>
+
+    <div class="filter-actions">
+      <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
+      <button mat-flat-button class="example-full-width" (click)="clearFilters()">Clear</button>
+    </div>
+
+  </mat-expansion-panel>
+
+
+  <div class="attendance-table">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">{{element.date | date:'dd/MM/yyyy'}}</td>
+      </ng-container>
+
+      <!-- Employee Column -->
+      <ng-container matColumnDef="employee">
+        <th mat-header-cell *matHeaderCellDef>Employee</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="employee-info">
+            <!-- <img [src]="element.photo" alt="avatar" class="avatar"> -->
+            <span>{{element.name}}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Role Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let element">{{element.designation}}</td>
+      </ng-container>
+
+      <!-- Employment Type Column -->
+      <ng-container matColumnDef="employmentType">
+        <th mat-header-cell *matHeaderCellDef>Employment Type</th>
+        <td mat-cell *matCellDef="let element">
+          <span [ngClass]="element.employmentType">{{element.employmentType}}</span>
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <span [ngClass]="element.status">{{element.status}}</span>
+        </td>
+      </ng-container>
+
+      <!-- Check In Column -->
+      <ng-container matColumnDef="checkIn">
+        <th mat-header-cell *matHeaderCellDef>Check In</th>
+        <td mat-cell *matCellDef="let element">{{element.checkInTime | date:'hh:mm a'}}</td>
+      </ng-container>
+
+      <!-- Check Out Column -->
+      <ng-container matColumnDef="checkOut">
+        <th mat-header-cell *matHeaderCellDef>Check Out</th>
+        <td mat-cell *matCellDef="let element">{{element.checkOutTime | date:'hh:mm a'}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+  <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

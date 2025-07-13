@@ -19,7 +19,12 @@
         <form [formGroup]="employeeLeaveFilterForm">
             <div class="filter-container">
 
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee No</mat-label>
+                    <input matInput type="text" formControlName="empNo">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
                     <mat-label>Status</mat-label>
                     <mat-select formControlName="leaveStatus">
                         <mat-option *ngFor="let status of leaveStatusList" [value]="status.label">{{ status.label
@@ -27,14 +32,14 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                     <mat-label>From Date</mat-label>
                     <input matInput [matDatepicker]="fromPicker" placeholder="DD/MM/YYYY" formControlName="startDate">
                     <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
                     <mat-datepicker #fromPicker></mat-datepicker>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                     <mat-label>To Date</mat-label>
                     <input matInput [matDatepicker]="toPicker" placeholder="DD/MM/YYYY" formControlName="endDate">
                     <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
@@ -44,8 +49,6 @@
             </div>
 
         </form>
-
-
 
         <div class="filter-actions">
             <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
@@ -93,8 +96,8 @@
                 <th mat-header-cell *matHeaderCellDef> Status </th>
                 <td mat-cell *matCellDef="let element">
                     <span [ngClass]="element.status"> {{element.status}} </span>
-                    <mat-icon class="status-icon" [ngClass]="getStatusIconClass(element.status)" 
-                    (click)="openApprovalFlowDialog(element._id)">
+                    <mat-icon class="status-icon" [ngClass]="getStatusIconClass(element.status)"
+                        (click)="openApprovalFlowDialog(element._id)">
                         visibility
                     </mat-icon>
                 </td>
@@ -116,8 +119,6 @@
 
     <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
         (page)="onPageChange($event)"></mat-paginator>
-
-
 
 
 </div>

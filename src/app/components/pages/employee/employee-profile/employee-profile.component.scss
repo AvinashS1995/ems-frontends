@@ -62,7 +62,7 @@ mat-card {
     gap: 16px;
     margin: 16px;
 
-    
+
     grid-template-columns: 1fr;
 
     @media (min-width: 600px) {
@@ -73,7 +73,7 @@ mat-card {
       grid-template-columns: repeat(2, 1fr);
       // // // grid-template-columns: 2fr 2fr 1fr;
       // grid-template-columns: 1fr;
-    align-items: start;
+      align-items: start;
 
     }
 
@@ -83,8 +83,8 @@ mat-card {
   }
 
   .profile-image {
-display: flex;
-flex-direction: row-reverse;
+    display: flex;
+    flex-direction: row-reverse;
   }
 
   .photo-upload {
@@ -147,7 +147,7 @@ flex-direction: row-reverse;
     grid-template-columns: repeat(2, 1fr);
   }
 
-  
+
   @media (min-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
 

@@ -1,0 +1,74 @@
+<div class="approval-configuration-container">
+    <div class="header">
+        <div class="title">
+            <h1>{{ isEditMode ? 'Update Approval Configuration' : 'Create Approval Configuration' }}</h1>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <mat-card class="filter-card">
+        <form [formGroup]="createApprovalConfigurationForm">
+
+            <mat-form-field appearance="outline" class="request-type">
+                <mat-label>Select Request Type</mat-label>
+                <mat-select [(value)]="selectedRequestType" (selectionChange)="onRequestTypeSelect($event.value)">
+                    <mat-option *ngFor="let type of requestTypeList" [value]="type">{{ type.label }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </form>
+
+    </mat-card>
+
+    <div *ngIf="selectedRequestType" class="container">
+        <!-- LEFT: Category List -->
+        <div class="category-list">
+            <h2 class="section-title">Role Category List</h2>
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let category of categories" [expanded]="category.expanded">
+                    <mat-expansion-panel-header (click)="toggleExpand(category)">
+                        <mat-panel-title>{{ category.name }}</mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div class="role-item" *ngFor="let role of category.roles">
+                        <span>{{ role.typeLabel }}</span>
+                        <button mat-icon-button color="primary" class="circle-icon" (click)="addToHierarchy(role)">
+                            <mat-icon class="add-icon">add</mat-icon>
+                        </button>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+        <!-- RIGHT: Hierarchy List -->
+        <div class="hierarchy-card">
+            <h2 class="section-title">Approval Flow Hierarchy</h2>
+            <div *ngIf="hierarchyRoles.length; else noData">
+                <div cdkDropList [cdkDropListData]="hierarchyRoles" (cdkDropListDropped)="drop($event)"
+                    class="drop-zone">
+                    <div *ngFor="let role of hierarchyRoles; let i = index" class="hierarchy-item" cdkDrag>
+                        {{ role.typeLabel }}
+                        <button mat-icon-button color="warn" (click)="removeFromHierarchy(i)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <ng-template #noData>
+                <div class="empty-state">No roles added yet</div>
+            </ng-template>
+        </div>
+    </div>
+
+
+    <div class="form-buttons">
+        <button mat-flat-button color="primary" type="submit" [disabled]="createApprovalConfigurationForm.invalid"
+            (click)="onSubmitApprovalConfigurationForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
+        </button>
+        <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
+            Cancel
+        </button>
+    </div>
+
+
+</div>

@@ -3,18 +3,6 @@
     <mat-dialog-content>
         <form [formGroup]="employeeForm" class="form-grid">
 
-            <!-- <div class="image-container">
-                <label class="hoverable" for="fileInput">
-                    <span matTooltip="Tap here to select your picture" matTooltipPosition="above"></span>
-                    <img [src]="previewUrl ? previewUrl : 'https://www.w3schools.com/howto/img_avatar.png'" />
-                   
-                    <div class="background"></div>
-                </label>
-                <br />
-                <input id="fileInput" type="file" (change)="onSelectFile($event)" class="select-profile-picture" />
-               
-            </div> -->
-
             <div class="avatar-container">
                 <div class="image-circle" [ngStyle]="{
         backgroundImage: 'url(' + (previewUrl || defaultAvatar) + ')'
@@ -26,11 +14,41 @@
                 </label>
             </div>
 
+
             <mat-form-field appearance="outline">
-                <mat-label>Name</mat-label>
-                <input matInput type="text" formControlName="name">
+                <mat-label>Fist Name</mat-label>
+                <input matInput type="text" formControlName="firstName">
                 <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">Employee Name is required</mat-error>
 
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Middle Name</mat-label>
+                <input matInput type="text" formControlName="middleName">
+                <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">Employee Name is required</mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input matInput type="text" formControlName="lastName">
+                <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">Employee Name is required</mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Date Of Birth</mat-label>
+                <input matInput [matDatepicker]="dobpicker" formControlName="dob">
+                <mat-datepicker-toggle matSuffix [for]="dobpicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobpicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender">
+                    <mat-option *ngFor="let gender of genderTypeList" [value]="gender.label">{{ gender.label
+                        }}</mat-option>
+                </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
@@ -49,6 +67,12 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
+                <mat-label>Address</mat-label>
+                <input matInput type="text" formControlName="address">
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
                 <mat-label>Role</mat-label>
                 <mat-select formControlName="role">
                     <mat-option *ngFor="let role of roles" [value]="role.label">{{ role.label }}</mat-option>
@@ -64,18 +88,21 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Team Leader</mat-label>
-                <input matInput formControlName="teamLeader">
+                <mat-label>Reported By</mat-label>
+                <mat-select formControlName="reportedBy">
+                    <mat-option *ngFor="let reportedBy of reportedByTypeList" [value]="reportedBy.label">{{
+                        reportedBy.label }}</mat-option>
+                </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Manager</mat-label>
-                <input matInput formControlName="manager">
-            </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>HR</mat-label>
-                <input matInput formControlName="hr">
+                <mat-label>Department</mat-label>
+                <mat-select formControlName="department">
+                    <mat-option *ngFor="let department of departmentTypeList" [value]="department.label">{{
+                        department.label
+                        }}</mat-option>
+                </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline">

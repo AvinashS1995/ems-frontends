@@ -9,6 +9,7 @@ import { LeaveApprovalRequestListResolverService } from './components/pages/leav
 import { ConfigurationResolverService } from './components/pages/configuration/configuration/configuration-resolver.service';
 import { CreateMenuConfigurationResolverService } from './components/pages/configuration/menu/create-menu-configuration/create-menu-configuration-resolver.service';
 import { RoleWiseMenuConfigurationResolverService } from './components/pages/configuration/menu/role-wise-menu-configuration/role-wise-menu-configuration-resolver.service';
+import { ApprovalConfigurationResolverService } from './components/pages/approval/approaval-configuration/approval-configuration-resolver.service';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -153,6 +154,28 @@ export const routes: Routes = [
             title: "Role Wise Menu Configuration",
           },
           resolve: { data: RoleWiseMenuConfigurationResolverService }
+      },
+      {
+        path: 'approval-configuration-list',
+        loadComponent: () =>
+          import('./components/pages/approval/approaval-configuration/approaval-configuration.component').then(
+            (c) => c.ApproavalConfigurationComponent
+          ),
+          data: {
+            title: "Approval Configuration List",
+          },
+          resolve: { data: ApprovalConfigurationResolverService }
+      },
+      {
+        path: 'create-approval-configuration',
+        loadComponent: () =>
+          import('./components/pages/approval/approval-configuration-form/approval-configuration-form.component').then(
+            (c) => c.ApprovalConfigurationFormComponent
+          ),
+          data: {
+            title: "Create Approval Configuration",
+          },
+          resolve: { data: ApprovalConfigurationResolverService }
       },
 
     ],

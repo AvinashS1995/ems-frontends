@@ -80,9 +80,6 @@ export class RoleWiseMenuConfigurationComponent {
 
         if (selectedRoleValue) {
           this.getMenuList();
-
-
-          
         }
       }
     );
@@ -91,33 +88,35 @@ export class RoleWiseMenuConfigurationComponent {
   getMenuList() {
     const { role } = this.roleWiseMenuFilterForm.getRawValue();
     const payload = {
-      role: role  || ''
-    }
-    this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETMENUS,payload).subscribe({
-      next: (res: any) => {
-        console.log(`${API_ENDPOINTS.SERVICE_GETMENUS} Response : `, res);
+      role: role || '',
+    };
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_GETMENUS, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(`${API_ENDPOINTS.SERVICE_GETMENUS} Response : `, res);
 
-        // this.menuList = res?.data || [];
-        const rawMenus = res?.data || [];
-        this.menuList = this.flattenMenus(rawMenus);
-        debugger
-        this.menuFormArray = this.fb.array(
-          this.menuList.map((menu) =>
-            this.fb.group({
-              menuId: [menu._id],
-              access: [menu.access || 'noAccess'],
-            })
-          )
-        );
-        this.createRoleWiseMenuForm.setControl('menus', this.menuFormArray);
-        console.log(this.menuList);
+          // this.menuList = res?.data || [];
+          const rawMenus = res?.data || [];
+          this.menuList = this.flattenMenus(rawMenus);
+          debugger;
+          this.menuFormArray = this.fb.array(
+            this.menuList.map((menu) =>
+              this.fb.group({
+                menuId: [menu._id],
+                access: [menu.access || 'noAccess'],
+              })
+            )
+          );
+          this.createRoleWiseMenuForm.setControl('menus', this.menuFormArray);
+          console.log(this.menuList);
 
-        this.commonService.openSnackbar(res.message, 'success');
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   flattenMenus(
@@ -159,24 +158,28 @@ export class RoleWiseMenuConfigurationComponent {
   submitRoleWiseMenuForm() {
     console.log(this.menuFormArray.value);
 
-    const  { role } = this.roleWiseMenuFilterForm.getRawValue();
+    const { role } = this.roleWiseMenuFilterForm.getRawValue();
 
     const payload = {
       role: role || '',
       menus: this.menuFormArray.value || [],
     };
-    
 
-    this.apiService.postApiCall(API_ENDPOINTS.SERVICE_SAVE_ROLE_WISE_MENUS, payload).subscribe({
-      next: (res: any) => {
-        console.log(`${API_ENDPOINTS.SERVICE_SAVE_ROLE_WISE_MENUS} Response : `, res);
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_SAVE_ROLE_WISE_MENUS, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(
+            `${API_ENDPOINTS.SERVICE_SAVE_ROLE_WISE_MENUS} Response : `,
+            res
+          );
 
-        this.commonService.openSnackbar(res.message, 'success');
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   onCancel() {

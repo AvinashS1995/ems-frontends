@@ -3,18 +3,17 @@
         <div class="title">
             <h1>Manage Employees</h1>
         </div>
-        <!-- <button mat-flat-button class="example-full-width" type="button" (click)="addEmployee()">+ Add new
-            employee</button> -->
 
-            <!-- For medium and large screens -->
-<button mat-flat-button class="add-employee-btn text-btn" type="button" (click)="addEmployee()">
-  + Add new employee
-</button>
+        <div class="action-buttons">
+            <button mat-flat-button color="primary" class="text-btn" type="button" (click)="addEmployee()">
+                + Create Approval Configuration
+            </button>
 
-<!-- For small screens -->
-<button mat-icon-button class="custom-primary icon-btn" type="button" (click)="addEmployee()">
-  <mat-icon>person_add</mat-icon>
-</button>
+            <button mat-icon-button class="icon-btn circular-icon-btn" color="primary" (click)="addEmployee()"
+                matTooltip="Create Approval Configuration">
+                <mat-icon class="bold-plus-icon">add</mat-icon>
+            </button>
+        </div>
 
     </div>
     <mat-divider></mat-divider>
@@ -29,7 +28,7 @@
         <form [formGroup]="employeeFilterForm">
             <div class="filter-container">
 
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                     <mat-label>Search</mat-label>
                     <input matInput placeholder="Search by Name" formControlName="name">
                 </mat-form-field>
@@ -61,16 +60,16 @@
 
             </div>
 
-             <div class="form-buttons">
-            <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
-            <button mat-flat-button class="example-full-width" (click)="clearFilters()">Clear</button>
-        </div>
+            <div class="form-buttons">
+                <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
+                <button mat-flat-button class="example-full-width" (click)="clearFilters()">Clear</button>
+            </div>
 
         </form>
 
 
 
-       
+
 
     </mat-expansion-panel>
 

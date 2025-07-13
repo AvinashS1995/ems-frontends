@@ -11,26 +11,22 @@ import { API_ENDPOINTS } from '../../../../../shared/common/api-contant';
   standalone: true,
   imports: [SHARED_MATERIAL_MODULES],
   templateUrl: './create-menu-configuration.component.html',
-  styleUrl: './create-menu-configuration.component.scss'
+  styleUrl: './create-menu-configuration.component.scss',
 })
 export class CreateMenuConfigurationComponent {
-
   createMenuForm!: FormGroup;
 
   menuList: Array<any> = [];
   isEditMode: Boolean = false;
   descriptionLength = 0;
 
-
   constructor(
-        private commonService: CommonService,
-        private apiService: ApiService,
-        private activateRoute: ActivatedRoute,
-        private fb: FormBuilder,
-        private router: Router
-      ) {
-        
-      }
+    private commonService: CommonService,
+    private apiService: ApiService,
+    private activateRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.prepareCreateMenuForm();
@@ -45,30 +41,42 @@ export class CreateMenuConfigurationComponent {
       menuIcon: [''],
       parentMenu: [''],
       menuDescription: [''],
-    })
+    });
 
-  this.createMenuForm.controls['menuDescription'].valueChanges.subscribe(menuDescriptionValue => {
-    this.descriptionLength = menuDescriptionValue?.length || 0;
-  })
+    this.createMenuForm.controls['menuDescription'].valueChanges.subscribe(
+      (menuDescriptionValue) => {
+        this.descriptionLength = menuDescriptionValue?.length || 0;
+      }
+    );
   }
 
   getparams() {
-    this.activateRoute.data.subscribe(params => {
-      console.log("Menu Params--->", params)
+    this.activateRoute.data.subscribe((params) => {
+      console.log('Menu Params--->', params);
 
       if (params['data']) {
-        const menuData = params['data']?.menus?.data || []
-        
-        this.menuList  = this.buildMenuList(menuData)
+        const menuData = params['data']?.menus?.data || [];
 
-        console.log(this.menuList)
+        this.menuList = this.buildMenuList(menuData);
 
-        const { title, componentName, path, icon, description, parentId, mode } = params['data'].menuDetails || {}
-        
-        const parentMenu = this.menuList.find(item => item.value === parentId)
-        console.log(parentMenu)
+        console.log(this.menuList);
 
-        if(mode === 'edit') {
+        const {
+          title,
+          componentName,
+          path,
+          icon,
+          description,
+          parentId,
+          mode,
+        } = params['data'].menuDetails || {};
+
+        const parentMenu = this.menuList.find(
+          (item) => item.value === parentId
+        );
+        console.log(parentMenu);
+
+        if (mode === 'edit') {
           this.isEditMode = true;
           this.createMenuForm.patchValue({
             menuTitle: title || '',
@@ -78,44 +86,48 @@ export class CreateMenuConfigurationComponent {
             parentMenu: parentMenu?.label || '',
             menuDescription: description || '',
           });
-
         }
       }
-    })
-  }
-
- buildMenuList(menus: any[], parentPath: string = ''): Array<any> {
-  let result: Array<any> = [];
-
-  for (const menu of menus) {
-    const label = parentPath ? `${menu.title}` : menu.title;
-
-    result.push({
-      label: label,
-      value: menu._id 
     });
-
-    if (menu.childMenu && menu.childMenu.length > 0) {
-      result = result.concat(this.buildMenuList(menu.childMenu, label));
-    }
   }
 
-  return result;
-}
+  buildMenuList(menus: any[], parentPath: string = ''): Array<any> {
+    let result: Array<any> = [];
 
-updateDescriptionLength() {
-  const value = this.createMenuForm.get('menuDescription')?.value;
-  this.descriptionLength = value?.length || 0;
-}
+    for (const menu of menus) {
+      const label = parentPath ? `${menu.title}` : menu.title;
 
-onSubmitMenuForm() {
+      result.push({
+        label: label,
+        value: menu._id,
+      });
 
-    const  { menuTitle, menuRoute, menuComponentName, menuIcon,
-      parentMenu, menuDescription } = this.createMenuForm.getRawValue();
+      if (menu.childMenu && menu.childMenu.length > 0) {
+        result = result.concat(this.buildMenuList(menu.childMenu, label));
+      }
+    }
 
-      const parentId = this.menuList.find(item => item.label === parentMenu)
+    return result;
+  }
 
-      console.log(parentId)
+  updateDescriptionLength() {
+    const value = this.createMenuForm.get('menuDescription')?.value;
+    this.descriptionLength = value?.length || 0;
+  }
+
+  onSubmitMenuForm() {
+    const {
+      menuTitle,
+      menuRoute,
+      menuComponentName,
+      menuIcon,
+      parentMenu,
+      menuDescription,
+    } = this.createMenuForm.getRawValue();
+
+    const parentId = this.menuList.find((item) => item.label === parentMenu);
+
+    console.log(parentId);
 
     const payload = {
       title: menuTitle || '',
@@ -123,27 +135,30 @@ onSubmitMenuForm() {
       componentName: menuComponentName || '',
       description: menuDescription || '',
       icon: menuIcon || '',
-      parentId: parentId?.value || ''
+      parentId: parentId?.value || '',
     };
 
-    console.log(payload)
-    
+    console.log(payload);
 
-    this.apiService.postApiCall(API_ENDPOINTS.SERVICE_SAVE_MENU, payload).subscribe({
-      next: (res: any) => {
-        console.log(`${API_ENDPOINTS.SERVICE_SAVE_ROLE_WISE_MENUS} Response : `, res);
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_SAVE_MENU, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(
+            `${API_ENDPOINTS.SERVICE_SAVE_ROLE_WISE_MENUS} Response : `,
+            res
+          );
 
-        this.commonService.openSnackbar(res.message, 'success');
-        this.router.navigateByUrl('/menu-configuration')
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
-}
-
+          this.commonService.openSnackbar(res.message, 'success');
+          this.router.navigateByUrl('/menu-configuration');
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
+  }
 
   cancelForm() {
-    this.router.navigateByUrl('/menu-configuration')
+    this.router.navigateByUrl('/menu-configuration');
   }
 }

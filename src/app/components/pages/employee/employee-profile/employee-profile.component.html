@@ -94,20 +94,17 @@
                         <div class="profile-image">
                             <div class="photo-upload">
                                 <label for="profilePhoto">
-                                    <img [src]="uploadedPhotoUrl ? uploadedPhotoUrl : 'https://www.w3schools.com/howto/img_avatar.png'"
+                                    <img [src]="uploadedPhotoUrl ? uploadedPhotoUrl : defaultAvatar"
                                         class="profile-image" alt="Profile Photo" />
                                 </label>
                                 <input type="file" id="profilePhoto" (change)="onFileSelected($event)" accept="image/*"
                                     hidden />
-                                
+
                             </div>
                         </div>
 
-
-
                     </div>
                 </mat-card>
-
 
                 <!-- Reporting -->
                 <mat-card class="profile-card">
@@ -134,7 +131,8 @@
 
             <div class="form-buttons">
                 <button mat-flat-button color="primary" type="submit" [disabled]="updateEmployeeProfileForm.invalid"
-                  [disabled]="updateEmployeeProfileForm.invalid || !isFormChanged"  (click)="onSubmitEmployeeProfileForm()"> Update
+                    [disabled]="updateEmployeeProfileForm.invalid || !isFormChanged"
+                    (click)="onSubmitEmployeeProfileForm()"> Update
                 </button>
                 <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
                     Cancel

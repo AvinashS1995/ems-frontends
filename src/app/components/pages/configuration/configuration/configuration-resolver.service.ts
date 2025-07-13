@@ -4,26 +4,26 @@ import { ApiService } from '../../../../shared/service/api/api.service';
 import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfigurationResolverService {
-
   constructor(private apiService: ApiService) {}
 
-  
-
   resolve(): Observable<any> {
-
     let roles = of({});
-    let filterRoles = of({})
-    
-    roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "type" });
-    filterRoles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, {});
+    let filterRoles = of({});
 
+    roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, {
+      entityValue: 'type',
+    });
+    filterRoles = this.apiService.postApiCall(
+      API_ENDPOINTS.SERVICE_GETROLETYPE,
+      {}
+    );
 
-   return forkJoin({
-    roles,
-    filterRoles
+    return forkJoin({
+      roles,
+      filterRoles,
     });
   }
 }

@@ -19,12 +19,16 @@ export class EmployeeManagementResolverService {
     let designations = of({})
     let experienceLevel = of({})
     let workType = of({})
+    let genderType = of({})
+    let departmentType = of({})
     
     roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "Role" });
     status = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "EmployeeStatus" });
     designations = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "Designation" });
     experienceLevel = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "ExperienceType" });
     workType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "WorkType" });
+    genderType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "genderType" });
+    departmentType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "departmentType" });
 
 
    return forkJoin({
@@ -32,7 +36,9 @@ export class EmployeeManagementResolverService {
     status,
     designations,
     experienceLevel,
-    workType
+    workType,
+    genderType,
+    departmentType
     });
   }
 }

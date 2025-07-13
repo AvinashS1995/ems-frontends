@@ -1,15 +1,11 @@
-import {
-  Component,
-  Inject,
-  PLATFORM_ID,
-} from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subject, Subscription, takeUntil } from 'rxjs';
 import { CheckInsComponent } from '../check-ins/check-ins.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -33,17 +29,6 @@ export const MY_DATE_FORMATS = {
   },
 };
 
-export interface AttendanceRecord {
-  date: string;
-  name: string;
-  role: string;
-  employmentType: string;
-  status: string;
-  checkIn: string;
-  checkOut: string;
-  photo: string;
-}
-
 @Component({
   selector: 'app-attendence-management',
   standalone: true,
@@ -60,7 +45,7 @@ export interface AttendanceRecord {
   ],
 })
 export class AttendenceManagementComponent {
-
+  private destroy$ = new Subject<void>();
 
   employeeAttendenceFilterForm!: FormGroup;
 
@@ -82,7 +67,7 @@ export class AttendenceManagementComponent {
   minutes: number = 0;
   seconds: number = 0;
   private timerSubscription!: Subscription;
-  // private isBrowser: boolean;
+
   hasCheckedIn: any;
 
   totalRecords = 0;
@@ -103,15 +88,9 @@ export class AttendenceManagementComponent {
     private fb: FormBuilder,
     private dialog: MatDialog,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    // this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  ) {}
 
   ngOnInit() {
-    
-    // if (this.isBrowser) {
-    //   this.startTimer();
-    // }
     this.prepareEmployeeAttendenceFilterForm();
     this.getparams();
     this.getWorkSummary();
@@ -119,13 +98,12 @@ export class AttendenceManagementComponent {
   }
 
   getparams() {
-
     this.activateRoute.data.subscribe((params) => {
-      console.log("Attendence Params ---->", params);
+      console.log('Attendence Params ---->', params);
 
-      if(params['data']) {
-
-        this.attendenceStatuse = params['data'].attendenceStatus?.data?.types || [];
+      if (params['data']) {
+        this.attendenceStatuse =
+          params['data'].attendenceStatus?.data?.types || [];
         this.attendenceStatuse = this.attendenceStatuse.map((item) => {
           return {
             value: item.typeValue,
@@ -133,44 +111,50 @@ export class AttendenceManagementComponent {
           };
         });
 
-        console.log("Attendence Statuse---->", this.attendenceStatuse);
+        console.log('Attendence Statuse---->', this.attendenceStatuse);
 
-        this.todayAttendenceSummary = params['data'].todayAttendenceSummary?.summary || {};
-        console.log("todayAttendenceSummary ---->",this.todayAttendenceSummary);
-        
-        
+        this.todayAttendenceSummary =
+          params['data'].todayAttendenceSummary?.summary || {};
+        console.log(
+          'todayAttendenceSummary ---->',
+          this.todayAttendenceSummary
+        );
       }
-      
-    })
+    });
   }
 
   prepareEmployeeAttendenceFilterForm() {
     this.employeeAttendenceFilterForm = this.fb.group({
-          name: ['',],
-          attendenceStatus: [''],
-          startDate: [''],
-          endDate: [''],
-    })
+      name: [''],
+      attendenceStatus: [''],
+      startDate: [''],
+      endDate: [''],
+    });
   }
 
   getEmployeeAttendence() {
-
-    const { name, attendenceStatus, startDate, endDate} = this.employeeAttendenceFilterForm.getRawValue();
+    const { name, attendenceStatus, startDate, endDate } =
+      this.employeeAttendenceFilterForm.getRawValue();
     const paylaod = {
       name: name ? name : '',
-      email: this.commonService.getCurrentUserDetails().email ? this.commonService.getCurrentUserDetails().email : '',
-      role: this.commonService.getCurrentUserDetails().role ? this.commonService.getCurrentUserDetails().role : '',
+      email: this.commonService.getCurrentUserDetails().email
+        ? this.commonService.getCurrentUserDetails().email
+        : '',
+      role: this.commonService.getCurrentUserDetails().role
+        ? this.commonService.getCurrentUserDetails().role
+        : '',
       status: attendenceStatus ? attendenceStatus : '',
       startDate: startDate ? startDate : '',
       endDate: endDate ? endDate : '',
       page: this.currentPage,
-      limit: this.pageSize
+      limit: this.pageSize,
     };
 
-console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
+    console.log('SERVICE_GET_USER_ATTENDENCE paylaod', paylaod);
 
     this.apiService
       .postApiCall(API_ENDPOINTS.SERVICE_GET_USER_ATTENDENCE, paylaod)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: any) => {
           console.log(
@@ -180,10 +164,6 @@ console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
 
           this.dataSource = res?.data?.employeeAttendenceList || [];
           this.totalRecords = res.data.totalRecords || 0;
-          // this.totalEmployee = res.data.totalEmployee || 0
-          // this.presentEmployee = res.data.presentCount || 0
-          // this.absentEmployee = res.data.absentCount || 0
-          // this.lateEmployee = res.data.lateCount || 0
 
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -201,31 +181,13 @@ console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
     this.employeeAttendenceFilterForm.reset();
   }
 
-
-
-  // startTimer() {
-  //   this.timerSubscription = interval(1000).subscribe(() => {
-  //     this.seconds++;
-
-  //     if (this.seconds === 60) {
-  //       this.seconds = 0;
-  //       this.minutes++;
-  //     }
-  //     if (this.minutes === 60) {
-  //       this.minutes = 0;
-  //       this.hours++;
-  //     }
-  //   });
-  // }
-
   getWorkSummary() {
-
     const paylaod = {
-      email: this.commonService.getCurrentUserDetails().email ? this.commonService.getCurrentUserDetails().email : '',
-      date: new Date().toISOString().split('T')[0]
+      email: this.commonService.getCurrentUserDetails().email
+        ? this.commonService.getCurrentUserDetails().email
+        : '',
+      date: new Date().toISOString().split('T')[0],
     };
-
-
 
     this.apiService
       .postApiCall(API_ENDPOINTS.SERVICE_WORK_SUMMARY_ATTENDENCE, paylaod)
@@ -237,8 +199,6 @@ console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
           );
 
           this.startTimerFrom(res.totalWorkSeconds);
-
-          // this.commonService.openSnackbar(res.message, 'success');
         },
         error: (error) => {
           this.commonService.openSnackbar(error.error.message, 'error');
@@ -250,12 +210,12 @@ console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
     this.hours = Math.floor(seconds / 3600);
     this.minutes = Math.floor((seconds % 3600) / 60);
     this.seconds = seconds % 60;
-  
+
     this.timerSubscription = interval(1000).subscribe(() => {
       this.incrementTimer();
     });
   }
-  
+
   incrementTimer() {
     this.seconds++;
     if (this.seconds === 60) {
@@ -289,14 +249,16 @@ console.log("SERVICE_GET_USER_ATTENDENCE paylaod", paylaod)
   }
 
   onPageChange(event: PageEvent): void {
-      this.currentPage = event.pageIndex + 1;
-      this.pageSize = event.pageSize;
-      this.getEmployeeAttendence();
-    }
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getEmployeeAttendence();
+  }
 
   ngOnDestroy(): void {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

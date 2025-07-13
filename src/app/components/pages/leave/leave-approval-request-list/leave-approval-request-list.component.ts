@@ -38,7 +38,7 @@ export class LeaveApprovalRequestListComponent {
     private apiService: ApiService,
     private commonService: CommonService,
     private dialog: MatDialog,
-     private activateRoute: ActivatedRoute,
+    private activateRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -71,18 +71,18 @@ export class LeaveApprovalRequestListComponent {
         });
 
         console.log('Leave Reason Type--->', this.leaveReasonType);
-
       }
     });
   }
 
   getEmployeeLeaveRequestList() {
-    debugger
+    const currentUser = this.commonService.getCurrentUserDetails();
+
     const paylaod = {
-      empNo: this.commonService.getCurrentUserDetails().empNo ? this.commonService.getCurrentUserDetails().empNo : '',
-      role: this.commonService.getCurrentUserDetails().role? this.commonService.getCurrentUserDetails().role : '',
+      approverEmpNo: currentUser.empNo || '',
     };
-    console.log('SERVICE_GET_USER_ATTENDENCE paylaod', paylaod);
+
+    console.log('SERVICE_GET_USER_ATTENDENCE paylaod', {});
 
     this.apiService
       .postApiCall(
@@ -92,11 +92,12 @@ export class LeaveApprovalRequestListComponent {
       .subscribe({
         next: (res: any) => {
           console.log(
-            `${API_ENDPOINTS.SERVICE_GET_EMPLOYEE_LEAVE_REQUEST_LIST} Response : `,
+            `${API_ENDPOINTS.SERVICE_GET_LEAVE_REQUEST_APPROVER} Response : `,
             res
           );
 
-          this.leaveRequests = res?.data?.leaveRequests || [];
+          this.leaveRequests = res?.data.leaves || [];
+          console.log(this.leaveRequests);
 
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -107,20 +108,23 @@ export class LeaveApprovalRequestListComponent {
   }
 
   openViewApproval(leave: any) {
-    this.dialog.open(ApplyLeaveComponent, {
-      width: '500px',
-      disableClose: true,
-    data: {
-      mode: 'view',  
-      leaveRequest: leave,
-      leaveType: this.leaveType,
-      leaveReasonType: this.leaveReasonType,    
-    },
-    }).afterClosed().subscribe((result) => {
-      if (result) { 
-        this.getEmployeeLeaveRequestList();
-      }
-  });;
+    this.dialog
+      .open(ApplyLeaveComponent, {
+        width: '500px',
+        disableClose: true,
+        data: {
+          mode: 'view',
+          leaveRequest: leave,
+          leaveType: this.leaveType,
+          leaveReasonType: this.leaveReasonType,
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.getEmployeeLeaveRequestList();
+        }
+      });
   }
 
   getStatusIconClass(status: string): string {

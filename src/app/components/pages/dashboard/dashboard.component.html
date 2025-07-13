@@ -20,7 +20,6 @@
       <p>3</p>
 
     </mat-card>
-    {{pendingLeaveCount}}
     <mat-card class="summary-card notification-card">
       <div class="notification-icon" [matBadge]="pendingLeaveCount" matBadgeColor="warn" matBadgePosition="above after"
         matBadgeOverlap="false" (click)="navigateToRequestList()">
@@ -37,7 +36,7 @@
         <div class="holidays-section">
           <h3>Employee Task</h3>
           <div class="holiday-list">
-            <div >
+            <div>
               <div class="scroll-item" *ngFor="let task of employeeTaskList">
                 <div class="holiday-info">
                   <strong>{{ task.taskname }}</strong>
@@ -56,7 +55,7 @@
         <div class="holidays-section">
           <h3>Employee Task</h3>
           <div class="holiday-list">
-            <div >
+            <div>
               <div class="scroll-item" *ngFor="let task of employeeTaskList">
                 <div class="holiday-info">
                   <strong>{{ task.taskname }}</strong>
@@ -89,7 +88,7 @@
       </mat-card>
 
     </div>
-    
+
   </div>
 
 

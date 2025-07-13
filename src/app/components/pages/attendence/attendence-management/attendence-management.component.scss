@@ -32,10 +32,10 @@ mat-expansion-panel {
   overflow-x: auto;
 }
 
-  .employee-info {
-    display: flex;
-    align-items: center;
-  }
+.employee-info {
+  display: flex;
+  align-items: center;
+}
 
 .Present {
   background: #e5f9e7;
@@ -77,48 +77,9 @@ mat-expansion-panel {
 
 .filter-actions {
   display: flex;
-  gap: 12px; 
-  margin-top: 16px; 
+  gap: 12px;
+  margin-top: 16px;
 }
-
-// .start-day-card {
-//   cursor: pointer;
-//   transition: transform 0.2s ease-in-out;
-
-//   &:hover {
-//     transform: scale(1.02);
-//   }
-
-//   .time-inputs {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     gap: 12px;
-//     margin-top: 10px;
-
-//     .time-box:first-child {
-//       margin-left: 8px;
-
-//     }
-
-//     .time-box {
-//       background-color: #d5d7e0;
-//       font-size: 24px;
-//       padding: 10px 16px;
-//       border-radius: 10px;
-//       text-align: center;
-//       font-weight: 600;
-//     }
-
-//     .time-label {
-//       font-weight: 500;
-//       margin-left: 8px;
-//       margin-right: 8px;
-//       font-size: 14px;
-//       color: #444;
-//     }
-//   }
-// }
 
 
 .attendance-container {
@@ -127,12 +88,12 @@ mat-expansion-panel {
 
 .summary-cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); // default for small screens
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin: 20px 0;
 
   @media (min-width: 1200px) {
-    grid-template-columns: repeat(5, 1fr); // 5 cards in 1 row for large screens
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
@@ -183,10 +144,10 @@ mat-expansion-panel {
 }
 
 .start-day-card {
-   grid-column: span 2; 
+  grid-column: span 2;
 
   @media (min-width: 1200px) {
-    grid-column: span 1; 
+    grid-column: span 1;
   }
 
   cursor: pointer;

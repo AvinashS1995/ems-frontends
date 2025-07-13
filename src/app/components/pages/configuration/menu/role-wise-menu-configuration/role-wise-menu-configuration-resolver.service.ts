@@ -4,21 +4,20 @@ import { ApiService } from '../../../../../shared/service/api/api.service';
 import { API_ENDPOINTS } from '../../../../../shared/common/api-contant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoleWiseMenuConfigurationResolverService {
-
   constructor(private apiService: ApiService) {}
 
   resolve(): Observable<any> {
-
     let roles = of({});
-    
-    roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "Role" });
 
+    roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, {
+      entityValue: 'Role',
+    });
 
-   return forkJoin({
-    roles,
+    return forkJoin({
+      roles,
     });
   }
 }

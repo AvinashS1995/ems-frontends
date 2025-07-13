@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { CommonModule } from '@angular/common';
 import { AddNewRoleTypeComponent } from '../add-new-role-type/add-new-role-type.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +9,7 @@ import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-materi
 import { ApiService } from '../../../../shared/service/api/api.service';
 import { CommonService } from '../../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-configuration',
@@ -19,6 +19,9 @@ import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
   styleUrl: './configuration.component.scss',
 })
 export class ConfigurationComponent {
+  
+  private destroy$ = new Subject<void>();
+
   displayedColumns: string[] = [
     'srno',
     'role',
@@ -59,7 +62,6 @@ export class ConfigurationComponent {
       console.log('Title ---->', params);
 
       if (params['data']) {
-
         this.roles = params['data'].roles?.data?.types || [];
         this.roles = this.roles.map((item) => {
           return {
@@ -67,9 +69,9 @@ export class ConfigurationComponent {
             label: item.typeLabel,
           };
         });
-  
+
         console.log('Roles--->', this.roles);
-  
+
         this.roleTypes = params['data'].status?.data?.types || [];
         this.roleTypes = this.roleTypes.map((status) => {
           return {
@@ -77,11 +79,11 @@ export class ConfigurationComponent {
             label: status.name,
           };
         });
-  
+
         console.log('Status ---->', this.roleTypes);
-  
+
         this.filterRole = params['data'].filterRoles?.data?.types || [];
-  
+
         this.filterRole = [
           ...new Map(
             this.filterRole.map((item: { entityValue: any }) => [
@@ -90,18 +92,17 @@ export class ConfigurationComponent {
             ])
           ).values(),
         ];
-  
+
         this.filterRole = this.filterRole.map((item: { entityValue: any }) => {
           return {
             value: item.entityValue,
             label: item.entityValue,
           };
         });
-  
+
         console.log('this.filterRoles', this.filterRoles);
         console.log('this.filterRoles', this.filterRole);
       }
-     
     });
   }
 
@@ -113,7 +114,6 @@ export class ConfigurationComponent {
   }
 
   addRoleType(roleTypeData?: any) {
-    
     const dialogRef = this.dialog.open(AddNewRoleTypeComponent, {
       width: '600px',
       disableClose: true,
@@ -137,6 +137,7 @@ export class ConfigurationComponent {
 
     this.apiService
       .postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, paylaod)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         console.log(res);
         this.dataSource.data = res?.data?.types || [];
@@ -151,7 +152,6 @@ export class ConfigurationComponent {
   }
 
   applyFilter() {
-
     const { role, roleType } = this.roleTypeFilterForm.getRawValue();
 
     const paylaod = {
@@ -205,5 +205,10 @@ export class ConfigurationComponent {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

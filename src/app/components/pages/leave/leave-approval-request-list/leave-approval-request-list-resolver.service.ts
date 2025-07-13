@@ -4,26 +4,26 @@ import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
 import { ApiService } from '../../../../shared/service/api/api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LeaveApprovalRequestListResolverService {
-
   constructor(private apiService: ApiService) {}
 
-  
-
   resolve(): Observable<any> {
-
     let leaveType = of({});
     let leaveReasonType = of({});
-    
-    leaveType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "leaveType" });
-    leaveReasonType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "leaveReasonType" });
 
+    leaveType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, {
+      entityValue: 'leaveType',
+    });
+    leaveReasonType = this.apiService.postApiCall(
+      API_ENDPOINTS.SERVICE_GETROLETYPE,
+      { entityValue: 'leaveReasonType' }
+    );
 
-   return forkJoin({
-    leaveType,
-    leaveReasonType,
+    return forkJoin({
+      leaveType,
+      leaveReasonType,
     });
   }
 }

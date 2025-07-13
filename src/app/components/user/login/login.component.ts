@@ -17,7 +17,6 @@ import { KeyService } from '../../../shared/service/common/key.service';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
-  
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +33,6 @@ export class LoginComponent {
   }
 
   buildForm() {
-    
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
       // password: ['', [Validators.required, Validators.pattern(REGEX.PASSWORD_REGEX)]]
@@ -48,43 +46,43 @@ export class LoginComponent {
     if (rememberedEmail) {
       this.loginForm.patchValue({
         email: rememberedEmail,
-        rememberMe: true
+        rememberMe: true,
       });
     }
-
   }
 
   onLoginSubmit() {
     console.log(this.loginForm);
     let { rememberMe } = this.loginForm.getRawValue();
     if (this.loginForm.valid) {
-      this.apiService.authApiCall(
-        API_ENDPOINTS.SERVICE_LOGIN,
-        this.loginForm.value
-      ).subscribe({
-        next: (resp: any) => {
-          console.log(`${API_ENDPOINTS.SERVICE_LOGIN} Response : `, resp);
-          if (resp.token && resp.secretKey) {
-            
+      this.apiService
+        .authApiCall(API_ENDPOINTS.SERVICE_LOGIN, this.loginForm.value)
+        .subscribe({
+          next: (resp: any) => {
+            console.log(`${API_ENDPOINTS.SERVICE_LOGIN} Response : `, resp);
+            if (resp.token && resp.secretKey) {
+              const storage = rememberMe ? 'local' : 'session';
 
-            const storage = rememberMe ? 'local' : 'session';
-
-            if (rememberMe) {
-              this.storageService.setItem('rememberedEmail', resp.user.email, storage);
+              if (rememberMe) {
+                this.storageService.setItem(
+                  'rememberedEmail',
+                  resp.user.email,
+                  storage
+                );
+              }
+              this.storageService.setItem('token', resp.token, storage);
+              // this.storageService.setEncrypted('key', resp.secretKey, storage);
+              this.commonService.setUserDetailsFromToken();
+              // this.keyService.setKey(this.commonService.userDetails.loginUserSecretkey);
+              this.commonService.openSnackbar(resp.message, 'success');
+              // this.commonService.setUserDetails(resp.user.name, resp.user.role);
+              this.router.navigateByUrl('/dashboard');
             }
-            this.storageService.setItem('token', resp.token, storage);
-            // this.storageService.setEncrypted('key', resp.secretKey, storage);
-            this.commonService.setUserDetailsFromToken();
-            // this.keyService.setKey(this.commonService.userDetails.loginUserSecretkey);
-            this.commonService.openSnackbar(resp.message, 'success');
-            // this.commonService.setUserDetails(resp.user.name, resp.user.role);
-            this.router.navigateByUrl('/dashboard');
-          }
-        },
-        error: (error) => {
-          this.commonService.openSnackbar(error.error.message, 'error');
-        },
-      });
+          },
+          error: (error) => {
+            this.commonService.openSnackbar(error.error.message, 'error');
+          },
+        });
     }
   }
 

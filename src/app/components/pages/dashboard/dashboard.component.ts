@@ -43,11 +43,12 @@ export class DashboardComponent {
   upcomingHolidays: Array<any> = [];
   pendingLeaveCount: any;
   employeeTaskList = [
-  { taskname: 'Prepare Monthly Report', deadlinedate: new Date('2025-07-10') },
-  { taskname: 'Client Meeting', deadlinedate: new Date('2025-07-08') }
-];
-
- 
+    {
+      taskname: 'Prepare Monthly Report',
+      deadlinedate: new Date('2025-07-10'),
+    },
+    { taskname: 'Client Meeting', deadlinedate: new Date('2025-07-08') },
+  ];
 
   constructor(
     private router: Router,
@@ -76,13 +77,12 @@ export class DashboardComponent {
       const dialogRef = this.dialog.open(CheckInsComponent, {
         width: '600px',
         disableClose: true,
-        data: { mode: 'checkins' }
+        data: { mode: 'checkins' },
       });
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result === 'checkins') {
           // this.commonService.openSnackbar('Check-in required to continue', 'error');
-
         }
       });
     }
@@ -139,10 +139,12 @@ export class DashboardComponent {
   }
 
   getEmployeeLeaveRequestList() {
+    const currentUser = this.commonService.getCurrentUserDetails();
+
     const paylaod = {
-      empNo: this.commonService.getCurrentUserDetails().empNo ? this.commonService.getCurrentUserDetails().empNo : '',
-      role: this.commonService.getCurrentUserDetails().role ? this.commonService.getCurrentUserDetails().role : '',
+      approverEmpNo: currentUser.empNo || '',
     };
+
     console.log('SERVICE_GET_USER_ATTENDENCE paylaod', paylaod);
 
     this.apiService
@@ -157,7 +159,7 @@ export class DashboardComponent {
             res
           );
 
-          this.pendingLeaveCount = res?.data?.records || '';
+          this.pendingLeaveCount = res?.data?.totalRecords || '';
 
           this.commonService.openSnackbar(res.message, 'success');
         },

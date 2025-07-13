@@ -6,7 +6,6 @@
     <button mat-flat-button class="example-full-width" (click)="addRoleType()">+ Add New Role Type</button>
   </div>
 
-
   <mat-divider></mat-divider>
 
   <mat-expansion-panel>
@@ -18,14 +17,14 @@
 
     <form [formGroup]="roleTypeFilterForm">
       <div class="filters">
-        <mat-form-field appearance="outline" >
+        <mat-form-field appearance="outline">
           <mat-label>Role</mat-label>
           <mat-select formControlName="role">
             <mat-option *ngFor="let role of filterRole" [value]="role.label">{{ role.label }}</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" >
+        <mat-form-field appearance="outline">
           <mat-label>Role Type</mat-label>
           <mat-select formControlName="roleType">
             <mat-option *ngFor="let roleType of fiterRoleTypes" [value]="roleType.label">{{ roleType.label
@@ -44,10 +43,7 @@
 
     </div>
 
-
   </mat-expansion-panel>
-
-
 
   <div class="configuration-table">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">

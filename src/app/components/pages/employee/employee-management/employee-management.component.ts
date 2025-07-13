@@ -17,6 +17,7 @@ import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-materi
 import { ApiService } from '../../../../shared/service/api/api.service';
 import { CommonService } from '../../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
+import { Subject, takeUntil } from 'rxjs';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -46,6 +47,7 @@ export const MY_DATE_FORMATS = {
   ],
 })
 export class EmployeeManagementComponent {
+  private destroy$ = new Subject<void>();
 
   displayedColumns: string[] = [
     'empno',
@@ -58,10 +60,9 @@ export class EmployeeManagementComponent {
     'salary',
     'workType',
     'status',
-    'action'
+    'action',
   ];
   dataSource: Array<any> = [];
-
 
   employeeFilterForm!: FormGroup;
 
@@ -77,6 +78,9 @@ export class EmployeeManagementComponent {
   totalRecords = 0;
   pageSize = 5;
   currentPage: number = 1;
+  genderTypeList: Array<any> = [];
+  departmentTypeList: Array<any> = [];
+  reportedByEmployee: Array<any> = [];
 
   constructor(
     private router: Router,
@@ -126,13 +130,16 @@ export class EmployeeManagementComponent {
           };
         });
 
-        this.experienceTypeList = params['data'].experienceLevel?.data?.types || [];
-        this.experienceTypeList = this.experienceTypeList.map((experienceLevel) => {
-          return {
-            value: experienceLevel.typeValue,
-            label: experienceLevel.typeLabel,
-          };
-        });
+        this.experienceTypeList =
+          params['data'].experienceLevel?.data?.types || [];
+        this.experienceTypeList = this.experienceTypeList.map(
+          (experienceLevel) => {
+            return {
+              value: experienceLevel.typeValue,
+              label: experienceLevel.typeLabel,
+            };
+          }
+        );
 
         this.workTypeList = params['data'].workType?.data?.types || [];
         this.workTypeList = this.workTypeList.map((workType) => {
@@ -141,19 +148,37 @@ export class EmployeeManagementComponent {
             label: workType.typeLabel,
           };
         });
+
+        this.genderTypeList = params['data'].genderType?.data?.types || [];
+        this.genderTypeList = this.genderTypeList.map((genderType) => {
+          return {
+            value: genderType.typeValue,
+            label: genderType.typeLabel,
+          };
+        });
+
+        this.departmentTypeList =
+          params['data'].departmentType?.data?.types || [];
+        this.departmentTypeList = this.departmentTypeList.map(
+          (departmentType) => {
+            return {
+              value: departmentType.typeValue,
+              label: departmentType.typeLabel,
+            };
+          }
+        );
       }
     });
   }
 
   prepareEmployeeFilterForm() {
-     this.employeeFilterForm = this.fb.group({
-          name: ['',],
-          role: [''],
-          status: [''],
-          type: [''],
-        });
+    this.employeeFilterForm = this.fb.group({
+      name: [''],
+      role: [''],
+      status: [''],
+      type: [''],
+    });
   }
-  
 
   addEmployee(employeeTypeData?: any) {
     // debugger
@@ -166,7 +191,10 @@ export class EmployeeManagementComponent {
         Status: this.statuses,
         designations: this.designationList,
         experienceLevel: this.experienceTypeList,
-        workType: this.workTypeList
+        workType: this.workTypeList,
+        genderType: this.genderTypeList,
+        departmentType: this.departmentTypeList,
+        reportedEmployee: this.reportedByEmployee,
       },
     });
 
@@ -178,8 +206,7 @@ export class EmployeeManagementComponent {
   }
 
   getEmployees() {
-
-    const { name, role, status, type} = this.employeeFilterForm.getRawValue()
+    const { name, role, status, type } = this.employeeFilterForm.getRawValue();
 
     const paylaod = {
       name: name ? name : '',
@@ -187,27 +214,38 @@ export class EmployeeManagementComponent {
       status: status ? status : '',
       type: type ? type : '',
       page: this.currentPage,
-      limit: this.pageSize
-    }
+      limit: this.pageSize,
+    };
 
-    this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GET_USER_LIST, paylaod).subscribe({
-      next: (res: any) => {
-        console.log(`${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `, res);
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_GET_USER_LIST, paylaod)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          console.log(
+            `${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `,
+            res
+          );
 
-        this.dataSource = res?.data?.userList || [];
-        this.totalRecords = res.data.totalRecords || 0;
-        
-        this.commonService.openSnackbar(res.message, 'success');
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+          this.dataSource = res?.data?.userList || [];
+          this.totalRecords = res.data.totalRecords || 0;
+          this.reportedByEmployee = this.dataSource.map((reportedBy) => {
+            return {
+              label: `${reportedBy.name} - [${reportedBy.empNo}]`,
+              value: reportedBy.empNo,
+            };
+          });
+
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
-
   clearFilters() {
-   this.employeeFilterForm.reset();
+    this.employeeFilterForm.reset();
   }
 
   applyFilters() {
@@ -216,11 +254,10 @@ export class EmployeeManagementComponent {
 
   editEmployee(employee: any) {
     // debugger
-    this.addEmployee(employee)
+    this.addEmployee(employee);
   }
 
   deleteEmployee(employee: any) {
-
     const paylaod = {
       id: employee ? employee._id : 0,
     };
@@ -252,5 +289,8 @@ export class EmployeeManagementComponent {
     this.getEmployees();
   }
 
-  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

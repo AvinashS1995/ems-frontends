@@ -13,6 +13,7 @@ import { KeyService } from './key.service';
 import { StorageService } from './storage.service';
 import * as jwtDecodeNamespace from 'jwt-decode';
 import { UserDetails } from '../../interface/user';
+import { DocumentViewerComponent } from '../../widget/dialog/document-viewer/document-viewer.component';
 
 @Injectable({
   providedIn: 'root',
@@ -23,16 +24,20 @@ export class CommonService {
   userDetails: UserDetails = {
     _id: '',
     empNo: '',
-    name: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    dob: '',
+    gender: '',
     email: '',
     mobile: '',
+    address: '',
     role: '',
     type: '',
     status: '',
-    teamLeader: '',
-    manager: '',
-    hr: '',
+    reportedBy: '',
     designation: '',
+    department: '',
     joiningDate: '',
     salary: 0,
     workType: '',
@@ -92,6 +97,13 @@ export class CommonService {
     });
 
     return dialogRef.afterClosed();
+  }
+
+  showDocumentViewer(fileUrl: string, fileName?: string): void {
+    this.dialog.open(DocumentViewerComponent, {
+      width: '900px',
+      data: { fileUrl, fileName }
+    });
   }
 
   setUserDetailsFromToken() {

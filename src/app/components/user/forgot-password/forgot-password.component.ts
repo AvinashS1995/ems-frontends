@@ -18,10 +18,10 @@ import { API_ENDPOINTS } from '../../../shared/common/api-contant';
 })
 export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm!: FormGroup;
-  currentStep: ForgotPasswordStep = ForgotPasswordStep.VERIFY_EMAIL; // Initial step
-  ForgotPasswordStep = ForgotPasswordStep; // Expose Enum to HTML
+  currentStep: ForgotPasswordStep = ForgotPasswordStep.VERIFY_EMAIL;
+  ForgotPasswordStep = ForgotPasswordStep;
   resendOtpDisabled = false;
-  countdown = 60; // Initial countdown value
+  countdown = 60;
   countdownSubscription!: Subscription;
 
   constructor(
@@ -72,33 +72,35 @@ export class ForgotPasswordComponent implements OnInit {
     };
 
     if (this.forgotPasswordForm.valid) {
-      this.apiService.authApiCall(
-        API_ENDPOINTS.SERVICE_VERIFYEMAIL,
-        payload
-      ).subscribe({
-        next: (res: any) => {
-          console.log(`${API_ENDPOINTS.SERVICE_VERIFYEMAIL} Response : `, res);
+      this.apiService
+        .authApiCall(API_ENDPOINTS.SERVICE_VERIFYEMAIL, payload)
+        .subscribe({
+          next: (res: any) => {
+            console.log(
+              `${API_ENDPOINTS.SERVICE_VERIFYEMAIL} Response : `,
+              res
+            );
 
-          this.forgotPasswordForm.controls['email'].disable();
-          this.forgotPasswordForm.controls['otp'].disable();
-          this.forgotPasswordForm.controls['oldPassword'].addValidators([
-            Validators.required,
-          ]);
-          this.forgotPasswordForm.controls['newPassword'].addValidators([
-            Validators.required,
-          ]);
-          this.forgotPasswordForm.controls['confirmPassword'].addValidators([
-            Validators.required,
-          ]);
+            this.forgotPasswordForm.controls['email'].disable();
+            this.forgotPasswordForm.controls['otp'].disable();
+            this.forgotPasswordForm.controls['oldPassword'].addValidators([
+              Validators.required,
+            ]);
+            this.forgotPasswordForm.controls['newPassword'].addValidators([
+              Validators.required,
+            ]);
+            this.forgotPasswordForm.controls['confirmPassword'].addValidators([
+              Validators.required,
+            ]);
 
-          this.currentStep = ForgotPasswordStep.SEND_OTP;
+            this.currentStep = ForgotPasswordStep.SEND_OTP;
 
-          this.commonService.openSnackbar(res.message, 'success');
-        },
-        error: (error) => {
-          this.commonService.openSnackbar(error.error.message, 'error');
-        },
-      });
+            this.commonService.openSnackbar(res.message, 'success');
+          },
+          error: (error) => {
+            this.commonService.openSnackbar(error.error.message, 'error');
+          },
+        });
     }
   }
 
@@ -109,23 +111,22 @@ export class ForgotPasswordComponent implements OnInit {
       email: email,
     };
 
-    this.apiService.authApiCall(
-      API_ENDPOINTS.SERVICE_SENDOTP,
-      payload
-    ).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.commonService.openSnackbar(res.message, 'success');
-        this.currentStep = ForgotPasswordStep.VERIFY_OTP;
-        this.forgotPasswordForm.controls['otp'].enable();
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_SENDOTP, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
+          this.commonService.openSnackbar(res.message, 'success');
+          this.currentStep = ForgotPasswordStep.VERIFY_OTP;
+          this.forgotPasswordForm.controls['otp'].enable();
 
-        // Start countdown after sending OTP
-        this.startResendOtpCountdown();
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+          // Start countdown after sending OTP
+          this.startResendOtpCountdown();
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   onVerifyOtp() {
@@ -135,21 +136,20 @@ export class ForgotPasswordComponent implements OnInit {
       email: email,
       otp: otp,
     };
-    this.apiService.authApiCall(
-      API_ENDPOINTS.SERVICE_VERIFYOTP,
-      payload
-    ).subscribe({
-      next: (res: any) => {
-        console.log(res);
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_VERIFYOTP, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
 
-        this.commonService.openSnackbar(res.message, 'success');
-        this.currentStep = ForgotPasswordStep.RESET_PASSWORD;
-        this.forgotPasswordForm.controls['otp'].disable();
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+          this.commonService.openSnackbar(res.message, 'success');
+          this.currentStep = ForgotPasswordStep.RESET_PASSWORD;
+          this.forgotPasswordForm.controls['otp'].disable();
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   onResendOtp() {
@@ -159,20 +159,19 @@ export class ForgotPasswordComponent implements OnInit {
       email: email,
     };
 
-    this.apiService.authApiCall(
-      API_ENDPOINTS.SERVICE_RESENDOTP,
-      payload
-    ).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.commonService.openSnackbar(res.message, 'success');
-        // Restart the countdown
-        this.startResendOtpCountdown();
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_RESENDOTP, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
+          this.commonService.openSnackbar(res.message, 'success');
+          // Restart the countdown
+          this.startResendOtpCountdown();
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   onResetpassword() {
@@ -184,20 +183,19 @@ export class ForgotPasswordComponent implements OnInit {
       newPassword: newPassword,
       confirmPassword: confirmPassword,
     };
-    this.apiService.authApiCall(
-      API_ENDPOINTS.SERVICE_RESETPASSWORD,
-      payload
-    ).subscribe({
-      next: (res: any) => {
-        console.log(res);
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_RESETPASSWORD, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
 
-        this.commonService.openSnackbar(res.message, 'success');
-        this.router.navigateByUrl('/login');
-      },
-      error: (error) => {
-        this.commonService.openSnackbar(error.error.message, 'error');
-      },
-    });
+          this.commonService.openSnackbar(res.message, 'success');
+          this.router.navigateByUrl('/login');
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   startResendOtpCountdown() {
