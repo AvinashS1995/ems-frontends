@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="zoomIn()"><mat-icon>zoom_in</mat-icon></button>
+  <button mat-icon-button (click)="zoomOut()"><mat-icon>zoom_out</mat-icon></button>
+  <button mat-icon-button (click)="rotateLeft()"><mat-icon>rotate_left</mat-icon></button>
+  <button mat-icon-button (click)="rotateRight()"><mat-icon>rotate_right</mat-icon></button>
+  <button mat-icon-button (click)="flipHorizontal()"><mat-icon>flip</mat-icon></button>
+  <button mat-icon-button (click)="flipVertical()"><mat-icon>flip_camera_android</mat-icon></button>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="close()"><mat-icon>close</mat-icon></button>
+</mat-toolbar>
+
+<div class="image-container">
+  <img [src]="imageSrc" [style.transform]="getTransform()" alt="Image" />
+</div>

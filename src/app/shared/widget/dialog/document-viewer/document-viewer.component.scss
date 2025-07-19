@@ -1,11 +1,47 @@
-.viewer-wrapper {
-  width: 100%;
-  height: 600px;
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+.dialog-actions {
+  padding: 16px;
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+
+  button {
+    border-radius: 5px;
   }
 }
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+mat-toolbar {
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.iframe-container {
+  flex: 1;
+  overflow: hidden;
+  padding: 16px;
+  display: flex;
+}
+
+.pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+

@@ -224,20 +224,23 @@ export class AddEmployeeComponent {
 
   onSelectFile(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
 
-    if (!file || !file.type.startsWith('image/')) {
-      this.commonService.openSnackbar('Only image files are allowed', 'error');
+    if (!input.files || input.files.length === 0) {
+      this.commonService.openSnackbar('No file selected.', 'error');
       return;
     }
 
-    if (file.size > 2 * 1024 * 1024) {
-      // 2 MB limit
-      this.commonService.openSnackbar('Image must be less than 2MB', 'error');
+    const file = input.files[0];
+    const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+    if (!allowedFileTypes.includes(file.type)) {
+      this.commonService.openSnackbar(
+        'Only JPG, JPEG, and PNG, pdf files are allowed.',
+        'error'
+      );
       return;
     }
 
-    // Upload to backend (Filebase)
     const formData = new FormData();
     formData.append('file', file);
 
@@ -246,7 +249,9 @@ export class AddEmployeeComponent {
       .subscribe({
         next: (res) => {
           const uploadedUrl = res?.data?.presignFileUrl;
+          
           this.previewUrl = uploadedUrl;
+          console.log(this.previewUrl);
           this.fileKey = res?.data?.fileKey;
           this.employeeForm.patchValue({ profileImage: this.fileKey });
           this.commonService.openSnackbar(res.message, 'success');
@@ -256,6 +261,22 @@ export class AddEmployeeComponent {
           this.commonService.openSnackbar(error.error.message, 'error');
         },
       });
+  }
+
+  onViewDocument(filename?: string, filepath?: any) {
+    if (filepath !== '' || this.previewUrl) {
+      const filename = this.fileKey;
+      const filepath = this.previewUrl;
+
+      if (filepath) {
+        this.commonService.onViewDocument(filename, filepath);
+      } else {
+        this.commonService.openSnackbar(
+          'No image available to preview',
+          'error'
+        );
+      }
+    }
   }
 
   cancel() {

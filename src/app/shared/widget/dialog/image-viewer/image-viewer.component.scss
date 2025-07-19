@@ -1,0 +1,35 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f0f0;
+  overflow: auto;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    transition: transform 0.3s ease;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

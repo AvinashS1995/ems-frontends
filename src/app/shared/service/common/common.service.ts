@@ -14,6 +14,7 @@ import { StorageService } from './storage.service';
 import * as jwtDecodeNamespace from 'jwt-decode';
 import { UserDetails } from '../../interface/user';
 import { DocumentViewerComponent } from '../../widget/dialog/document-viewer/document-viewer.component';
+import { ImageViewerComponent } from '../../widget/dialog/image-viewer/image-viewer.component';
 
 @Injectable({
   providedIn: 'root',
@@ -60,8 +61,6 @@ export class CommonService {
     // this.setUserDetailsFromToken();
   }
 
-  
-
   openSnackbar(message: string, type: 'success' | 'error') {
     this.snackBar.openFromComponent(SnackBarComponent, {
       data: { message, type },
@@ -99,11 +98,54 @@ export class CommonService {
     return dialogRef.afterClosed();
   }
 
-  showDocumentViewer(fileUrl: string, fileName?: string): void {
-    this.dialog.open(DocumentViewerComponent, {
-      width: '900px',
-      data: { fileUrl, fileName }
+  viewImageViewer(filename?: string, imageUrl?: string): void {
+    this.dialog.open(ImageViewerComponent, {
+      data: { filename, imageUrl },
+      width: '95vw',
+      height: '95vh',
+      panelClass: 'custom-dialog-container',
+      autoFocus: false,
+      disableClose: false,
     });
+  }
+
+  viewDocumentViewer(filename?: string, fileUrl?: string): void {
+    this.dialog.open(DocumentViewerComponent, {
+      data: { filename, fileUrl },
+      width: '95vw',
+      height: '95vh',
+      disableClose: false,
+      panelClass: 'pdf-viewer-dialog',
+    });
+  }
+
+  returnFilenameExtension(filepath: string): string | null {
+    if (!filepath || typeof filepath !== 'string') {
+      return null;
+    }
+
+    const sanitizedPath = filepath.split('?')[0];
+    const segments = sanitizedPath.split('/');
+    const filename = segments[segments.length - 1];
+    const lastDotIndex = filename.lastIndexOf('.');
+
+    if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
+      return null;
+    }
+
+    return filename.substring(lastDotIndex + 1).toLowerCase();
+  }
+
+  onViewDocument(filename?: string, fileUrl?: any): void {
+    const extension = this.returnFilenameExtension(fileUrl);
+
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+
+    if (extension && imageExtensions.includes(extension)) {
+      this.viewImageViewer(filename, fileUrl);
+    } else {
+      this.viewDocumentViewer(filename, fileUrl);
+    }
   }
 
   setUserDetailsFromToken() {

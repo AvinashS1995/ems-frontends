@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { SHARED_MATERIAL_MODULES } from '../../../common/shared-material';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CommonService } from '../../../service/common/common.service';
 
 @Component({
   selector: 'app-document-viewer',
@@ -12,26 +13,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class DocumentViewerComponent {
 
-  safeUrl: SafeResourceUrl;
-  fileExtension: string;
+  safePdfUrl: SafeResourceUrl;
 
   constructor(
     public dialogRef: MatDialogRef<DocumentViewerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { fileUrl: string; fileName?: string },
+    @Inject(MAT_DIALOG_DATA) public data: { fileUrl: string; filename?: string },
     private sanitizer: DomSanitizer
   ) {
-    this.fileExtension = this.getFileExtension(data.fileUrl);
-    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.buildViewerUrl(data.fileUrl));
+    this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(data.fileUrl);
   }
 
-  private getFileExtension(url: string): string {
-    return url.split('.').pop()?.toLowerCase() || '';
+  close(): void {
+    this.dialogRef.close();
   }
-
-  private buildViewerUrl(url: string): string {
-    // For PDFs, hide toolbar/nav
-    return this.getFileExtension(url) === 'pdf'
-      ? `${url}#toolbar=0&navpanes=0&scrollbar=0`
-      : url;
-  }
+  
 }
