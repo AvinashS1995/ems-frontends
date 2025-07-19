@@ -21,8 +21,8 @@
 
     </mat-card>
     <mat-card class="summary-card notification-card">
-      <div class="notification-icon" [matBadge]="pendingLeaveCount" matBadgeColor="warn" matBadgePosition="above after"
-        matBadgeOverlap="false" (click)="navigateToRequestList()">
+      <div class="notification-icon" [matBadge]="pendingRequestCount" matBadgeColor="warn" matBadgePosition="above after"
+        matBadgeOverlap="false" (click)="handleNotificationClick()">
         <img src="assets/mail.png" alt="Mail" class="mail-image" />
       </div>
       <div class="notification-label">Notification</div>

@@ -127,14 +127,5 @@ export class LeaveApprovalRequestListComponent {
       });
   }
 
-  getStatusIconClass(status: string): string {
-    if (status?.toLowerCase().includes('approved')) {
-      return 'approved-icon';
-    } else if (status?.toLowerCase().includes('pending')) {
-      return 'pending-icon';
-    } else if (status?.toLowerCase().includes('rejected')) {
-      return 'rejected-icon';
-    }
-    return '';
-  }
+  
 }

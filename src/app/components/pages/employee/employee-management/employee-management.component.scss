@@ -224,3 +224,10 @@ button {
     display: none;
   }
 }
+
+.action-icon-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  justify-content: center;
+}

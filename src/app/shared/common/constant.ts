@@ -14,3 +14,7 @@ export enum CheckInsStep {
   INITIAL,
   SEND_OTP,
 }
+
+export const APPROVAL_ROUTE_MAP: { [key: string]: string } = {
+  'Leave': '/employee-leave-approval-request-list',
+}

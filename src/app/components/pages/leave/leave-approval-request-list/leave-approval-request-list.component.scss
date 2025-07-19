@@ -3,22 +3,50 @@
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-height: 100%; // ensure parent doesn't force scroll
+  display: flex;
+  flex-direction: column;
+}
 
+.table-container {
+  max-height: 400px; /* adjust as needed */
+  margin-top: 16px;
+  overflow: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+}
+
+/* Table styling */
+table {
+  min-width: 1000px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+mat-header-row,
+mat-row {
+  display: table-row;
+}
+
+mat-header-cell,
+mat-cell {
+  padding: 16px;
+  white-space: nowrap;
 }
 
 mat-icon {
   vertical-align: middle;
   margin-right: 6px;
+  cursor: pointer;
 }
 
-.approved-icon {
-  color: green;
+/* Status Icons */
+.custom-primary-icon {
+  color: #3f51b5;
 }
 
-.pending-icon {
-  color: red;
-}
-
-.rejected-icon {
-  color: red;
+.no-data {
+  text-align: center;
+  padding: 24px;
+  font-weight: 600;
 }

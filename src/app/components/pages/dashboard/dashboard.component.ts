@@ -41,7 +41,7 @@ export class DashboardComponent {
   animationState = false;
   pauseAnimation = false;
   upcomingHolidays: Array<any> = [];
-  pendingLeaveCount: any;
+  pendingRequestCount: any;
   employeeTaskList = [
     {
       taskname: 'Prepare Monthly Report',
@@ -149,17 +149,17 @@ export class DashboardComponent {
 
     this.apiService
       .postApiCall(
-        API_ENDPOINTS.SERVICE_GET_EMPLOYEE_LEAVE_REQUEST_LIST,
+        API_ENDPOINTS.SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST,
         paylaod
       )
       .subscribe({
         next: (res: any) => {
           console.log(
-            `${API_ENDPOINTS.SERVICE_GET_EMPLOYEE_LEAVE_REQUEST_LIST} Response : `,
+            `${API_ENDPOINTS.SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST} Response : `,
             res
           );
 
-          this.pendingLeaveCount = res?.data?.totalRecords || '';
+          this.pendingRequestCount = res?.totalRecords || '';
 
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -170,6 +170,12 @@ export class DashboardComponent {
   }
 
   navigateToRequestList() {
-    this.router.navigate(['/employee-leave-approval-request-list']);
+    this.router.navigate(['/request-list']);
+  }
+
+  handleNotificationClick(): void {
+    if (this.pendingRequestCount && this.pendingRequestCount > 0) {
+      this.navigateToRequestList();
+    }
   }
 }

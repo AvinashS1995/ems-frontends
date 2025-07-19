@@ -10,6 +10,7 @@ import { ConfigurationResolverService } from './components/pages/configuration/c
 import { CreateMenuConfigurationResolverService } from './components/pages/configuration/menu/create-menu-configuration/create-menu-configuration-resolver.service';
 import { RoleWiseMenuConfigurationResolverService } from './components/pages/configuration/menu/role-wise-menu-configuration/role-wise-menu-configuration-resolver.service';
 import { ApprovalConfigurationResolverService } from './components/pages/approval/approaval-configuration/approval-configuration-resolver.service';
+import { RequestListResolverService } from './components/pages/approval/request-list/request-list-resolver.service';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -46,12 +47,13 @@ export const routes: Routes = [
       {
         path: 'employee-profile',
         loadComponent: () =>
-          import('../app/components/pages/employee/employee-profile/employee-profile.component').then(
-            (c) => c.EmployeeProfileComponent),
-            data: {
-              title: "Employee Profile"
-            },
-            resolve: { data: EmployeeProfileResolverService }
+          import(
+            '../app/components/pages/employee/employee-profile/employee-profile.component'
+          ).then((c) => c.EmployeeProfileComponent),
+        data: {
+          title: 'Employee Profile',
+        },
+        resolve: { data: EmployeeProfileResolverService },
       },
       {
         path: 'employee-management',
@@ -59,10 +61,10 @@ export const routes: Routes = [
           import(
             '../app/components/pages/employee/employee-management/employee-management.component'
           ).then((c) => c.EmployeeManagementComponent),
-          data: {
-            title: "Employee Management"
-          },
-          resolve: { data: EmployeeManagementResolverService }
+        data: {
+          title: 'Employee Management',
+        },
+        resolve: { data: EmployeeManagementResolverService },
       },
       {
         path: 'add-employee',
@@ -77,10 +79,10 @@ export const routes: Routes = [
           import(
             '../app/components/pages/attendence/attendence-management/attendence-management.component'
           ).then((c) => c.AttendenceManagementComponent),
-          data: {
-            title: "Attendence Management"
-          },
-          resolve: { data: AttendenceManagementResolverService }
+        data: {
+          title: 'Attendence Management',
+        },
+        resolve: { data: AttendenceManagementResolverService },
       },
       {
         path: 'leave-management',
@@ -88,10 +90,10 @@ export const routes: Routes = [
           import(
             './components/pages/leave/leave-management/leave-management.component'
           ).then((c) => c.LeaveManagementComponent),
-          data: {
-            title: "Leave Management"
-          },
-          resolve: { data: LeaveManagementResolverService }
+        data: {
+          title: 'Leave Management',
+        },
+        resolve: { data: LeaveManagementResolverService },
       },
       {
         path: 'employee-leave-approval-request-list',
@@ -99,85 +101,95 @@ export const routes: Routes = [
           import(
             './components/pages/leave/leave-approval-request-list/leave-approval-request-list.component'
           ).then((c) => c.LeaveApprovalRequestListComponent),
-          data: {
-            title: "Employee Leave Approval Request List"
-          },
-          resolve: { data: LeaveApprovalRequestListResolverService }
+        data: {
+          title: 'Employee Leave Approval Request List',
+        },
+        resolve: { data: LeaveApprovalRequestListResolverService },
       },
       {
         path: 'option-type-configuration',
         loadComponent: () =>
-          import('./components/pages/configuration/configuration/configuration.component').then(
-            (c) => c.ConfigurationComponent
-          ),
-          data: {
-            title: "Configuration"
-          },
-          resolve: { data: ConfigurationResolverService }
+          import(
+            './components/pages/configuration/configuration/configuration.component'
+          ).then((c) => c.ConfigurationComponent),
+        data: {
+          title: 'Configuration',
+        },
+        resolve: { data: ConfigurationResolverService },
       },
       {
         path: 'add-new-role-type',
         loadComponent: () =>
-          import('./components/pages/configuration/add-new-role-type/add-new-role-type.component').then(
-            (c) => c.AddNewRoleTypeComponent
-          ),
+          import(
+            './components/pages/configuration/add-new-role-type/add-new-role-type.component'
+          ).then((c) => c.AddNewRoleTypeComponent),
       },
       {
         path: 'menu-configuration',
         loadComponent: () =>
-          import('./components/pages/configuration/menu/menu-configuration/menu-configuration.component').then(
-            (c) => c.MenuConfigurationComponent
-          ),
-          data: {
-            title: "Menu Configuration List",
-          },
-          resolve: { data: CreateMenuConfigurationResolverService }
+          import(
+            './components/pages/configuration/menu/menu-configuration/menu-configuration.component'
+          ).then((c) => c.MenuConfigurationComponent),
+        data: {
+          title: 'Menu Configuration List',
+        },
+        resolve: { data: CreateMenuConfigurationResolverService },
       },
       {
         path: 'create-menu',
         loadComponent: () =>
-          import('./components/pages/configuration/menu/create-menu-configuration/create-menu-configuration.component').then(
-            (c) => c.CreateMenuConfigurationComponent
-          ),
-          data: {
-            title: "Create Menu Configuration",
-          },
-          resolve: { data: CreateMenuConfigurationResolverService }
+          import(
+            './components/pages/configuration/menu/create-menu-configuration/create-menu-configuration.component'
+          ).then((c) => c.CreateMenuConfigurationComponent),
+        data: {
+          title: 'Create Menu Configuration',
+        },
+        resolve: { data: CreateMenuConfigurationResolverService },
       },
       {
         path: 'role-wise-menu-configuration',
         loadComponent: () =>
-          import('./components/pages/configuration/menu/role-wise-menu-configuration/role-wise-menu-configuration.component').then(
-            (c) => c.RoleWiseMenuConfigurationComponent
-          ),
-          data: {
-            title: "Role Wise Menu Configuration",
-          },
-          resolve: { data: RoleWiseMenuConfigurationResolverService }
+          import(
+            './components/pages/configuration/menu/role-wise-menu-configuration/role-wise-menu-configuration.component'
+          ).then((c) => c.RoleWiseMenuConfigurationComponent),
+        data: {
+          title: 'Role Wise Menu Configuration',
+        },
+        resolve: { data: RoleWiseMenuConfigurationResolverService },
       },
       {
         path: 'approval-configuration-list',
         loadComponent: () =>
-          import('./components/pages/approval/approaval-configuration/approaval-configuration.component').then(
-            (c) => c.ApproavalConfigurationComponent
-          ),
-          data: {
-            title: "Approval Configuration List",
-          },
-          resolve: { data: ApprovalConfigurationResolverService }
+          import(
+            './components/pages/approval/approaval-configuration/approaval-configuration.component'
+          ).then((c) => c.ApproavalConfigurationComponent),
+        data: {
+          title: 'Approval Configuration List',
+        },
+        resolve: { data: ApprovalConfigurationResolverService },
       },
       {
         path: 'create-approval-configuration',
         loadComponent: () =>
-          import('./components/pages/approval/approval-configuration-form/approval-configuration-form.component').then(
-            (c) => c.ApprovalConfigurationFormComponent
-          ),
-          data: {
-            title: "Create Approval Configuration",
-          },
-          resolve: { data: ApprovalConfigurationResolverService }
+          import(
+            './components/pages/approval/approval-configuration-form/approval-configuration-form.component'
+          ).then((c) => c.ApprovalConfigurationFormComponent),
+        data: {
+          title: 'Create Approval Configuration',
+        },
+        resolve: { data: ApprovalConfigurationResolverService },
       },
-
+      {
+        path: 'request-list',
+        loadComponent: () =>
+          import(
+            './components/pages/approval/request-list/request-list.component'
+          ).then((c) => c.RequestListComponent),
+        data: {
+          title: 'Request List',
+        },
+        resolve: { data: RequestListResolverService },
+      },
     ],
   },
 ];

@@ -26,7 +26,7 @@ export class ApprovalConfigurationResolverService {
     roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, {
       entityValue: 'Role',
     });
-    debugger;
+    
     if (route.queryParams['data']) {
       const decrypted = this.cryptoService.decrypt(route.queryParams['data']);
       approvalDetails = of(decrypted as any);
