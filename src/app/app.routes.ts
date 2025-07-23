@@ -190,6 +190,26 @@ export const routes: Routes = [
         },
         resolve: { data: RequestListResolverService },
       },
+      {
+        path: 'popup-configuration',
+        loadComponent: () =>
+          import(
+            './components/pages/configuration/popup/popup-configuration/popup-configuration.component'
+          ).then((c) => c.PopupConfigurationComponent),
+        data: {
+          title: 'Popup Configuration',
+        },
+      },
+      {
+        path: 'create-popup-configuration',
+        loadComponent: () =>
+          import(
+            './components/pages/configuration/popup/create-popup-configuration/create-popup-configuration.component'
+          ).then((c) => c.CreatePopupConfigurationComponent),
+        data: {
+          title: 'Create Popup Configuration',
+        },
+      },
     ],
   },
 ];

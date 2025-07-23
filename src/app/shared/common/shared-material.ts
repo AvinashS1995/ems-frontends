@@ -36,6 +36,7 @@ import {MatTreeModule} from '@angular/material/tree';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 
 export const SHARED_MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -76,5 +77,6 @@ export const SHARED_MATERIAL_MODULES = [
   CommonModule,
   ReactiveFormsModule,
   FormsModule,
-  DragDropModule
+  DragDropModule,
+  NgxMatTimepickerModule
 ];

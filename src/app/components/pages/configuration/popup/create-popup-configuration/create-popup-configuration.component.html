@@ -1,0 +1,163 @@
+<div class="menu-configuration-container">
+  <h2>Create Popup Configuration</h2>
+  <mat-divider></mat-divider>
+
+  <mat-card>
+    <form [formGroup]="createPopupConfigForm" (ngSubmit)="onSubmitPopupConfigForm()">
+      <div class="create-menu-form-container">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Start Time</mat-label>
+          <input matInput [ngxMatTimepicker]="startTimePicker" formControlName="startTime" readonly />
+          <ngx-mat-timepicker #startTimePicker></ngx-mat-timepicker>
+          <mat-icon matSuffix (click)="startTimePicker.open()">access_time</mat-icon>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>End Time</mat-label>
+          <input matInput [ngxMatTimepicker]="endTimePicker" formControlName="endTime" readonly />
+          <ngx-mat-timepicker #endTimePicker></ngx-mat-timepicker>
+          <mat-icon matSuffix (click)="endTimePicker.open()">access_time</mat-icon>
+        </mat-form-field>
+
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <mat-select formControlName="country">
+            <mat-option *ngFor="let country of countryList" [value]="country.label">
+              {{ country.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option *ngFor="let role of employeeRoleList" [value]="role.label">
+              {{ role.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="male">Male</mat-option>
+            <mat-option value="female">Female</mat-option>
+            <mat-option value="other">Other</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Employee</mat-label>
+          <mat-select formControlName="employee">
+            <mat-option *ngFor="let employee of employeeList" [value]="employee.label">
+              {{ employee.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <div class="popup-type-group">
+          <label>Popup Type</label>
+          <mat-radio-group formControlName="popupType">
+            <mat-radio-button value="text">Text</mat-radio-button>
+            <mat-radio-button value="file">File</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+
+        <mat-form-field appearance="outline" *ngIf="createPopupConfigForm.value.popupType === 'text'">
+          <mat-label>Enter Text</mat-label>
+          <textarea matInput formControlName="textInput" rows="3"></textarea>
+        </mat-form-field>
+
+
+        <div class="custom-outline-upload" *ngIf="createPopupConfigForm.value.popupType === 'file'">
+          <ng-container *ngIf="createPopupConfigForm.controls['file']">
+            <div class="upload-field-main" [ngClass]="{
+        invalid: createPopupConfigForm.controls['file'].dirty &&
+                 createPopupConfigForm.controls['file'].invalid
+      }">
+              <!-- Show floating label only AFTER upload -->
+              <label class="custom-label" *ngIf="uploadFileDocumentName">
+                Upload File
+              </label>
+
+              <div class="upload-field" [class.disabled]="createPopupConfigForm.controls['file'].disabled">
+                <input type="hidden" formControlName="file" />
+
+                <!-- Actual file input -->
+                <input type="file" id="document-upload" (change)="uploadFile(createPopupConfigForm, 'file', $event)" />
+
+                <!-- BEFORE upload: show bold Upload File inside -->
+                <label for="document-upload" class="file-label" *ngIf="!uploadFileDocumentName">
+                  Upload File
+                </label>
+
+                <!-- AFTER upload: show uploaded filename -->
+                <label for="document-upload" class="file-label" *ngIf="uploadFileDocumentName">
+                  {{ uploadFileDocumentName }}
+                </label>
+
+                <div class="attachment-icon">
+                  <mat-icon id="attach_file">attach_file</mat-icon>
+                  <mat-icon id="done" *ngIf="createPopupConfigForm.controls['file'].value">done</mat-icon>
+                  <mat-icon id="visibility" *ngIf="uploadFileDocumentName"
+                    (click)="onViewDocument(createPopupConfigForm.controls['file'].value, uploadFileDocumentName)">
+                    visibility
+                  </mat-icon>
+                </div>
+              </div>
+
+              <div class="description">
+                MAX File Size: 5MB, Format: PDF
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+
+
+
+
+
+
+        <mat-slide-toggle formControlName="isActive"><span class="status-label">
+            {{ createPopupConfigForm.get('isActive')?.value ? 'Active' : 'Inactive' }}
+          </span></mat-slide-toggle>
+      </div>
+
+      <div class="form-buttons">
+        <button mat-flat-button color="primary" type="submit" [disabled]="createPopupConfigForm.invalid">
+          Submit
+        </button>
+        <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">Cancel</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

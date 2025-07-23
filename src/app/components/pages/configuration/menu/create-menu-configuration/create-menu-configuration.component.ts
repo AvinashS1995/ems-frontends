@@ -19,6 +19,7 @@ export class CreateMenuConfigurationComponent {
   menuList: Array<any> = [];
   isEditMode: Boolean = false;
   descriptionLength = 0;
+  menudetails: any;
 
   constructor(
     private commonService: CommonService,
@@ -61,6 +62,8 @@ export class CreateMenuConfigurationComponent {
 
         console.log(this.menuList);
 
+        this.menudetails = params['data'].menuDetails
+
         const {
           title,
           componentName,
@@ -69,7 +72,7 @@ export class CreateMenuConfigurationComponent {
           description,
           parentId,
           mode,
-        } = params['data'].menuDetails || {};
+        } = this.menudetails || {};
 
         const parentMenu = this.menuList.find(
           (item) => item.value === parentId
@@ -136,12 +139,17 @@ export class CreateMenuConfigurationComponent {
       description: menuDescription || '',
       icon: menuIcon || '',
       parentId: parentId?.value || '',
+      menuId: this.isEditMode ?  this.menudetails.id : ''
     };
 
     console.log(payload);
 
+    const ENDPOINT = this.isEditMode
+        ? API_ENDPOINTS.SERVICE_UPDATE_MENUS
+        : API_ENDPOINTS.SERVICE_SAVE_MENU;
+
     this.apiService
-      .postApiCall(API_ENDPOINTS.SERVICE_SAVE_MENU, payload)
+      .postApiCall(ENDPOINT, payload)
       .subscribe({
         next: (res: any) => {
           console.log(

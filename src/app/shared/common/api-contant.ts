@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
   SERVICE_DELETEROLETYPE: 'auth/delete-type-list',
   SERVICE_SAVE_MENU: 'menu/create-menu',
   SERVICE_GETMENUS: 'menu/getmenu', 
+  SERVICE_UPDATE_MENUS: 'menu/update-menu', 
   SERVICE_SAVE_ROLE_WISE_MENUS: 'menu/create-role-wise-menu',
   SERVICE_ROLEWISEMENUS: 'menu/getrole-wise-menu',
   SERVICE_GETALLSTATUS: 'auth/getall-status',
