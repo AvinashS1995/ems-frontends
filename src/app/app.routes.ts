@@ -11,6 +11,7 @@ import { CreateMenuConfigurationResolverService } from './components/pages/confi
 import { RoleWiseMenuConfigurationResolverService } from './components/pages/configuration/menu/role-wise-menu-configuration/role-wise-menu-configuration-resolver.service';
 import { ApprovalConfigurationResolverService } from './components/pages/approval/approaval-configuration/approval-configuration-resolver.service';
 import { RequestListResolverService } from './components/pages/approval/request-list/request-list-resolver.service';
+import { CreatePopupConfigResolverService } from './components/pages/configuration/popup/create-popup-configuration/create-popup-config-resolver.service';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -209,6 +210,7 @@ export const routes: Routes = [
         data: {
           title: 'Create Popup Configuration',
         },
+        resolve: { data: CreatePopupConfigResolverService }
       },
     ],
   },

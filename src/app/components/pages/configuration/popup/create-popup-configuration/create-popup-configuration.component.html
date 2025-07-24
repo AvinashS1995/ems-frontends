@@ -1,5 +1,5 @@
 <div class="menu-configuration-container">
-  <h2>Create Popup Configuration</h2>
+  <h2> {{ editMode ? 'Update' : 'Create' }} Popup Configuration</h2>
   <mat-divider></mat-divider>
 
   <mat-card>
@@ -55,19 +55,19 @@
         <mat-form-field appearance="outline">
           <mat-label>Role</mat-label>
           <mat-select formControlName="role">
-            <mat-option *ngFor="let role of employeeRoleList" [value]="role.label">
+            <mat-option *ngFor="let role of roles" [value]="role.label">
               {{ role.label }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
 
-        <mat-form-field appearance="outline">
+         <mat-form-field appearance="outline">
           <mat-label>Gender</mat-label>
           <mat-select formControlName="gender">
-            <mat-option value="male">Male</mat-option>
-            <mat-option value="female">Female</mat-option>
-            <mat-option value="other">Other</mat-option>
+            <mat-option *ngFor="let gender of genderTypeList" [value]="gender.label">
+              {{ gender.label }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -75,7 +75,8 @@
         <mat-form-field appearance="outline">
           <mat-label>Employee</mat-label>
           <mat-select formControlName="employee">
-            <mat-option *ngFor="let employee of employeeList" [value]="employee.label">
+            <mat-option value="all">All Employee</mat-option>
+            <mat-option *ngFor="let employee of allEmployeeList" [value]="employee.value">
               {{ employee.label }}
             </mat-option>
           </mat-select>
@@ -154,7 +155,7 @@
 
       <div class="form-buttons">
         <button mat-flat-button color="primary" type="submit" [disabled]="createPopupConfigForm.invalid">
-          Submit
+          {{ editMode ? 'Update' : 'Submit' }}
         </button>
         <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">Cancel</button>
       </div>

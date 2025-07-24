@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SHARED_MATERIAL_MODULES } from '../../../../../shared/common/shared-material';
 import { API_ENDPOINTS } from '../../../../../shared/common/api-contant';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-create-popup-configuration',
@@ -14,6 +15,8 @@ import { API_ENDPOINTS } from '../../../../../shared/common/api-contant';
   styleUrl: './create-popup-configuration.component.scss',
 })
 export class CreatePopupConfigurationComponent {
+  private destroy$ = new Subject<void>();
+
   createPopupConfigForm!: FormGroup;
 
   countryList = [{ label: 'India' }, { label: 'USA' }, { label: 'Germany' }];
@@ -31,6 +34,12 @@ export class CreatePopupConfigurationComponent {
   ];
   uploadFileDocumentName: any;
   uploadedUrl: any;
+  editMode: boolean = false;
+  popupDetailID: any;
+  genderTypeList: Array<any> = [];
+  allEmployeeList: Array<any> = [];
+  roles: Array<any> = [];
+  popdetails: any;
 
   constructor(
     private commonService: CommonService,
@@ -42,6 +51,7 @@ export class CreatePopupConfigurationComponent {
 
   ngOnInit() {
     this.prepareCreatePopupConfigForm();
+    this.getparam();
   }
 
   prepareCreatePopupConfigForm() {
@@ -85,65 +95,151 @@ export class CreatePopupConfigurationComponent {
       });
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file && file.size <= 5 * 1024 * 1024) {
-      this.createPopupConfigForm.patchValue({ file });
-    } else {
-      alert('File exceeds 5MB limit!');
-    }
+  getparam() {
+    this.activateRoute.data.subscribe((params) => {
+      console.log('Title ---->', params);
+
+      if (params['data']) {
+        this.roles = params['data'].roles?.data?.types || [];
+        this.roles = this.roles.map((item) => {
+          return {
+            value: item.typeValue,
+            label: item.typeLabel,
+          };
+        });
+
+        console.log('Roles--->', this.roles);
+
+        this.genderTypeList = params['data'].genderType?.data?.types || [];
+        this.genderTypeList = this.genderTypeList.map((genderType) => {
+          return {
+            value: genderType.typeValue,
+            label: genderType.typeLabel,
+          };
+        });
+
+        this.allEmployeeList =
+          params['data'].getAllEmployee?.data?.userList || [];
+        this.allEmployeeList = this.allEmployeeList.map((allEmployee) => {
+          return {
+            label: `${allEmployee.firstName} ${allEmployee.lastName} - [${allEmployee.empNo}]`,
+            value: allEmployee.empNo,
+          };
+        });
+      }
+
+      this.popdetails = params['data'].popDetails;
+debugger
+      if (this.popdetails.mode === 'edit') {
+        this.editMode = true;
+        this.createPopupConfigForm.patchValue({
+          name: this.popdetails.name || '',
+          startDate: this.popdetails.startDate || '',
+          endDate: this.popdetails.endDate || '',
+          startTime: this.popdetails.startTime || '',
+          endTime: this.popdetails.endTime || '',
+          country: this.popdetails.country || "",
+          role: this.popdetails.role || "",
+          gender: this.popdetails.gender || "",
+          employee: this.popdetails.name || "",
+          popupType: this.popdetails.popupType || "",
+          textInput: this.popdetails.textMessage || "",
+          file: this.popdetails.uploadedFile || "",
+          isActive: this.popdetails.isActive || "",
+        });
+      }
+    });
   }
 
   onSubmitPopupConfigForm(): void {
     if (this.createPopupConfigForm.valid) {
       console.log('Form Submitted:', this.createPopupConfigForm.value);
-      // send to backend
+
+      const formValue = this.createPopupConfigForm.value;
+
+      const updateID = this.editMode ? this.popupDetailID : '';
+
+      const payload: any = {
+        id: updateID,
+        name: formValue.name,
+        startDate: formValue.startDate,
+        endDate: formValue.endDate,
+        startTime: formValue.startTime,
+        endTime: formValue.endTime,
+        country: formValue.country,
+        role: formValue.role,
+        gender: formValue.gender,
+        employee: formValue.employee,
+        popupType: formValue.popupType,
+        isActive: formValue.isActive,
+      };
+
+      if (formValue.popupType === 'text') {
+        payload.textMessage = formValue.textInput;
+      }
+
+      if (formValue.popupType === 'file') {
+        payload.uploadedFile = formValue.file;
+      }
+
+      const ENDPOINT = this.editMode
+        ? API_ENDPOINTS.SERVICE_UPDATE_POPUP_DETAILS
+        : API_ENDPOINTS.SERVICE_SAVE_POPUP_DETAILS;
+
+      this.apiService.postApiCall(ENDPOINT, payload).subscribe({
+        next: (res: any) => {
+          console.log(`${ENDPOINT} Response : `, res);
+
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
     }
   }
 
   cancelForm(): void {
-    this.createPopupConfigForm.reset({ isActive: true, popupType: 'text' });
+    this.router.navigateByUrl('/popup-configuration');
   }
 
   uploadFile(form: FormGroup, controlName: string, event: Event): void {
-    
-      const input = event.target as HTMLInputElement;
-debugger
-      if (!input.files || input.files.length === 0) {
-        this.commonService.openSnackbar('No file selected.', 'error');
-        return;
-      }
+    const input = event.target as HTMLInputElement;
 
-      const file = input.files[0];
-      const allowedFileTypes = ['application/pdf'];
+    if (!input.files || input.files.length === 0) {
+      this.commonService.openSnackbar('No file selected.', 'error');
+      return;
+    }
 
-      if (!allowedFileTypes.includes(file.type)) {
-        this.commonService.openSnackbar(
-          'Only JPG, JPEG, and PNG, pdf files are allowed.',
-          'error'
-        );
-        return;
-      }
+    const file = input.files[0];
+    const allowedFileTypes = ['application/pdf'];
 
-      const formData = new FormData();
-      formData.append('file', file);
+    if (!allowedFileTypes.includes(file.type)) {
+      this.commonService.openSnackbar(
+        'Only JPG, JPEG, and PNG, pdf files are allowed.',
+        'error'
+      );
+      return;
+    }
 
-      this.apiService
-        .postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData)
-        .subscribe({
-          next: (res) => {
-            form.get(controlName)?.setValue(res?.data?.fileKey);
-            this.uploadFileDocumentName = res?.data?.fileKey;
-            this.uploadedUrl = res?.data?.presignFileUrl;
+    const formData = new FormData();
+    formData.append('file', file);
 
-            this.commonService.openSnackbar(res.message, 'success');
-          },
-          error: (error) => {
-            console.error('Upload error:', error);
-            this.commonService.openSnackbar(error.error.message, 'error');
-          },
-        });
-    
+    this.apiService
+      .postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData)
+      .subscribe({
+        next: (res) => {
+          form.get(controlName)?.setValue(res?.data?.fileKey);
+          this.uploadFileDocumentName = res?.data?.fileKey;
+          this.uploadedUrl = res?.data?.presignFileUrl;
+
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (error) => {
+          console.error('Upload error:', error);
+          this.commonService.openSnackbar(error.error.message, 'error');
+        },
+      });
   }
 
   onViewDocument(filepath?: any, filename?: string) {
@@ -157,5 +253,10 @@ debugger
         );
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

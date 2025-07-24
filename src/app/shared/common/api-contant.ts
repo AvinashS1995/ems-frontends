@@ -39,4 +39,9 @@ export const API_ENDPOINTS = {
   SERVICE_DELETE_APPROVAL_CONFIGURATION_DETAILS: 'approval/delete-approval-configuration-detail',
   SERVICE_GET_LEAVE_REQUEST_APPROVER: 'leave/get-leave-request-approver',
   SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST: 'approval/get-employee-approval-request-list',
+  SERVICE_SAVE_POPUP_DETAILS: 'popup/save-popup-details',
+  SERVICE_GET_EMPLOYEE_POPUP_DETAILS: 'popup/get-employee-popup',
+  SERVICE_GET_ALL_POPUP_DETAILS: 'popup/get-all-popup',
+  SERVICE_UPDATE_POPUP_DETAILS: 'popup/update-popup-details',
+  SERVICE_DELETE_POPUP_DETAILS: 'popup/delete-popup-details',
 };
