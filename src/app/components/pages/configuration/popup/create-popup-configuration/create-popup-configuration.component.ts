@@ -147,6 +147,8 @@ debugger
           file: this.popdetails.uploadedFile || "",
           isActive: this.popdetails.isActive || "",
         });
+
+        this.popupDetailID = this.popdetails._id
       }
     });
   }
@@ -191,6 +193,8 @@ debugger
           console.log(`${ENDPOINT} Response : `, res);
 
           this.commonService.openSnackbar(res.message, 'success');
+          this.router.navigateByUrl('/popup-configuration');
+          
         },
         error: (error) => {
           this.commonService.openSnackbar(error.error.message, 'error');
@@ -204,23 +208,33 @@ debugger
   }
 
   uploadFile(form: FormGroup, controlName: string, event: Event): void {
-    const input = event.target as HTMLInputElement;
+      const input = event.target as HTMLInputElement;
 
-    if (!input.files || input.files.length === 0) {
-      this.commonService.openSnackbar('No file selected.', 'error');
-      return;
-    }
+  if (!input.files || input.files.length === 0) {
+    this.commonService.openSnackbar('No file selected.', 'error');
+    return;
+  }
 
-    const file = input.files[0];
-    const allowedFileTypes = ['application/pdf'];
+  const file = input.files[0];
+  const allowedFileTypes = [
+    'application/pdf',
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'image/bmp',
+    'image/svg+xml',
+    'image/tiff'
+  ];
 
-    if (!allowedFileTypes.includes(file.type)) {
-      this.commonService.openSnackbar(
-        'Only JPG, JPEG, and PNG, pdf files are allowed.',
-        'error'
-      );
-      return;
-    }
+  if (!allowedFileTypes.includes(file.type)) {
+    this.commonService.openSnackbar(
+      'Only PDF and image files are allowed (JPG, PNG, GIF, WebP, etc.)',
+      'error'
+    );
+    return;
+  }
 
     const formData = new FormData();
     formData.append('file', file);

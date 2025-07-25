@@ -44,4 +44,5 @@ export const API_ENDPOINTS = {
   SERVICE_GET_ALL_POPUP_DETAILS: 'popup/get-all-popup',
   SERVICE_UPDATE_POPUP_DETAILS: 'popup/update-popup-details',
   SERVICE_DELETE_POPUP_DETAILS: 'popup/delete-popup-details',
+  SERVICE_TOGGLE_POPUP_STATUS: 'popup/toggle-popup-status',
 };

@@ -85,9 +85,10 @@ export class CommonService {
     return dialogRef.afterClosed();
   }
 
-  showAlertDialog(data: AlertDialogData): Observable<void> {
+  showAlertDialog(data: AlertDialogData): Observable<any> {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       width: '650px',
+      disableClose: true,
       data: {
         title: data.title,
         message: data.message,
@@ -98,23 +99,23 @@ export class CommonService {
     return dialogRef.afterClosed();
   }
 
-  viewImageViewer(filename?: string, imageUrl?: string): void {
-    this.dialog.open(ImageViewerComponent, {
+  viewImageViewer(filename?: string, imageUrl?: string) {
+   return this.dialog.open(ImageViewerComponent, {
       data: { filename, imageUrl },
       width: '95vw',
       height: '95vh',
       panelClass: 'custom-dialog-container',
       autoFocus: false,
-      disableClose: false,
+      disableClose: true,
     });
   }
 
-  viewDocumentViewer(filename?: string, fileUrl?: string): void {
-    this.dialog.open(DocumentViewerComponent, {
+  viewDocumentViewer(filename?: string, fileUrl?: string) {
+   return this.dialog.open(DocumentViewerComponent, {
       data: { filename, fileUrl },
       width: '95vw',
       height: '95vh',
-      disableClose: false,
+      disableClose: true,
       panelClass: 'pdf-viewer-dialog',
     });
   }

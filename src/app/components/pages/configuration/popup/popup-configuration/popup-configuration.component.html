@@ -3,7 +3,17 @@
     <div class="title">
       <h2>Menu configuration</h2>
     </div>
-    <button mat-flat-button class="example-full-width" type="button" (click)="createMenu()">+ Create Menu</button>
+    <div class="action-buttons">
+            <button mat-flat-button color="primary" class="text-btn" type="button"
+              matTooltip="Create Pop Configuration"  (click)="createMenu()">
+                + Create Pop Configuration
+            </button>
+
+            <button mat-icon-button class="icon-btn circular-icon-btn" color="primary"
+                (click)="createMenu()" matTooltip="Create Pop Configuration">
+                <mat-icon class="bold-plus-icon">add</mat-icon>
+            </button>
+        </div>
   </div>
   <mat-divider></mat-divider>
 
@@ -16,15 +26,38 @@
 
     <form [formGroup]="popupConfigFilterForm">
       <div class="filters">
+        
         <mat-form-field appearance="outline">
-          <mat-label>Search</mat-label>
-          <input matInput placeholder="Search by Menu" formControlName="menuName">
+          <mat-label>From Date</mat-label>
+          <input matInput [matDatepicker]="fromPicker" placeholder="DD/MM/YYYY" formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>To Date</mat-label>
+          <input matInput [matDatepicker]="toPicker" placeholder="DD/MM/YYYY" formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option value="all">All Employee</mat-option>
+            <mat-option *ngFor="let role of roleTypeList" [value]="role.label">{{ role.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+         <mat-form-field appearance="outline">
+          <mat-label>Popup Type</mat-label>
+          <input matInput placeholder="Pop Type" formControlName="popupType">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
-          <mat-select formControlName="menuStatus">
-            <mat-option *ngFor="let status of menuStatusList" [value]="status.label">{{ status.label }}</mat-option>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of statusTypeList" [value]="status.label">{{ status.label }}</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -43,7 +76,6 @@
   <div class="table-container">
     <table mat-table [dataSource]="popupList" class="mat-elevation-z1">
 
-      <!-- Sr No Column -->
       <ng-container matColumnDef="srNo">
         <th mat-header-cell *matHeaderCellDef> Sr No </th>
         <td mat-cell *matCellDef="let element; let i = index">
@@ -51,7 +83,6 @@
         </td>
       </ng-container>
 
-      <!-- Pop Name -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Pop Name </th>
         <td mat-cell *matCellDef="let element">
@@ -59,7 +90,6 @@
         </td>
       </ng-container>
 
-      <!-- Start Date -->
       <ng-container matColumnDef="startDate">
         <th mat-header-cell *matHeaderCellDef> Start Date </th>
         <td mat-cell *matCellDef="let element">
@@ -67,7 +97,6 @@
         </td>
       </ng-container>
 
-      <!-- End Date -->
       <ng-container matColumnDef="endDate">
         <th mat-header-cell *matHeaderCellDef> End Date </th>
         <td mat-cell *matCellDef="let element">
@@ -75,7 +104,6 @@
         </td>
       </ng-container>
 
-      <!-- Time -->
       <ng-container matColumnDef="time">
         <th mat-header-cell *matHeaderCellDef> Time </th>
         <td mat-cell *matCellDef="let element">
@@ -83,18 +111,16 @@
         </td>
       </ng-container>
 
-      <!-- Status -->
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef> Status </th>
         <td mat-cell *matCellDef="let element">
-          <mat-icon [ngClass]="element.isActive ? 'icon-active' : 'icon-inactive'"
-            [matTooltip]="element.isActive ? 'Active Popup' : 'Inactive Popup'">
-            {{ element.isActive ? 'visibility' : 'visibility_off' }}
-          </mat-icon>
+          <button mat-icon-button [ngClass]="element.isActive ? 'icon-active' : 'icon-inactive'"
+            [matTooltip]="element.isActive ? 'Active Popup' : 'Inactive Popup'" (click)="toggleStatus(element)">
+            <mat-icon>{{ element.isActive ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
         </td>
       </ng-container>
 
-      <!-- Action Column -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element">
@@ -116,8 +142,6 @@
                 </tr>
             </ng-container>
 
-
-      <!-- Header and Row Declarations -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
 
