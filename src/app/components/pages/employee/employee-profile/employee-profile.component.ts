@@ -53,6 +53,7 @@ export class EmployeeProfileComponent {
   genderTypeList: Array<any> = [];
   departmentTypeList: Array<any> = [];
   reportedByEmployeeList: Array<any> = [];
+  countryList = [{ label: 'India' }, { label: 'USA' }, { label: 'Germany' }];
 
   uploadedPhotoUrl: string = '';
   isFormChanged = false;
@@ -89,6 +90,7 @@ export class EmployeeProfileComponent {
         [Validators.required, Validators.pattern(REGEX.MOBILE_NUMBER_REGEX)],
       ],
       address: ['', Validators.required],
+      country: [''],
       status: ['', Validators.required],
       type: [''],
       empno: [''],
@@ -110,6 +112,7 @@ export class EmployeeProfileComponent {
       email,
       mobile,
       address,
+      country,
       status,
       empNo,
       type,
@@ -132,6 +135,7 @@ debugger
       email: email || '',
       mobile: mobile || '',
       address: address || '',
+      country: country || '',
       status: status || '',
       type: type || '',
       empno: empNo || '',
@@ -300,6 +304,7 @@ debugger
       email: newEmployee.email ? newEmployee.email : '',
       mobile: newEmployee.mobile ? newEmployee.mobile : '',
       address: newEmployee.address ? newEmployee.address : '',
+      country: newEmployee.country ? newEmployee.country : '',
       role: newEmployee.role ? newEmployee.role : '',
       status: newEmployee.status ? newEmployee.status : '',
       type: newEmployee.type ? newEmployee.type : '',

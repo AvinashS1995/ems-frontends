@@ -58,6 +58,7 @@ export class AddEmployeeComponent {
   genderTypeList: Array<any> = [];
   departmentTypeList: Array<any> = [];
   reportedByTypeList: Array<any> = [];
+  countryList = [{ label: 'India' }, { label: 'USA' }, { label: 'Germany' }];
 
   isEditMode: Boolean = false;
 
@@ -126,6 +127,7 @@ export class AddEmployeeComponent {
         [Validators.required, Validators.pattern(REGEX.MOBILE_NUMBER_REGEX)],
       ],
       address: ['', Validators.required],
+      country: [''],
       status: ['', Validators.required],
       type: [''],
       reportedBy: [''],
@@ -149,6 +151,7 @@ export class AddEmployeeComponent {
         email: this.data.editData.email,
         mobile: this.data.editData.mobile,
         address: this.data.editData.address,
+        country: this.data.editData.country,
         status: this.data.editData.status,
         type: this.data.editData.type,
         reportedBy: this.data.editData.reportedBy,
@@ -188,6 +191,7 @@ export class AddEmployeeComponent {
         gender: newEmployee.gender ? newEmployee.gender : '',
         mobile: newEmployee.mobile ? newEmployee.mobile : '',
         address: newEmployee.address ? newEmployee.address : '',
+        country: newEmployee.country ? newEmployee.country : '',
         role: newEmployee.role ? newEmployee.role : '',
         status: newEmployee.status ? newEmployee.status : '',
         type: newEmployee.type ? newEmployee.type : '',
@@ -197,7 +201,7 @@ export class AddEmployeeComponent {
         joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
         salary: newEmployee.salary ? newEmployee.salary : 0,
         workType: newEmployee.workType ? newEmployee.workType : '',
-        profileImage: newEmployee ? newEmployee.profileImage.split('?')[0].split('/').pop() : '',
+        profileImage: newEmployee ? newEmployee.profileImage?.split('?')[0]?.split('/').pop() : '',
       };
       debugger;
       console.log('New employee data:', paylaod);

@@ -33,6 +33,7 @@ export class CommonService {
     email: '',
     mobile: '',
     address: '',
+    country: '',
     role: '',
     type: '',
     status: '',

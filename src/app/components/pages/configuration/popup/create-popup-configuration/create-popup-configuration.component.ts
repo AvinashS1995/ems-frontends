@@ -43,17 +43,6 @@ export class CreatePopupConfigurationComponent {
 
   countryList = [{ label: 'India' }, { label: 'USA' }, { label: 'Germany' }];
 
-  employeeRoleList = [
-    { label: 'Manager' },
-    { label: 'Developer' },
-    { label: 'HR' },
-  ];
-
-  employeeList = [
-    { label: 'John Doe' },
-    { label: 'Jane Smith' },
-    { label: 'Rahul Sharma' },
-  ];
   uploadFileDocumentName: any;
   uploadedUrl: any;
   editMode: boolean = false;
@@ -151,7 +140,7 @@ export class CreatePopupConfigurationComponent {
       }
 
       this.popdetails = params['data'].popDetails;
-
+debugger
       if (this.popdetails.mode === 'edit') {
         this.editMode = true;
         this.createPopupConfigForm.patchValue({
@@ -162,18 +151,19 @@ export class CreatePopupConfigurationComponent {
           endTime: this.popdetails.endTime || '',
           country: this.popdetails.country || '',
           role: this.popdetails.role || '',
+          employee: this.popdetails.employee || '',
           gender: this.popdetails.gender || '',
-          employee: this.popdetails.name || '',
           popupType: this.popdetails.popupType || '',
           textInput: this.popdetails.textMessage || '',
           file: this.popdetails.uploadedFile || '',
           isActive: this.popdetails.isActive || '',
         });
-
+        console.log(this.allEmployeeList)
+       
         this.popupDetailID = this.popdetails._id;
 
         this.uploadFileDocumentName =
-          this.popdetails.uploadedFile.split('?')[0].split('/').pop() || '';
+          this.popdetails.uploadedFile?.split('?')[0]?.split('/').pop() || '';
         console.log(this.uploadFileDocumentName);
       }
     });
@@ -208,7 +198,7 @@ export class CreatePopupConfigurationComponent {
 
       if (formValue.popupType === 'file') {
         payload.uploadedFile =
-          formValue.file.split('?')[0].split('/').pop() || '';
+          formValue.file?.split('?')[0]?.split('/').pop() || '';
       }
 
       console.log(payload);

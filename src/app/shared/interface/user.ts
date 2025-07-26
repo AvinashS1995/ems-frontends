@@ -9,6 +9,7 @@ export interface UserDetails {
   email: string;
   mobile: string;
   address: string;
+  country: string;
   role: string;
   type: string;
   status: string;
