@@ -58,7 +58,7 @@ export class EmployeeProfileComponent {
   isFormChanged = false;
   initialFormValue: any;
   previewUrl: string | ArrayBuffer | null = null;
-  defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
+  defaultAvatar: any;
 
   constructor(
     private fb: FormBuilder,
@@ -71,6 +71,8 @@ export class EmployeeProfileComponent {
   ngOnInit() {
     this.prepareUpdateEmployeeProfileForm();
     this.getparam();
+    const currentUser = this.commonService.getCurrentUserDetails()
+    this.defaultAvatar = currentUser.gender === 'Female' ? 'https://cdn-icons-png.flaticon.com/512/6997/6997668.png' : 'https://www.w3schools.com/howto/img_avatar.png';
   }
 
   prepareUpdateEmployeeProfileForm() {
