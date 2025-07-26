@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-material';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -47,7 +47,7 @@ export class ApprovalConfigurationFormComponent {
 
   prepareCreateApprovalConfigurationForm() {
     this.createApprovalConfigurationForm = new FormGroup({
-      request: new FormControl(''),
+      request: new FormControl('', Validators.required),
     });
   }
 

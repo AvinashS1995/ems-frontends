@@ -63,7 +63,7 @@ export class DashboardComponent {
     this.openCheckIns();
     this.getparams();
     if (this.commonService.getCurrentUserDetails().role !== 'Employee') {
-      this.getEmployeeLeaveRequestList();
+      this.getEmployeeRequestList();
     }
   }
 
@@ -81,8 +81,9 @@ export class DashboardComponent {
       });
 
       dialogRef.afterClosed().subscribe((result) => {
-        if (result === 'checkins') {
-          // this.commonService.openSnackbar('Check-in required to continue', 'error');
+        if (result) {
+          console.log(result);
+          this.showEmployeePopupIfAny();
         }
       });
     }
@@ -138,14 +139,14 @@ export class DashboardComponent {
     return name.replace(/\s*\(.*?\)/g, '').trim();
   }
 
-  getEmployeeLeaveRequestList() {
+  getEmployeeRequestList() {
     const currentUser = this.commonService.getCurrentUserDetails();
 
     const paylaod = {
       approverEmpNo: currentUser.empNo || '',
     };
 
-    console.log('SERVICE_GET_USER_ATTENDENCE paylaod', paylaod);
+    console.log('SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST paylaod', paylaod);
 
     this.apiService
       .postApiCall(
@@ -176,6 +177,72 @@ export class DashboardComponent {
   handleNotificationClick(): void {
     if (this.pendingRequestCount && this.pendingRequestCount > 0) {
       this.navigateToRequestList();
+    }
+  }
+
+  showEmployeePopupIfAny(): void {
+    const user = this.commonService.getCurrentUserDetails();
+
+    const paylaod = {
+      employee: user.empNo || '',
+    };
+
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_GET_EMPLOYEE_POPUP_DETAILS, paylaod)
+      .subscribe({
+        next: (resp: any) => {
+          const popups: any[] = resp?.data;
+          console.log(popups);
+
+          if (!popups || popups.length === 0) {
+            return;
+          }
+
+          this.displayPopupSequence(popups, 0);
+        },
+        error: (error) => {
+          console.error('Popup Fetch Error:', error);
+        },
+      });
+  }
+
+  displayPopupSequence(popups: any[], index: number): void {
+    if (index >= popups.length) {
+      return;
+    }
+
+    const popup = popups[index];
+
+    if (popup.popupType === 'text') {
+      this.commonService
+        .showAlertDialog({
+          title: popup.name,
+          message: popup.textMessage || 'No message',
+        })
+        .subscribe(() => {
+          this.displayPopupSequence(popups, index + 1);
+        });
+    } else {
+      const fileUrl = popup.uploadedFile;
+      const extension = this.commonService.returnFilenameExtension(fileUrl);
+
+      const isImage = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'bmp',
+        'webp',
+        'svg',
+      ].includes(extension || '');
+
+      const dialogRef = isImage
+        ? this.commonService.viewImageViewer(popup.uploadedFile, fileUrl)
+        : this.commonService.viewDocumentViewer(popup.uploadedFile, fileUrl);
+
+      dialogRef.afterClosed().subscribe(() => {
+        this.displayPopupSequence(popups, index + 1);
+      });
     }
   }
 }

@@ -45,6 +45,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Country</mat-label>
           <mat-select formControlName="country">
+            <mat-option value="all">All Country</mat-option>
             <mat-option *ngFor="let country of countryList" [value]="country.label">
               {{ country.label }}
             </mat-option>
@@ -55,6 +56,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Role</mat-label>
           <mat-select formControlName="role">
+            <mat-option value="all">All Role</mat-option>
             <mat-option *ngFor="let role of roles" [value]="role.label">
               {{ role.label }}
             </mat-option>
@@ -62,9 +64,10 @@
         </mat-form-field>
 
 
-         <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline">
           <mat-label>Gender</mat-label>
           <mat-select formControlName="gender">
+            <mat-option value="all">All Gender</mat-option>
             <mat-option *ngFor="let gender of genderTypeList" [value]="gender.label">
               {{ gender.label }}
             </mat-option>
@@ -104,7 +107,6 @@
         invalid: createPopupConfigForm.controls['file'].dirty &&
                  createPopupConfigForm.controls['file'].invalid
       }">
-              <!-- Show floating label only AFTER upload -->
               <label class="custom-label" *ngIf="uploadFileDocumentName">
                 Upload File
               </label>
@@ -112,15 +114,12 @@
               <div class="upload-field" [class.disabled]="createPopupConfigForm.controls['file'].disabled">
                 <input type="hidden" formControlName="file" />
 
-                <!-- Actual file input -->
                 <input type="file" id="document-upload" (change)="uploadFile(createPopupConfigForm, 'file', $event)" />
 
-                <!-- BEFORE upload: show bold Upload File inside -->
                 <label for="document-upload" class="file-label" *ngIf="!uploadFileDocumentName">
                   Upload File
                 </label>
 
-                <!-- AFTER upload: show uploaded filename -->
                 <label for="document-upload" class="file-label" *ngIf="uploadFileDocumentName">
                   {{ uploadFileDocumentName }}
                 </label>

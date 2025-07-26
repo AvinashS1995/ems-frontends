@@ -115,7 +115,7 @@ export class ConfigurationComponent {
 
   addRoleType(roleTypeData?: any) {
     const dialogRef = this.dialog.open(AddNewRoleTypeComponent, {
-      width: '600px',
+      width: '450px',
       disableClose: true,
       data: {
         Roles: this.roles,

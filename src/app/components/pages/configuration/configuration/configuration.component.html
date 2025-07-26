@@ -3,7 +3,17 @@
     <div class="title">
       <h1>Configuration</h1>
     </div>
-    <button mat-flat-button class="example-full-width" (click)="addRoleType()">+ Add New Role Type</button>
+    <div class="action-buttons">
+            <button mat-flat-button color="primary" class="text-btn" type="button"
+              matTooltip="Add New Role Type"  (click)="addRoleType()">
+                + Add New Role Type
+            </button>
+
+            <button mat-icon-button class="icon-btn circular-icon-btn" color="primary"
+                (click)="addRoleType()" matTooltip="Add New Role Type">
+                <mat-icon class="bold-plus-icon">add</mat-icon>
+            </button>
+        </div>
   </div>
 
   <mat-divider></mat-divider>

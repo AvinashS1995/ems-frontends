@@ -6,6 +6,20 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SHARED_MATERIAL_MODULES } from '../../../../../shared/common/shared-material';
 import { API_ENDPOINTS } from '../../../../../shared/common/api-contant';
 import { Subject } from 'rxjs';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  }
+}
 
 @Component({
   selector: 'app-create-popup-configuration',
@@ -13,6 +27,14 @@ import { Subject } from 'rxjs';
   imports: [SHARED_MATERIAL_MODULES],
   templateUrl: './create-popup-configuration.component.html',
   styleUrl: './create-popup-configuration.component.scss',
+  providers: [
+      {
+        provide: DateAdapter,
+        useClass: MomentDateAdapter,
+        deps: [MAT_DATE_LOCALE],
+      },
+      { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    ],
 })
 export class CreatePopupConfigurationComponent {
   private destroy$ = new Subject<void>();
@@ -129,7 +151,7 @@ export class CreatePopupConfigurationComponent {
       }
 
       this.popdetails = params['data'].popDetails;
-debugger
+
       if (this.popdetails.mode === 'edit') {
         this.editMode = true;
         this.createPopupConfigForm.patchValue({
@@ -138,17 +160,21 @@ debugger
           endDate: this.popdetails.endDate || '',
           startTime: this.popdetails.startTime || '',
           endTime: this.popdetails.endTime || '',
-          country: this.popdetails.country || "",
-          role: this.popdetails.role || "",
-          gender: this.popdetails.gender || "",
-          employee: this.popdetails.name || "",
-          popupType: this.popdetails.popupType || "",
-          textInput: this.popdetails.textMessage || "",
-          file: this.popdetails.uploadedFile || "",
-          isActive: this.popdetails.isActive || "",
+          country: this.popdetails.country || '',
+          role: this.popdetails.role || '',
+          gender: this.popdetails.gender || '',
+          employee: this.popdetails.name || '',
+          popupType: this.popdetails.popupType || '',
+          textInput: this.popdetails.textMessage || '',
+          file: this.popdetails.uploadedFile || '',
+          isActive: this.popdetails.isActive || '',
         });
 
-        this.popupDetailID = this.popdetails._id
+        this.popupDetailID = this.popdetails._id;
+
+        this.uploadFileDocumentName =
+          this.popdetails.uploadedFile.split('?')[0].split('/').pop() || '';
+        console.log(this.uploadFileDocumentName);
       }
     });
   }
@@ -181,8 +207,11 @@ debugger
       }
 
       if (formValue.popupType === 'file') {
-        payload.uploadedFile = formValue.file;
+        payload.uploadedFile =
+          formValue.file.split('?')[0].split('/').pop() || '';
       }
+
+      console.log(payload);
 
       const ENDPOINT = this.editMode
         ? API_ENDPOINTS.SERVICE_UPDATE_POPUP_DETAILS
@@ -194,7 +223,6 @@ debugger
 
           this.commonService.openSnackbar(res.message, 'success');
           this.router.navigateByUrl('/popup-configuration');
-          
         },
         error: (error) => {
           this.commonService.openSnackbar(error.error.message, 'error');
@@ -208,33 +236,33 @@ debugger
   }
 
   uploadFile(form: FormGroup, controlName: string, event: Event): void {
-      const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
 
-  if (!input.files || input.files.length === 0) {
-    this.commonService.openSnackbar('No file selected.', 'error');
-    return;
-  }
+    if (!input.files || input.files.length === 0) {
+      this.commonService.openSnackbar('No file selected.', 'error');
+      return;
+    }
 
-  const file = input.files[0];
-  const allowedFileTypes = [
-    'application/pdf',
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-    'image/bmp',
-    'image/svg+xml',
-    'image/tiff'
-  ];
+    const file = input.files[0];
+    const allowedFileTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+      'image/bmp',
+      'image/svg+xml',
+      'image/tiff',
+    ];
 
-  if (!allowedFileTypes.includes(file.type)) {
-    this.commonService.openSnackbar(
-      'Only PDF and image files are allowed (JPG, PNG, GIF, WebP, etc.)',
-      'error'
-    );
-    return;
-  }
+    if (!allowedFileTypes.includes(file.type)) {
+      this.commonService.openSnackbar(
+        'Only PDF and image files are allowed (JPG, PNG, GIF, WebP, etc.)',
+        'error'
+      );
+      return;
+    }
 
     const formData = new FormData();
     formData.append('file', file);
@@ -243,9 +271,9 @@ debugger
       .postFormDataApi(API_ENDPOINTS.SERVICE_UPLOADFILE, formData)
       .subscribe({
         next: (res) => {
-          form.get(controlName)?.setValue(res?.data?.fileKey);
           this.uploadFileDocumentName = res?.data?.fileKey;
           this.uploadedUrl = res?.data?.presignFileUrl;
+          form.get(controlName)?.setValue(this.uploadedUrl);
 
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -257,9 +285,10 @@ debugger
   }
 
   onViewDocument(filepath?: any, filename?: string) {
-    if (filename !== '' || this.uploadedUrl) {
+    if ((filename !== '' && filepath) || this.uploadedUrl) {
+      const url = filepath || this.uploadedUrl;
       if (filepath) {
-        this.commonService.onViewDocument(filename, this.uploadedUrl);
+        this.commonService.onViewDocument(filename, url);
       } else {
         this.commonService.openSnackbar(
           'No image available to preview',

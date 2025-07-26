@@ -63,7 +63,7 @@
 
     <div class="form-buttons">
         <button mat-flat-button color="primary" type="submit" [disabled]="createApprovalConfigurationForm.invalid"
-            (click)="onSubmitApprovalConfigurationForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
+           [disabled]="createApprovalConfigurationForm.invalid && hierarchyRoles.length === 0" (click)="onSubmitApprovalConfigurationForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
         </button>
         <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
             Cancel
