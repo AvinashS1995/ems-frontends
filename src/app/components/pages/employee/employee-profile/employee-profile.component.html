@@ -17,11 +17,43 @@
 
                         <div class="form-fields">
                             <mat-form-field appearance="outline">
-                                <mat-label>Name</mat-label>
-                                <input matInput type="text" formControlName="name">
-                                <mat-error *ngIf="updateEmployeeProfileForm.get('name')?.hasError('required')">
-                                    Employee Name is required
+                                <mat-label>First Name</mat-label>
+                                <input matInput type="text" formControlName="firstName">
+                                <mat-error *ngIf="updateEmployeeProfileForm.get('firstName')?.hasError('required')">
+                                    Employee First Name is required
                                 </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Middle Name</mat-label>
+                                <input matInput type="text" formControlName="middleName">
+                                <mat-error *ngIf="updateEmployeeProfileForm.get('middleName')?.hasError('required')">
+                                    Employee Middle Name is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Last Name</mat-label>
+                                <input matInput type="text" formControlName="lastName">
+                                <mat-error *ngIf="updateEmployeeProfileForm.get('lastName')?.hasError('required')">
+                                    Employee Last Name is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Date Of Birth</mat-label>
+                                <input matInput [matDatepicker]="dobpicker" formControlName="dob">
+                                <mat-datepicker-toggle matSuffix [for]="dobpicker"></mat-datepicker-toggle>
+                                <mat-datepicker #dobpicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Gender</mat-label>
+                                <mat-select formControlName="gender">
+                                    <mat-option *ngFor="let gender of genderTypeList" [value]="gender.label">{{
+                                        gender.label
+                                        }}</mat-option>
+                                </mat-select>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
@@ -35,59 +67,12 @@
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
-                                <mat-label>Role</mat-label>
-                                <mat-select formControlName="role">
-                                    <mat-option *ngFor="let role of roleList" [value]="role.label">{{ role.label
-                                        }}</mat-option>
-                                </mat-select>
+                                <mat-label>Address</mat-label>
+                                <input matInput type="text" formControlName="address">
+
                             </mat-form-field>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Designation</mat-label>
-                                <mat-select formControlName="designation">
-                                    <mat-option *ngFor="let designation of designationList" [value]="designation.label">
-                                        {{ designation.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>Type</mat-label>
-                                <mat-select formControlName="type">
-                                    <mat-option *ngFor="let type of experienceTypeList" [value]="type.label">
-                                        {{ type.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Joining Date</mat-label>
-                                <input matInput [matDatepicker]="picker" formControlName="joiningDate">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Status</mat-label>
-                                <mat-select formControlName="status">
-                                    <mat-option *ngFor="let status of statusList" [value]="status.label">{{ status.label
-                                        }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Salary</mat-label>
-                                <input matInput type="number" formControlName="salary">
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Work Type</mat-label>
-                                <mat-select formControlName="workType">
-                                    <mat-option *ngFor="let workType of workTypeList" [value]="workType.label">
-                                        {{ workType.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
                         </div>
 
                         <!-- Profile Upload Section -->
@@ -108,21 +93,85 @@
 
                 <!-- Reporting -->
                 <mat-card class="profile-card">
-                    <h3 class="card-title">Employee Reporting</h3>
+                    <h3 class="card-title">Employee Company Details </h3>
                     <div class="reporting-form-section">
+
                         <mat-form-field appearance="outline">
-                            <mat-label>Team Leader</mat-label>
-                            <input matInput formControlName="teamLeader">
+                            <mat-label>Employee No.</mat-label>
+                            <input matInput type="text" formControlName="empno">
+
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
-                            <mat-label>Manager</mat-label>
-                            <input matInput formControlName="manager">
+                            <mat-label>Role</mat-label>
+                            <mat-select formControlName="role">
+                                <mat-option *ngFor="let role of roleList" [value]="role.label">{{ role.label
+                                    }}</mat-option>
+                            </mat-select>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
-                            <mat-label>HR</mat-label>
-                            <input matInput formControlName="hr">
+                            <mat-label>Designation</mat-label>
+                            <mat-select formControlName="designation">
+                                <mat-option *ngFor="let designation of designationList" [value]="designation.label">
+                                    {{ designation.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Reported By</mat-label>
+                            <mat-select formControlName="reportedBy">
+                                <mat-option *ngFor="let reportedBy of reportedByEmployeeList" [value]="reportedBy.label">{{
+                                    reportedBy.label }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Department</mat-label>
+                            <mat-select formControlName="department">
+                                <mat-option *ngFor="let department of departmentTypeList" [value]="department.label">{{
+                                    department.label
+                                    }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Type</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option *ngFor="let type of experienceTypeList" [value]="type.label">
+                                    {{ type.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Joining Date</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="joiningDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <mat-select formControlName="status">
+                                <mat-option *ngFor="let status of statusList" [value]="status.label">{{ status.label
+                                    }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Salary</mat-label>
+                            <input matInput type="number" formControlName="salary">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Work Type</mat-label>
+                            <mat-select formControlName="workType">
+                                <mat-option *ngFor="let workType of workTypeList" [value]="workType.label">
+                                    {{ workType.label }}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
                     </div>
                 </mat-card>

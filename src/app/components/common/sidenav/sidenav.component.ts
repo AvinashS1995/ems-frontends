@@ -18,11 +18,12 @@ import { StorageService } from '../../../shared/service/common/storage.service';
 import { KeyService } from '../../../shared/service/common/key.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { SHARED_CUSTOM_PIPES } from '../../../shared/common/shared-pipe';
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [SHARED_MATERIAL_MODULES, NgClass],
+  imports: [SHARED_MATERIAL_MODULES, NgClass, SHARED_CUSTOM_PIPES],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
   animations: [
@@ -75,7 +76,7 @@ export class SidenavComponent implements OnInit {
     this.profileImage = currentUser.profileImage
       ? currentUser.profileImage
       : this.defaultAvatar;
-
+debugger
     if (typeof window !== 'undefined') {
       this.token =
         this.storageService.getItem('token', 'session') ||
@@ -240,4 +241,9 @@ export class SidenavComponent implements OnInit {
         }
       });
   }
+
+  isDefaultAvatar(): boolean {
+  return !this.profileImage || this.profileImage === this.defaultAvatar;
+}
+
 }

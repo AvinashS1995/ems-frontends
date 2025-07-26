@@ -197,7 +197,7 @@ export class AddEmployeeComponent {
         joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
         salary: newEmployee.salary ? newEmployee.salary : 0,
         workType: newEmployee.workType ? newEmployee.workType : '',
-        profileImage: newEmployee ? newEmployee.profileImage : '',
+        profileImage: newEmployee ? newEmployee.profileImage.split('?')[0].split('/').pop() : '',
       };
       debugger;
       console.log('New employee data:', paylaod);
@@ -253,7 +253,7 @@ export class AddEmployeeComponent {
           this.previewUrl = uploadedUrl;
           console.log(this.previewUrl);
           this.fileKey = res?.data?.fileKey;
-          this.employeeForm.patchValue({ profileImage: this.fileKey });
+          this.employeeForm.patchValue({ profileImage: this.previewUrl });
           this.commonService.openSnackbar(res.message, 'success');
         },
         error: (error) => {
@@ -261,22 +261,6 @@ export class AddEmployeeComponent {
           this.commonService.openSnackbar(error.error.message, 'error');
         },
       });
-  }
-
-  onViewDocument(filename?: string, filepath?: any) {
-    if (filepath !== '' || this.previewUrl) {
-      const filename = this.fileKey;
-      const filepath = this.previewUrl;
-
-      if (filepath) {
-        this.commonService.onViewDocument(filename, filepath);
-      } else {
-        this.commonService.openSnackbar(
-          'No image available to preview',
-          'error'
-        );
-      }
-    }
   }
 
   cancel() {

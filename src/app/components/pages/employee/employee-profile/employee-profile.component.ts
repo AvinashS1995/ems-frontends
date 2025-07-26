@@ -50,6 +50,9 @@ export class EmployeeProfileComponent {
   experienceTypeList: Array<any> = [];
   designationList: Array<any> = [];
   workTypeList: Array<any> = [];
+  genderTypeList: Array<any> = [];
+  departmentTypeList: Array<any> = [];
+  reportedByEmployeeList: Array<any> = [];
 
   uploadedPhotoUrl: string = '';
   isFormChanged = false;
@@ -73,17 +76,22 @@ export class EmployeeProfileComponent {
   prepareUpdateEmployeeProfileForm() {
     this.updateEmployeeProfileForm = this.fb.group({
       profileImage: [''],
-      name: ['', Validators.required],
+      firstName: ['', Validators.required],
+      middleName: [''],
+      lastName: ['', Validators.required],
+      dob: ['', Validators.required],
+      gender: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL_REGEX)]],
       mobile: [
         '',
         [Validators.required, Validators.pattern(REGEX.MOBILE_NUMBER_REGEX)],
       ],
+      address: ['', Validators.required],
       status: ['', Validators.required],
       type: [''],
-      teamLeader: [''],
-      manager: [''],
-      hr: [''],
+      empno: [''],
+      department: [''],
+      reportedBy: [''],
       role: [''],
       designation: [''],
       joiningDate: [''],
@@ -101,6 +109,7 @@ export class EmployeeProfileComponent {
       mobile,
       address,
       status,
+      empNo,
       type,
       reportedBy,
       role,
@@ -111,9 +120,9 @@ export class EmployeeProfileComponent {
       workType,
       profileImage,
     } = this.commonService.getCurrentUserDetails();
-
+debugger
     this.updateEmployeeProfileForm.patchValue({
-      fistName: firstName || '',
+      firstName: firstName || '',
       middleName: middleName || '',
       lastName: lastName || '',
       dob: dob || '',
@@ -123,6 +132,7 @@ export class EmployeeProfileComponent {
       address: address || '',
       status: status || '',
       type: type || '',
+      empno: empNo || '',
       reportedBy: reportedBy || '',
       role: role || '',
       designation: designation || '',
@@ -134,7 +144,7 @@ export class EmployeeProfileComponent {
 
     this.uploadedPhotoUrl = profileImage;
     this.updateEmployeeProfileForm.patchValue({
-      profileImage: this.updateEmployeeProfileForm,
+      profileImage: this.uploadedPhotoUrl,
     });
 
     this.setSubscription();
@@ -191,6 +201,34 @@ export class EmployeeProfileComponent {
             label: workType.typeLabel,
           };
         });
+
+         this.genderTypeList = params['data'].genderType?.data?.types || [];
+        this.genderTypeList = this.genderTypeList.map((genderType) => {
+          return {
+            value: genderType.typeValue,
+            label: genderType.typeLabel,
+          };
+        });
+
+        this.departmentTypeList =
+          params['data'].departmentType?.data?.types || [];
+        this.departmentTypeList = this.departmentTypeList.map(
+          (departmentType) => {
+            return {
+              value: departmentType.typeValue,
+              label: departmentType.typeLabel,
+            };
+          }
+        );
+
+        this.reportedByEmployeeList =
+          params['data'].getAllEmployee?.data?.userList || [];
+        this.reportedByEmployeeList = this.reportedByEmployeeList.map((allEmployee) => {
+          return {
+            label: `${allEmployee.firstName} ${allEmployee.lastName} - [${allEmployee.empNo}]`,
+            value: allEmployee.empNo,
+          };
+        });
       }
     });
   }
@@ -217,12 +255,11 @@ export class EmployeeProfileComponent {
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      // 2 MB limit
+    
       this.commonService.openSnackbar('Image must be less than 2MB', 'error');
       return;
     }
 
-    // Upload to backend (Filebase)
     const formData = new FormData();
     formData.append('file', file);
 
@@ -234,7 +271,7 @@ export class EmployeeProfileComponent {
           this.previewUrl = uploadedUrl;
           const fileKey = res?.data?.fileKey;
           debugger;
-          this.updateEmployeeProfileForm.patchValue({ profileImage: fileKey });
+          this.updateEmployeeProfileForm.patchValue({ profileImage: uploadedUrl });
           this.commonService.openSnackbar(res.message, 'success');
         },
         error: (error) => {
@@ -253,20 +290,24 @@ export class EmployeeProfileComponent {
 
     const paylaod = {
       id: _id ? _id : '',
-      name: newEmployee.name ? newEmployee.name : '',
+      firstName: newEmployee.firstName ? newEmployee.firstName : '',
+      middleName: newEmployee.middleName ? newEmployee.middleName : '',
+      lastName: newEmployee.lastName ? newEmployee.lastName : '',
+      dob: newEmployee.dob ? newEmployee.dob : '',
+      gender: newEmployee.gender ? newEmployee.gender : '',
       email: newEmployee.email ? newEmployee.email : '',
       mobile: newEmployee.mobile ? newEmployee.mobile : '',
+      address: newEmployee.address ? newEmployee.address : '',
       role: newEmployee.role ? newEmployee.role : '',
       status: newEmployee.status ? newEmployee.status : '',
       type: newEmployee.type ? newEmployee.type : '',
-      teamLeader: newEmployee.teamLeader ? newEmployee.teamLeader : '',
-      manager: newEmployee.manager ? newEmployee.manager : '',
-      hr: newEmployee.hr ? newEmployee.hr : '',
+      reportedBy: newEmployee.reportedBy ? newEmployee.reportedBy : '',
+      department: newEmployee.department ? newEmployee.department : '',
       designation: newEmployee.designation ? newEmployee.designation : '',
       joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
       salary: newEmployee.salary ? newEmployee.salary : 0,
       workType: newEmployee.workType ? newEmployee.workType : '',
-      profileImage: newEmployee.profileImage ? newEmployee.profileImage : '',
+      profileImage: newEmployee.profileImage ? newEmployee.profileImage.split('?')[0].split('/').pop() : '',
     };
 
     console.log('Update employee data:', paylaod);

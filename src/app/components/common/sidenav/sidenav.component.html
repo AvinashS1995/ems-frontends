@@ -1,8 +1,22 @@
 <mat-sidenav-container class="sidenav-container" [autosize]="true">
   <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="!isSmallScreen"
     [ngClass]="commonService.expandSidenav() ? 'expand' : 'colaps'">
-    <div class="sidenav-header">
+    <!-- <div class="sidenav-header">
       <img [src]="profileImage" alt="">
+      <div class="header-text">
+        <h2>{{ UserName }}</h2>
+        <p>{{ RoleName }}</p>
+      </div>
+    </div> -->
+     <div class="sidenav-header">
+      <div class="profile-wrapper">
+        <ng-container *ngIf="isDefaultAvatar(); else userImage">
+          <div class="initials-avatar">{{ UserName | initialName }}</div>
+        </ng-container>
+        <ng-template #userImage>
+          <img [src]="profileImage" alt="User" class="profile-image" />
+        </ng-template>
+      </div>
       <div class="header-text">
         <h2>{{ UserName }}</h2>
         <p>{{ RoleName }}</p>
