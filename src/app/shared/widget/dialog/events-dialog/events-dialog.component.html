@@ -1,0 +1,30 @@
+<mat-dialog-content class="events-dialog-wrapper">
+  <div class="events-card">
+    <div class="card-header">
+      <div class="header-icon">
+        <mat-icon>calendar_today</mat-icon>
+      </div>
+      <span class="card-title">Meeting & Schedules</span>
+    </div>
+
+    <div class="event-item" *ngFor="let event of data">
+      <div class="date-box" [ngStyle]="{ 'background-color': getColorByDay(event.date) }">
+        <span class="date">{{ event.date | date: 'dd' }}</span>
+        <span class="month">{{ event.date | date: 'MMM' }}</span>
+      </div>
+
+      <div class="event-details">
+        <h4>{{ event.title }}</h4>
+        <p class="event-time">{{ event.startTime }} - {{ event.endTime }} <span class="location">, {{ event.location
+            }}</span></p>
+        <p class="description">{{ event.description }}</p>
+
+        <div class="attendees">
+          <img *ngFor="let attendee of event.attendees.slice(0, 3)" [src]="attendee.avatar"
+            [alt]="attendee.attendeesName" matTooltip="{{ attendee.attendeesName }}" />
+          <span *ngIf="event.attendees.length > 3" class="more">+{{ event.attendees.length - 3 }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

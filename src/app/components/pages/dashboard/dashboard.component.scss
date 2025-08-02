@@ -66,26 +66,26 @@
 .dashboard-content {
   display: grid;
   gap: 20px;
-  grid-template-columns: 1fr; 
+  grid-template-columns: 1fr;
 
- @media (min-width: 900px) {
-  grid-template-columns: repeat(3, 1fr);
-}
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
 }
 
 .upcoming-holiday-card {
-   display: flex;
+  display: flex;
   flex-direction: column;
 
   mat-card {
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100%; 
+    height: 100%;
   }
 
-   .holidays-section {
+  .holidays-section {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -175,5 +175,445 @@
     grid-template-columns: repeat(4, 1fr);
 
 
+  }
+}
+
+
+
+.time-at-work-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  min-height: 200px;
+
+  .time-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .clock-icon {
+      color: #03a9f4;
+      font-size: 24px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+
+  .employee-status {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+
+    .profile-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 12px;
+    }
+
+    .status-text {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+
+      strong {
+        font-size: 14px;
+      }
+
+      small {
+        font-size: 11px;
+        color: gray;
+      }
+    }
+  }
+
+  .work-duration {
+    background: #f0f0f0;
+    margin: 12px 0;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 13px;
+
+    .fingerprint-icon {
+      color: #03a9f4;
+      font-size: 20px;
+    }
+  }
+
+  .weekly-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .week-label {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+
+      strong {
+        font-size: 14px;
+      }
+    }
+
+    .week-hours {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+  }
+}
+
+.leaves-balance-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+
+  .leaves-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    .leave-icon {
+      color: #ffc107;
+      font-size: 24px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+
+  .leaves-stats {
+    display: flex;
+    justify-content: center; // Center all three columns
+    gap: 20px; // ✅ Add spacing between Earned, Casual, Sick
+    margin-bottom: 10px;
+
+    .leave-type {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .circular-count {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: conic-gradient(#fbc02d 270deg, #e0e0e0 0deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+
+      small {
+        font-size: 12px;
+        color: #444;
+      }
+    }
+  }
+
+
+  .leaves-details {
+    display: flex;
+    flex-direction: column; // ✅ stack vertically
+    align-items: flex-start;
+    font-size: 12px;
+    gap: 6px; // ✅ spacing between Absence and Available Leave
+    margin-top: 8px;
+    color: #555;
+  }
+
+}
+
+.attendance-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+
+  .attendance-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+
+    .attendance-icon {
+      color: #4caf50;
+      font-size: 24px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+
+  .attendance-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    .attendance-metric {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      .metric-circle {
+        background-color: #f2f2f2;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      span {
+        font-size: 13px;
+        color: #555;
+        text-align: center;
+      }
+    }
+  }
+}
+
+
+
+
+/////
+
+.today-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+
+  .today-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+
+    .today-icon {
+      color: #7c4dff;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+
+  .today-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px; // ✅ Add spacing between tabs
+    margin-bottom: 16px;
+
+    button {
+      border-radius: 24px;
+      background: #f0f0f0;
+      color: #444;
+      padding: 6px 16px;
+      font-weight: 500;
+
+      &.active-tab {
+        background: linear-gradient(to right, #ff9800, #ffa726);
+        color: white;
+      }
+    }
+  }
+
+
+  .welcome-image {
+    text-align: center;
+    margin-bottom: 12px;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  .profile-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+
+    .profile-info {
+      background: #f8f8f8;
+      border-radius: 24px;
+      padding: 4px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+      }
+
+      span {
+        font-weight: 500;
+      }
+    }
+  }
+
+  .wish-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    background: #f5f5f5;
+    border-radius: 24px;
+
+    input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      font-size: 14px;
+    }
+  }
+}
+
+
+.events-card {
+  padding: 20px;
+  border-radius: 12px;
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .header-icon {
+      background: linear-gradient(135deg, #8e44ad, #9b59b6);
+      padding: 10px;
+      border-radius: 50%;
+      color: white;
+      margin-right: 10px;
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 20px;
+      color: #2c3e50;
+    }
+  }
+
+  .event-item {
+    display: flex;
+    margin-bottom: 20px;
+
+    .date-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-weight: bold;
+      text-align: center;
+
+      .date {
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .month {
+        font-size: 12px;
+        line-height: 1;
+      }
+    }
+
+
+    .event-details {
+      h4 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+        color: #2d3436;
+      }
+
+      .event-time {
+        margin: 4px 0;
+        color: #7f8c8d;
+        font-size: 14px;
+
+        .location {
+          font-style: italic;
+        }
+      }
+
+      .description {
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+      }
+
+      .attendees {
+        display: flex;
+        align-items: center;
+
+        img {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          margin-right: 4px;
+          object-fit: cover;
+          border: 2px solid #fff;
+          box-shadow: 0 0 0 1px #ccc;
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+
+        img:hover {
+          transform: scale(1.05);
+        }
+
+        .more {
+          font-size: 14px;
+          font-weight: 600;
+          margin-left: 4px;
+          color: #555;
+        }
+      }
+    }
+  }
+
+  .view-all {
+    color: #1976d2;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
   }
 }

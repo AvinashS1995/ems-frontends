@@ -199,21 +199,22 @@ export class PopupConfigurationComponent {
   }
 
   toggleStatus(element: any): void {
-  const payload = { id: element._id };
+    const payload = { id: element._id };
 
-  this.apiService.postApiCall(API_ENDPOINTS.SERVICE_TOGGLE_POPUP_STATUS, payload).subscribe({
-    next: (res: any) => {
-      console.log(
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_TOGGLE_POPUP_STATUS, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(
             `${API_ENDPOINTS.SERVICE_TOGGLE_POPUP_STATUS} Response : `,
             res
           );
-      this.commonService.openSnackbar(res.message, 'success');
-      this.applyFilters();
-    },
-    error: (err) => {
-      this.commonService.openSnackbar(err.error.message, 'error');
-    }
-  });
-}
-
+          this.commonService.openSnackbar(res.message, 'success');
+          this.applyFilters();
+        },
+        error: (err) => {
+          this.commonService.openSnackbar(err.error.message, 'error');
+        },
+      });
+  }
 }

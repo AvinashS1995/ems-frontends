@@ -201,7 +201,7 @@ export const routes: Routes = [
         data: {
           title: 'Popup Configuration',
         },
-        resolve: { data: PopupConfigResolverService }
+        resolve: { data: PopupConfigResolverService },
       },
       {
         path: 'create-popup-configuration',
@@ -212,7 +212,29 @@ export const routes: Routes = [
         data: {
           title: 'Create Popup Configuration',
         },
-        resolve: { data: CreatePopupConfigResolverService }
+        resolve: { data: CreatePopupConfigResolverService },
+      },
+      {
+        path: 'meeting-schedule-list',
+        loadComponent: () =>
+          import(
+            './components/pages/meetings/meeting-schedules/meeting-schedules.component'
+          ).then((c) => c.MeetingSchedulesComponent),
+        data: {
+          title: 'Meeting Schedule',
+        },
+        resolve: { data: PopupConfigResolverService },
+      },
+      {
+        path: 'create-meeting-schedule',
+        loadComponent: () =>
+          import(
+            './components/pages/meetings/create-meeting-schedules/create-meeting-schedules.component'
+          ).then((c) => c.CreateMeetingSchedulesComponent),
+        data: {
+          title: 'Create Meeting Schedule',
+        },
+        resolve: { data: CreatePopupConfigResolverService },
       },
     ],
   },

@@ -3,26 +3,100 @@
   <mat-divider></mat-divider>
 
   <div class="summary-cards">
-    <mat-card class="summary-card">
-      <h3>Total Employee</h3>
-      <p>11</p>
+    <ng-container *ngIf="commonService.getCurrentUserDetails().role === 'Employee'; else defaultSummary">
+      <mat-card class="summary-card time-at-work-card">
+        <div class="time-header">
+          <mat-icon class="clock-icon">access_time</mat-icon>
+          <span class="card-title">Time at work</span>
+        </div>
 
-    </mat-card>
+        <div class="employee-status">
+          <img [src]="profileImage" alt="Profile" class="profile-image" />
+          <div class="status-text">
+            <strong>Punched Out</strong>
+            <small>Punched Out : July 8th at 07:00 PM</small>
+          </div>
+        </div>
 
-    <mat-card class="summary-card">
-      <h3>Present Employee</h3>
-      <p>4</p>
+        <div class="work-duration">
+          <span class="duration-text">0hr 00min Today</span>
+          <mat-icon class="fingerprint-icon">fingerprint</mat-icon>
+        </div>
 
-    </mat-card>
+      </mat-card>
 
-    <mat-card class="summary-card">
-      <h3>Absent Employee</h3>
-      <p>3</p>
+      <mat-card class="summary-card leaves-balance-card">
+        <div class="leaves-header">
+          <mat-icon class="leave-icon">schedule</mat-icon>
+          <span class="card-title">Leaves Balance</span>
+        </div>
 
-    </mat-card>
+        <div class="leaves-stats">
+          <div class="leave-type">
+            <div class="circular-count earned">08</div>
+            <small>Earned Leaves</small>
+          </div>
+          <div class="leave-type">
+            <div class="circular-count casual">06</div>
+            <small>Casual Leaves</small>
+          </div>
+          <div class="leave-type">
+            <div class="circular-count sick">02</div>
+            <small>Sick Leaves</small>
+          </div>
+        </div>
+
+        <div class="leaves-details">
+          <span>1 Absence in this month</span>
+          <span>10 leaves available</span>
+        </div>
+      </mat-card>
+
+      <!-- Attendance Card -->
+      <mat-card class="summary-card attendance-card">
+        <div class="attendance-header">
+          <mat-icon class="attendance-icon">event</mat-icon>
+          <span class="card-title">Attendance</span>
+        </div>
+
+        <div class="attendance-body">
+          <div class="attendance-metric">
+            <div class="metric-circle">6.8</div>
+            <span>Average hrs/day</span>
+          </div>
+          <div class="attendance-metric">
+            <div class="metric-circle">70%</div>
+            <span>On time arrival</span>
+          </div>
+        </div>
+      </mat-card>
+
+
+    </ng-container>
+
+    <ng-template #defaultSummary>
+      <mat-card class="summary-card">
+        <h3>Total Employee</h3>
+        <p>11</p>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <h3>Present Employee</h3>
+        <p>4</p>
+
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <h3>Absent Employee</h3>
+        <p>3</p>
+
+      </mat-card>
+    </ng-template>
+
+
     <mat-card class="summary-card notification-card">
-      <div class="notification-icon" [matBadge]="pendingRequestCount" matBadgeColor="warn" matBadgePosition="above after"
-        matBadgeOverlap="false" (click)="handleNotificationClick()">
+      <div class="notification-icon" [matBadge]="pendingRequestCount" matBadgeColor="warn"
+        matBadgePosition="above after" matBadgeOverlap="false" (click)="handleNotificationClick()">
         <img src="assets/mail.png" alt="Mail" class="mail-image" />
       </div>
       <div class="notification-label">Notification</div>
@@ -32,41 +106,83 @@
   </div>
   <div class="dashboard-content">
     <div class="upcoming-holiday-card">
-      <mat-card class="summary-card">
-        <div class="holidays-section">
-          <h3>Employee Task</h3>
-          <div class="holiday-list">
-            <div>
-              <div class="scroll-item" *ngFor="let task of employeeTaskList">
-                <div class="holiday-info">
-                  <strong>{{ task.taskname }}</strong>
-                  <small>{{ task.deadlinedate | date: 'fullDate' }}</small>
-                </div>
+      <mat-card class="events-card">
+        <div class="card-header">
+          <div class="header-icon">
+            <mat-icon>calendar_today</mat-icon>
+          </div>
+          <span class="card-title">Meeting & Schedules</span>
+        </div>
 
-              </div>
+        <div class="event-item" *ngFor="let event of eventList.slice(0, 2)" (click)="openAllEventsDialog()"
+          style="cursor: pointer">
+          <div class="date-box" [ngStyle]="{ 'background-color': getColorByDay(event.date) }">
+            <span class="date">{{ event.date | date: 'dd' }}</span>
+            <span class="month">{{ event.date | date: 'MMM' }}</span>
+          </div>
+          <div class="event-details">
+            <h4>{{ event.title }}</h4>
+            <p class="event-time">{{ event.startTime }} - {{ event.endTime }} <span class="location">, {{ event.location }}</span></p>
+            <p class="description">{{ event.description }}</p>
+
+            <div class="attendees">
+              <img *ngFor="let person of event.attendees.slice(0, 3)" [src]="person.avatar"
+          [alt]="person.attendeesName"
+          matTooltip="{{ person.attendeesName }}" />
+              <span *ngIf="event.attendees.length > 3" class="more">+{{ event.attendees.length - 3 }}</span>
             </div>
           </div>
         </div>
       </mat-card>
 
     </div>
-    <div class="upcoming-holiday-card">
-      <mat-card class="summary-card">
-        <div class="holidays-section">
-          <h3>Employee Task</h3>
-          <div class="holiday-list">
-            <div>
-              <div class="scroll-item" *ngFor="let task of employeeTaskList">
-                <div class="holiday-info">
-                  <strong>{{ task.taskname }}</strong>
-                  <small>{{ task.deadlinedate | date: 'fullDate' }}</small>
-                </div>
 
-              </div>
+    <div class="upcoming-holiday-card">
+      <mat-card class="summary-card today-card">
+        <div class="today-header">
+          <mat-icon class="today-icon">auto_awesome</mat-icon>
+          <span class="card-title">Today</span>
+        </div>
+
+        <div class="today-tabs">
+          <button mat-button [ngClass]="{ 'active-tab': activeTab === 'birthdays' }"
+            (click)="changeTab('birthdays')">Birthdays</button>
+          <button mat-button [ngClass]="{ 'active-tab': activeTab === 'anniversaries' }"
+            (click)="changeTab('anniversaries')">Work Anniversaries</button>
+          <button mat-button [ngClass]="{ 'active-tab': activeTab === 'newJoinees' }"
+            (click)="changeTab('newJoinees')">New Joinees</button>
+        </div>
+
+        <div class="today-content">
+          <div class="welcome-image" *ngIf="activeTab === 'newJoinees'">
+            <img src="assets/images/welcome.png" alt="Welcome" />
+          </div>
+
+          <div class="profile-carousel" *ngIf="currentPerson.name">
+            <button mat-icon-button (click)="prevPerson()">
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+
+            <div class="profile-info">
+              <img [src]="profileImage" class="avatar" />
+              <span>{{ currentPerson.name }}</span>
             </div>
+
+            <button mat-icon-button (click)="nextPerson()">
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          </div>
+
+          <div class="wish-input">
+            <input matInput placeholder="Wish here..." [(ngModel)]="wishMessage" />
+            <button mat-icon-button (click)="sendWish()">
+              <mat-icon color="primary">send</mat-icon>
+            </button>
           </div>
         </div>
       </mat-card>
+
+
 
     </div>
     <div class="upcoming-holiday-card">

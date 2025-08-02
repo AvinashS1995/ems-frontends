@@ -15,6 +15,27 @@ import { ApiService } from '../../../shared/service/api/api.service';
 import { CommonService } from '../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../shared/common/api-contant';
 import { CheckInsComponent } from '../attendence/check-ins/check-ins.component';
+import { EventsDialogComponent } from '../../../shared/widget/dialog/events-dialog/events-dialog.component';
+
+interface EventItem {
+  _id: string;
+  title: string;
+  date: Date | string;
+  startTime: string;
+  endTime: string;
+  meetingType: string;
+  platform?: string | null;
+  location: string;
+  meetingLink?: string;
+  description: string;
+  attendees: {
+    attendeesName: string;
+    email: string;
+    avatar: string;
+    empNo: string;
+    _id: string;
+  }[];
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -42,13 +63,11 @@ export class DashboardComponent {
   pauseAnimation = false;
   upcomingHolidays: Array<any> = [];
   pendingRequestCount: any;
-  employeeTaskList = [
-    {
-      taskname: 'Prepare Monthly Report',
-      deadlinedate: new Date('2025-07-10'),
-    },
-    { taskname: 'Client Meeting', deadlinedate: new Date('2025-07-08') },
-  ];
+  eventList: Array<any> = [];
+
+  profileImage: string = '';
+  defaultAvatar: string =
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
 
   constructor(
     private router: Router,
@@ -56,7 +75,7 @@ export class DashboardComponent {
     private activateRoute: ActivatedRoute,
     private apiService: ApiService,
     private fb: FormBuilder,
-    private commonService: CommonService
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +84,10 @@ export class DashboardComponent {
     if (this.commonService.getCurrentUserDetails().role !== 'Employee') {
       this.getEmployeeRequestList();
     }
+    const currentUser = this.commonService.getCurrentUserDetails();
+    this.profileImage = currentUser.profileImage
+      ? currentUser.profileImage
+      : this.defaultAvatar;
   }
 
   openCheckIns() {
@@ -104,6 +127,11 @@ export class DashboardComponent {
         this.upcomingHolidays = this.getCurrentAndNextMonthHolidays(
           this.upcomingHolidays
         );
+
+        this.eventList =
+          params['data'].getEmployeeMeetingList.data?.meetings || [];
+
+        console.log('Meetings---->', this.eventList);
       }
     });
   }
@@ -243,6 +271,95 @@ export class DashboardComponent {
       dialogRef.afterClosed().subscribe(() => {
         this.displayPopupSequence(popups, index + 1);
       });
+    }
+  }
+
+  activeTab: 'birthdays' | 'anniversaries' | 'newJoinees' = 'newJoinees';
+
+  birthdayList = [
+    { name: 'Aditi Sharma', image: 'assets/images/aditi.png' },
+    { name: 'Ravi Kumar', image: 'assets/images/ravi.png' },
+  ];
+
+  anniversaryList = [
+    { name: 'Neha Jain', image: 'assets/images/neha.png' },
+    { name: 'Manoj Tiwari', image: 'assets/images/manoj.png' },
+  ];
+
+  joineeList = [
+    { name: 'Vedangi Pandav', image: 'assets/images/vedangi.png' },
+    { name: 'Siddharth Rao', image: 'assets/images/siddharth.png' },
+  ];
+
+  currentIndex = 0;
+  wishMessage = '';
+
+  // Dynamically get current list based on active tab
+  get currentList() {
+    switch (this.activeTab) {
+      case 'birthdays':
+        return this.birthdayList;
+      case 'anniversaries':
+        return this.anniversaryList;
+      case 'newJoinees':
+      default:
+        return this.joineeList;
+    }
+  }
+
+  // Currently visible person
+  get currentPerson() {
+    return this.currentList[this.currentIndex] || { name: '', image: '' };
+  }
+
+  changeTab(tab: 'birthdays' | 'anniversaries' | 'newJoinees') {
+    this.activeTab = tab;
+    this.currentIndex = 0;
+  }
+
+  prevPerson() {
+    if (this.currentIndex > 0) this.currentIndex--;
+  }
+
+  nextPerson() {
+    if (this.currentIndex < this.currentList.length - 1) this.currentIndex++;
+  }
+
+  sendWish() {
+    if (this.wishMessage.trim()) {
+      console.log(
+        `Wish sent to ${this.currentPerson.name}: ${this.wishMessage}`
+      );
+      this.wishMessage = '';
+    }
+  }
+
+  openAllEventsDialog() {
+    this.dialog.open(EventsDialogComponent, {
+      width: '600px',
+      data: this.eventList,
+    });
+  }
+
+  getColorByDay(date: Date): string {
+    const day = new Date(date).getDay();
+    switch (day) {
+      case 0:
+        return '#e74c3c'; // Sunday
+      case 1:
+        return '#2980b9'; // Monday
+      case 2:
+        return '#9b59b6'; // Tuesday
+      case 3:
+        return '#1abc9c'; // Wednesday
+      case 4:
+        return '#f1c40f'; // Thursday
+      case 5:
+        return '#2ecc71'; // Friday
+      case 6:
+        return '#e67e22'; // Saturday
+      default:
+        return '#7f8c8d'; // fallback
     }
   }
 }

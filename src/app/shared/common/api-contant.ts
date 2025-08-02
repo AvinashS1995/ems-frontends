@@ -15,8 +15,8 @@ export const API_ENDPOINTS = {
   SERVICE_UPDATEROLETYPE: 'auth/update-type-list',
   SERVICE_DELETEROLETYPE: 'auth/delete-type-list',
   SERVICE_SAVE_MENU: 'menu/create-menu',
-  SERVICE_GETMENUS: 'menu/getmenu', 
-  SERVICE_UPDATE_MENUS: 'menu/update-menu', 
+  SERVICE_GETMENUS: 'menu/getmenu',
+  SERVICE_UPDATE_MENUS: 'menu/update-menu',
   SERVICE_SAVE_ROLE_WISE_MENUS: 'menu/create-role-wise-menu',
   SERVICE_ROLEWISEMENUS: 'menu/getrole-wise-menu',
   SERVICE_GETALLSTATUS: 'auth/getall-status',
@@ -25,24 +25,36 @@ export const API_ENDPOINTS = {
   SERVICE_CHECK_OUT_ATTENDENCE: 'attendence/check-out',
   SERVICE_WORK_SUMMARY_ATTENDENCE: 'attendence/work-summary',
   SERVICE_GET_USER_ATTENDENCE: 'attendence/get-attendence-list',
-  SERVICE_GET_USER_ATTENDENCE_TODAY_SUMMARY: 'attendence/get-attendence-summary',
+  SERVICE_GET_USER_ATTENDENCE_TODAY_SUMMARY:
+    'attendence/get-attendence-summary',
   SERVICE_GET_UPCOMING_HOLIDAYS: 'leave/get-upcoming-holidays',
   SERVICE_SAVE_EMPLOYEE_LEAVE: 'leave/save-employee-leave',
   SERVICE_GET_EMPLOYEE_LEAVE: 'leave/get-employee-all-leave',
-  SERVICE_GET_EMPLOYEE_LEAVE_REQUEST_LIST: 'leave/get-empployee-leave-request-list',
-  SERVICE_SAVE_EMPLOYEE_LEAVE_APPLICATION_APPROVE_REJECT: 'leave/employee-leave-application-approve-reject',
+  SERVICE_GET_EMPLOYEE_LEAVE_REQUEST_LIST:
+    'leave/get-empployee-leave-request-list',
+  SERVICE_SAVE_EMPLOYEE_LEAVE_APPLICATION_APPROVE_REJECT:
+    'leave/employee-leave-application-approve-reject',
   SERVICE_APPLICATION_APPROVAL_FLOW: 'leave/application-approval-flow',
   SERVICE_UPLOADFILE: 'file/upload-file',
-  SERVICE_SAVE_APPROVAL_CONFIGURATION_DETAILS: 'approval/save-approval-configuration-details',
-  SERVICE_GET_ALL_APPROVAL_CONFIGURATION_DETAILS: 'approval/get-all-approval-configuration-details',
-  SERVICE_UPDATE_APPROVAL_CONFIGURATION_DETAILS: 'approval/update-approval-configuration-detail',
-  SERVICE_DELETE_APPROVAL_CONFIGURATION_DETAILS: 'approval/delete-approval-configuration-detail',
+  SERVICE_SAVE_APPROVAL_CONFIGURATION_DETAILS:
+    'approval/save-approval-configuration-details',
+  SERVICE_GET_ALL_APPROVAL_CONFIGURATION_DETAILS:
+    'approval/get-all-approval-configuration-details',
+  SERVICE_UPDATE_APPROVAL_CONFIGURATION_DETAILS:
+    'approval/update-approval-configuration-detail',
+  SERVICE_DELETE_APPROVAL_CONFIGURATION_DETAILS:
+    'approval/delete-approval-configuration-detail',
   SERVICE_GET_LEAVE_REQUEST_APPROVER: 'leave/get-leave-request-approver',
-  SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST: 'approval/get-employee-approval-request-list',
+  SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST:
+    'approval/get-employee-approval-request-list',
   SERVICE_SAVE_POPUP_DETAILS: 'popup/save-popup-details',
   SERVICE_GET_EMPLOYEE_POPUP_DETAILS: 'popup/get-employee-popup',
   SERVICE_GET_ALL_POPUP_DETAILS: 'popup/get-all-popup',
   SERVICE_UPDATE_POPUP_DETAILS: 'popup/update-popup-details',
   SERVICE_DELETE_POPUP_DETAILS: 'popup/delete-popup-details',
   SERVICE_TOGGLE_POPUP_STATUS: 'popup/toggle-popup-status',
+  SERVICE_SAVE_MEETING_SCHEDULE: 'meeting/save-meeting-schedule',
+  SERVICE_GET_ALL_MEETING_SCHEDULE: 'meeting/get-all-meeting-schedule',
+  SERVICE_DELETE_MEETING_SCHEDULE: 'meeting/delete-meeting-schedule',
+  SERVICE_UPDATE_MEETING_SCHEDULE: 'meeting/update-meeting-schedule',
 };

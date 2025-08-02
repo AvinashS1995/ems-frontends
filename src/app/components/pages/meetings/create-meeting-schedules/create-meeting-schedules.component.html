@@ -1,0 +1,80 @@
+<div class="create-meeting-container">
+    <h2>{{ editMode ? 'Update Meeting' : 'Create Meeting' }}</h2>
+    <mat-divider></mat-divider>
+
+    <mat-card>
+        <form [formGroup]="createMeetingForm" (ngSubmit)="onSubmitMeetingForm()">
+            <div class="create-meeting-schedule-container">
+ 
+                <mat-form-field appearance="outline">
+                    <mat-label>Meeting Title</mat-label>
+                    <input matInput formControlName="title" required />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="datePicker" formControlName="date" required />
+                    <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Start Time</mat-label>
+                    <input matInput [ngxMatTimepicker]="startTimePicker" formControlName="startTime" readonly />
+                    <ngx-mat-timepicker #startTimePicker></ngx-mat-timepicker>
+                    <mat-icon matSuffix (click)="startTimePicker.open()">access_time</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>End Time</mat-label>
+                    <input matInput [ngxMatTimepicker]="endTimePicker" formControlName="endTime" readonly />
+                    <ngx-mat-timepicker #endTimePicker></ngx-mat-timepicker>
+                    <mat-icon matSuffix (click)="endTimePicker.open()">access_time</mat-icon>
+                </mat-form-field>
+
+                <div class="platform-type-group">
+                    <label class="mat-label">Meeting Type</label>
+                    <mat-radio-group formControlName="meetingType">
+                        <mat-radio-button value="Online">Online</mat-radio-button>
+                        <mat-radio-button value="Offline">Offline</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <mat-form-field appearance="outline" *ngIf="createMeetingForm.value.meetingType === 'Online'">
+                    <mat-label>Platform</mat-label>
+                    <mat-select formControlName="platform">
+                        <mat-option value="Google Meet">Google Meet</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Location</mat-label>
+                    <input matInput formControlName="location" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Attendees</mat-label>
+                    <mat-select formControlName="attendees" multiple>
+                        <mat-option *ngFor="let emp of allEmployeeList" [value]="emp.value">
+                            {{ emp.label }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="description-label">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description" rows="3" maxlength="200"
+                        (input)="updateDescriptionLength()"></textarea>
+                    <mat-hint align="end">{{ descriptionLength }}/200</mat-hint>
+                </mat-form-field>
+
+            </div>
+
+            <div class="form-actions">
+                <button mat-flat-button color="primary" type="submit" [disabled]="createMeetingForm.invalid">
+                    {{ editMode ? 'Update' : 'Create' }}
+                </button>
+                <button mat-stroked-button color="warn" type="button" (click)="cancelMeeting()">Cancel</button>
+            </div>
+        </form>
+    </mat-card>
+</div>

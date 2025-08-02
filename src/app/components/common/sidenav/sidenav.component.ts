@@ -76,7 +76,7 @@ export class SidenavComponent implements OnInit {
     this.profileImage = currentUser.profileImage
       ? currentUser.profileImage
       : this.defaultAvatar;
-debugger
+
     if (typeof window !== 'undefined') {
       this.token =
         this.storageService.getItem('token', 'session') ||
@@ -243,7 +243,6 @@ debugger
   }
 
   isDefaultAvatar(): boolean {
-  return !this.profileImage || this.profileImage === this.defaultAvatar;
-}
-
+    return !this.profileImage || this.profileImage === this.defaultAvatar;
+  }
 }

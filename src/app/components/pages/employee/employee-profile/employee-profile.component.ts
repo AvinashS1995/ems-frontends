@@ -72,8 +72,11 @@ export class EmployeeProfileComponent {
   ngOnInit() {
     this.prepareUpdateEmployeeProfileForm();
     this.getparam();
-    const currentUser = this.commonService.getCurrentUserDetails()
-    this.defaultAvatar = currentUser.gender === 'Female' ? 'https://cdn-icons-png.flaticon.com/512/6997/6997668.png' : 'https://www.w3schools.com/howto/img_avatar.png';
+    const currentUser = this.commonService.getCurrentUserDetails();
+    this.defaultAvatar =
+      currentUser.gender === 'Female'
+        ? 'https://cdn-icons-png.flaticon.com/512/6997/6997668.png'
+        : 'https://www.w3schools.com/howto/img_avatar.png';
   }
 
   prepareUpdateEmployeeProfileForm() {
@@ -125,7 +128,7 @@ export class EmployeeProfileComponent {
       workType,
       profileImage,
     } = this.commonService.getCurrentUserDetails();
-debugger
+
     this.updateEmployeeProfileForm.patchValue({
       firstName: firstName || '',
       middleName: middleName || '',
@@ -208,7 +211,7 @@ debugger
           };
         });
 
-         this.genderTypeList = params['data'].genderType?.data?.types || [];
+        this.genderTypeList = params['data'].genderType?.data?.types || [];
         this.genderTypeList = this.genderTypeList.map((genderType) => {
           return {
             value: genderType.typeValue,
@@ -229,12 +232,14 @@ debugger
 
         this.reportedByEmployeeList =
           params['data'].getAllEmployee?.data?.userList || [];
-        this.reportedByEmployeeList = this.reportedByEmployeeList.map((allEmployee) => {
-          return {
-            label: `${allEmployee.firstName} ${allEmployee.lastName} - [${allEmployee.empNo}]`,
-            value: allEmployee.empNo,
-          };
-        });
+        this.reportedByEmployeeList = this.reportedByEmployeeList.map(
+          (allEmployee) => {
+            return {
+              label: `${allEmployee.firstName} ${allEmployee.lastName} - [${allEmployee.empNo}]`,
+              value: allEmployee.empNo,
+            };
+          }
+        );
       }
     });
   }
@@ -261,7 +266,6 @@ debugger
     }
 
     if (file.size > 2 * 1024 * 1024) {
-    
       this.commonService.openSnackbar('Image must be less than 2MB', 'error');
       return;
     }
@@ -276,8 +280,10 @@ debugger
           const uploadedUrl = res?.data?.presignFileUrl;
           this.previewUrl = uploadedUrl;
           const fileKey = res?.data?.fileKey;
-          debugger;
-          this.updateEmployeeProfileForm.patchValue({ profileImage: uploadedUrl });
+
+          this.updateEmployeeProfileForm.patchValue({
+            profileImage: uploadedUrl,
+          });
           this.commonService.openSnackbar(res.message, 'success');
         },
         error: (error) => {
@@ -314,7 +320,9 @@ debugger
       joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
       salary: newEmployee.salary ? newEmployee.salary : 0,
       workType: newEmployee.workType ? newEmployee.workType : '',
-      profileImage: newEmployee.profileImage ? newEmployee.profileImage.split('?')[0].split('/').pop() : '',
+      profileImage: newEmployee.profileImage
+        ? newEmployee.profileImage.split('?')[0].split('/').pop()
+        : '',
     };
 
     console.log('Update employee data:', paylaod);
