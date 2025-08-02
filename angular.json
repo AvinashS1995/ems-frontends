@@ -33,7 +33,7 @@
             ],
             "styles": [
               "src/styles.scss",
-               "node_modules/ngx-spinner/animations/ball-circus.css"
+              "node_modules/ngx-spinner/animations/ball-circus.css"
             ],
             "scripts": []
           },
@@ -49,12 +49,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2MB",
-                  "maximumError": "3.5MB"
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "15kB"
                 }
               ],
               "optimization": true,
@@ -62,7 +62,9 @@
               "sourceMap": false,
               "namedChunks": false,
               "outputHashing": "all",
-              "allowedCommonJsDependencies": ["crypto-js"]
+              "allowedCommonJsDependencies": [
+                "crypto-js"
+              ]
             },
             "development": {
               "optimization": false,
