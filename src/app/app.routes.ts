@@ -236,6 +236,39 @@ export const routes: Routes = [
         },
         resolve: { data: CreatePopupConfigResolverService },
       },
+      {
+        path: 'project-task-list',
+        loadComponent: () =>
+          import(
+            './components/pages/projects/project-task-management/project-task-management.component'
+          ).then((c) => c.ProjectTaskManagementComponent),
+        data: {
+          title: 'Project Task List',
+        },
+        resolve: { data: PopupConfigResolverService },
+      },
+      {
+        path: 'create-project-task',
+        loadComponent: () =>
+          import(
+            './components/pages/projects/create-project-task-management/create-project-task-management.component'
+          ).then((c) => c.CreateProjectTaskManagementComponent),
+        data: {
+          title: 'Create Project Task',
+        },
+        resolve: { data: CreatePopupConfigResolverService },
+      },
+      {
+        path: 'payroll',
+        loadComponent: () =>
+          import(
+            './components/pages/payroll-management/payroll-management.component'
+          ).then((c) => c.PayrollManagementComponent),
+        data: {
+          title: 'Payroll Management',
+        },
+        resolve: { data: CreatePopupConfigResolverService },
+      },
     ],
   },
 ];

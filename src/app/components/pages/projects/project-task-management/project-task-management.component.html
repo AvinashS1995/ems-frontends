@@ -1,0 +1,82 @@
+<div class="proejct-task-container">
+    <div class="header">
+        <div class="title">
+            <h1>Project & Task Management</h1>
+        </div>
+        <div class="action-buttons">
+            <button mat-flat-button color="primary" class="text-btn" type="button"
+                matTooltip="Create New Project & Task" (click)="CreateTask()">
+                + Create New Project & Task
+            </button>
+
+            <button mat-icon-button class="icon-btn circular-icon-btn" color="primary" (click)="CreateTask()"
+                matTooltip="Create New Project & Task">
+                <mat-icon class="bold-plus-icon">add</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="summary-cards">
+        <mat-card class="summary-card">
+            <h3>Total Projects & Task</h3>
+            <p>5</p>
+        </mat-card>
+
+        <mat-card class="summary-card">
+            <h3>Completed Projects & Task</h3>
+            <p>5</p>
+        </mat-card>
+
+        <mat-card class="summary-card">
+            <h3>Ongoing Project & Task</h3>
+            <p>3</p>
+        </mat-card>
+
+        <mat-card class="summary-card">
+            <h3>Under Review Projects & Task</h3>
+            <p>14</p>
+        </mat-card>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Filter Employees Project & Task
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="employeeProjectTaskFilterForm">
+            <div class="filters">
+                <mat-form-field appearance="outline">
+                    <mat-label>Search</mat-label>
+                    <input matInput placeholder="Search by name, role, department" formControlName="name">
+                </mat-form-field>
+
+            </div>
+        </form>
+
+        <div class="filter-actions">
+            <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
+            <button mat-flat-button class="example-full-width" (click)="clearFilters()">Clear</button>
+        </div>
+
+    </mat-expansion-panel>
+
+
+    <mat-tab-group class="dashboard-tabs" mat-stretch-tabs>
+        <mat-tab label="My Projects">
+            <app-project-management></app-project-management>
+        </mat-tab>
+        <mat-tab label="My Tasks">
+            <app-task-management></app-task-management>
+        </mat-tab>
+        <mat-tab label="My Reminders">
+            <app-reminder></app-reminder>
+        </mat-tab>
+    </mat-tab-group>
+</div>

@@ -55,20 +55,12 @@
       <!-- Attendance Card -->
       <mat-card class="summary-card attendance-card">
         <div class="attendance-header">
-          <mat-icon class="attendance-icon">event</mat-icon>
-          <span class="card-title">Attendance</span>
+          <div class="empty-state">
+            <img src="assets/project-management-preview.png" alt="Project & Task Management" class="empty-icon" />
+            <p>Project & Task</p>
+          </div>
         </div>
 
-        <div class="attendance-body">
-          <div class="attendance-metric">
-            <div class="metric-circle">6.8</div>
-            <span>Average hrs/day</span>
-          </div>
-          <div class="attendance-metric">
-            <div class="metric-circle">70%</div>
-            <span>On time arrival</span>
-          </div>
-        </div>
       </mat-card>
 
 
@@ -77,18 +69,18 @@
     <ng-template #defaultSummary>
       <mat-card class="summary-card">
         <h3>Total Employee</h3>
-        <p>11</p>
+        <p>{{ todayAttendenceSummary.totalEmployees }}</p>
       </mat-card>
 
       <mat-card class="summary-card">
         <h3>Present Employee</h3>
-        <p>4</p>
+        <p>{{ todayAttendenceSummary.presentEmployees }}</p>
 
       </mat-card>
 
       <mat-card class="summary-card">
         <h3>Absent Employee</h3>
-        <p>3</p>
+        <p>{{ todayAttendenceSummary.absentEmployees }}</p>
 
       </mat-card>
     </ng-template>
@@ -113,32 +105,40 @@
           </div>
           <span class="card-title">Meeting & Schedules</span>
         </div>
+        <ng-container *ngIf="eventList && eventList.length > 0; else noMeetingsTemplate">
+          <div class="event-item" *ngFor="let event of eventList.slice(0, 2)" (click)="openAllEventsDialog()"
+            style="cursor: pointer">
+            <div class="date-box" [ngStyle]="{ 'background-color': getColorByDay(event.date) }">
+              <span class="date">{{ event.date | date: 'dd' }}</span>
+              <span class="month">{{ event.date | date: 'MMM' }}</span>
+            </div>
+            <div class="event-details">
+              <h4>{{ event.title }}</h4>
+              <p class="event-time">{{ event.startTime }} - {{ event.endTime }} <span class="location">, {{
+                  event.location }}</span></p>
+              <p class="description">{{ event.description }}</p>
 
-        <div class="event-item" *ngFor="let event of eventList.slice(0, 2)" (click)="openAllEventsDialog()"
-          style="cursor: pointer">
-          <div class="date-box" [ngStyle]="{ 'background-color': getColorByDay(event.date) }">
-            <span class="date">{{ event.date | date: 'dd' }}</span>
-            <span class="month">{{ event.date | date: 'MMM' }}</span>
-          </div>
-          <div class="event-details">
-            <h4>{{ event.title }}</h4>
-            <p class="event-time">{{ event.startTime }} - {{ event.endTime }} <span class="location">, {{ event.location }}</span></p>
-            <p class="description">{{ event.description }}</p>
-
-            <div class="attendees">
-              <img *ngFor="let person of event.attendees.slice(0, 3)" [src]="person.avatar"
-          [alt]="person.attendeesName"
-          matTooltip="{{ person.attendeesName }}" />
-              <span *ngIf="event.attendees.length > 3" class="more">+{{ event.attendees.length - 3 }}</span>
+              <div class="attendees">
+                <img *ngFor="let person of event.attendees.slice(0, 3)" [src]="person.avatar"
+                  [alt]="person.attendeesName" matTooltip="{{ person.attendeesName }}" />
+                <span *ngIf="event.attendees.length > 3" class="more">+{{ event.attendees.length - 3 }}</span>
+              </div>
             </div>
           </div>
-        </div>
+        </ng-container>
+
+        <ng-template #noMeetingsTemplate>
+          <div class="empty-state">
+            <img src="assets/no-event.png" alt="No Meetings" class="empty-icon" />
+            <p>No Meetings & Schedules Available</p>
+          </div>
+        </ng-template>
       </mat-card>
 
     </div>
 
     <div class="upcoming-holiday-card">
-      <mat-card class="summary-card today-card">
+      <mat-card class="birthday-card today-card">
         <div class="today-header">
           <mat-icon class="today-icon">auto_awesome</mat-icon>
           <span class="card-title">Today</span>
@@ -154,9 +154,9 @@
         </div>
 
         <div class="today-content">
-          <div class="welcome-image" *ngIf="activeTab === 'newJoinees'">
+          <!-- <div class="welcome-image" *ngIf="activeTab === 'newJoinees'">
             <img src="assets/images/welcome.png" alt="Welcome" />
-          </div>
+          </div> -->
 
           <div class="profile-carousel" *ngIf="currentPerson.name">
             <button mat-icon-button (click)="prevPerson()">

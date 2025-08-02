@@ -69,6 +69,8 @@ export class DashboardComponent {
   defaultAvatar: string =
     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
 
+  todayAttendenceSummary: any;
+
   constructor(
     private router: Router,
     private dialog: MatDialog,
@@ -132,6 +134,13 @@ export class DashboardComponent {
           params['data'].getEmployeeMeetingList.data?.meetings || [];
 
         console.log('Meetings---->', this.eventList);
+
+        this.todayAttendenceSummary =
+          params['data'].todayAttendenceSummary?.summary || {};
+        console.log(
+          'todayAttendenceSummary ---->',
+          this.todayAttendenceSummary
+        );
       }
     });
   }

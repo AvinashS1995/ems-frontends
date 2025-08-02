@@ -26,7 +26,6 @@
   text-align: center;
   border-radius: 8px;
   background-color: #ffffff;
-  // color: #333;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 
@@ -63,6 +62,41 @@
 
 }
 
+.birthday-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  h3,
+  p {
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  h3 {
+    margin-bottom: 8px;
+    font-size: clamp(16px, 2vw, 18px);
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    font-size: clamp(20px, 3vw, 24px);
+    font-weight: bold;
+    color: #3f51b5;
+  }
+
+
+}
+
+
 .dashboard-content {
   display: grid;
   gap: 20px;
@@ -91,23 +125,11 @@
     flex: 1;
   }
 
-  // .holiday-list {
-  //   flex: 1;
-  //   overflow-y: auto;
-  //   margin-top: 12px;
-  // }
-
-  // .scroll-list {
-  //   display: flex;
-  //   flex-direction: column;
-  // }
 }
 
 
 .holiday-list {
-  // border: 1px solid #ccc;
   padding: 10px;
-  // height: 200px;
   overflow: hidden;
   position: relative;
 }
@@ -126,9 +148,7 @@
 
 .scroll-item {
   padding: 10px 5px;
-  // border-bottom: 1px solid #eee;
   font-size: 14px;
-  // background: white;
 }
 
 .holiday-info {
@@ -301,8 +321,8 @@
 
   .leaves-stats {
     display: flex;
-    justify-content: center; // Center all three columns
-    gap: 20px; // ✅ Add spacing between Earned, Casual, Sick
+    justify-content: center; 
+    gap: 20px; 
     margin-bottom: 10px;
 
     .leave-type {
@@ -333,10 +353,10 @@
 
   .leaves-details {
     display: flex;
-    flex-direction: column; // ✅ stack vertically
+    flex-direction: column; 
     align-items: flex-start;
     font-size: 12px;
-    gap: 6px; // ✅ spacing between Absence and Available Leave
+    gap: 6px; 
     margin-top: 8px;
     color: #555;
   }
@@ -353,7 +373,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 12px;
+    // margin-bottom: 12px;
 
     .attendance-icon {
       color: #4caf50;
@@ -400,11 +420,6 @@
   }
 }
 
-
-
-
-/////
-
 .today-card {
   display: flex;
   flex-direction: column;
@@ -429,11 +444,11 @@
   .today-tabs {
     display: flex;
     justify-content: center;
-    gap: 12px; // ✅ Add spacing between tabs
+    gap: 12px; 
     margin-bottom: 16px;
 
     button {
-      border-radius: 24px;
+      border-radius: 5px;
       background: #f0f0f0;
       color: #444;
       padding: 6px 16px;
@@ -505,7 +520,10 @@
 
 .events-card {
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 
   .card-header {
     display: flex;
@@ -609,11 +627,22 @@
       }
     }
   }
+}
 
-  .view-all {
-    color: #1976d2;
-    text-align: center;
-    font-weight: 600;
-    cursor: pointer;
+.empty-state {
+  text-align: center;
+  padding: 30px 10px;
+  color: #888;
+  font-style: italic;
+
+  .empty-icon {
+    width: 120px;
+    margin-bottom: 10px;
+    opacity: 0.6;
+  }
+
+  p {
+    margin: 0;
+    font-weight: 500;
   }
 }

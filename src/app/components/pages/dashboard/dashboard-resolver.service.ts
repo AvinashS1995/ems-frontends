@@ -16,6 +16,7 @@ export class DashboardResolverService {
   resolve(): Observable<any> {
     let getUpcomingHoliday = of({});
     let getEmployeeMeetingList = of({});
+    let todayAttendenceSummary = of({});
 
     getUpcomingHoliday = this.apiService.getApiCall(
       API_ENDPOINTS.SERVICE_GET_UPCOMING_HOLIDAYS
@@ -30,9 +31,14 @@ export class DashboardResolverService {
       { empNo: this.commonService.getCurrentUserDetails().empNo || '' }
     );
 
+    todayAttendenceSummary = this.apiService.getApiCall(
+      API_ENDPOINTS.SERVICE_GET_USER_ATTENDENCE_TODAY_SUMMARY
+    );
+
     return forkJoin({
       getUpcomingHoliday,
       getEmployeeMeetingList,
+      todayAttendenceSummary,
     });
   }
 }
