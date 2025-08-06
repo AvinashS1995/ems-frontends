@@ -1,0 +1,27 @@
+<div class="chatbot-dialog">
+  <!-- 🟣 Header -->
+  <div class="chatbot-header">
+    <img src="assets/smiling-chatbot.png" class="bot-avatar" alt="AI Bot" />
+    <span class="title">EMS Bot AI</span>
+    <button mat-icon-button (click)="closeDialog()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- 📨 Chat Body -->
+  <div class="chatbot-body" #scrollContainer>
+    <div *ngFor="let msg of messages" class="message-wrapper" [ngClass]="msg.sender">
+      <div class="chat-bubble">
+        {{ msg.text }}
+      </div>
+    </div>
+  </div>
+
+  <!-- 💬 Input -->
+  <div class="chatbot-footer">
+    <input [(ngModel)]="userMessage" placeholder="Ask me anything..." (keydown.enter)="sendMessage()" />
+    <button (click)="sendMessage()">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+  </div>
+</div>

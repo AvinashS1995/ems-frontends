@@ -16,6 +16,7 @@ import { CommonService } from '../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../shared/common/api-contant';
 import { CheckInsComponent } from '../attendence/check-ins/check-ins.component';
 import { EventsDialogComponent } from '../../../shared/widget/dialog/events-dialog/events-dialog.component';
+import { ChatBotDialogComponent } from '../../../shared/widget/dialog/chat-bot-dialog/chat-bot-dialog.component';
 
 interface EventItem {
   _id: string;
@@ -370,5 +371,15 @@ export class DashboardComponent {
       default:
         return '#7f8c8d'; // fallback
     }
+  }
+
+  openChatbotDialog() {
+    this.dialog.open(ChatBotDialogComponent, {
+      panelClass: 'chatbot-dialog-panel',
+      width: '350px',
+      height: '500px',
+      position: { bottom: '80px', right: '20px' },
+      backdropClass: 'no-backdrop',
+    });
   }
 }

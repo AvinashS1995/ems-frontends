@@ -1,0 +1,116 @@
+.chatbot-dialog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 🔥 Gradient Header */
+.chatbot-header {
+  background: linear-gradient(135deg, #d500f9, #7c4dff);
+  padding: 14px 16px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .bot-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+  }
+
+  .title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 17px;
+  }
+
+  button {
+    color: white;
+  }
+}
+
+/* 💬 Chat Area */
+.chatbot-body {
+  flex: 1;
+  padding: 14px 16px;
+  background: #f4f7fa;
+  overflow-y: auto;
+
+  .message-wrapper {
+    display: flex;
+    margin-bottom: 12px;
+
+    &.bot {
+      justify-content: flex-start;
+      .chat-bubble {
+        background: white;
+        color: #1a237e;
+        border: 1px solid #e0e0e0;
+      }
+    }
+
+    &.user {
+      justify-content: flex-end;
+      .chat-bubble {
+        background: #e0e0e0;
+        color: #000;
+      }
+    }
+
+    .chat-bubble {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.4;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: 0.2s ease-in-out;
+    }
+  }
+}
+
+/* 📝 Input Footer */
+.chatbot-footer {
+  display: flex;
+  padding: 10px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+
+  input {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 22px;
+    background: #eeeeee;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+  }
+
+  button {
+    margin-left: 8px;
+    background: #000;
+    color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background: #333;
+    }
+  }
+}
