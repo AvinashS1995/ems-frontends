@@ -19,6 +19,11 @@ export interface UserDetails {
   joiningDate: string;
   salary: number;
   workType: string;
-  profileImage: string,
+  bankName: string;
+  bankAccNo: string;
+  pfNo: string;
+  uan: string;
+  pan: string;
+  profileImage: string;
   loginUserSecretkey: string;
 }

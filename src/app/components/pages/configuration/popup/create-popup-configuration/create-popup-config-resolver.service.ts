@@ -6,36 +6,42 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { CryptoService } from '../../../../../shared/service/common/crypto.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CreatePopupConfigResolverService {
+  constructor(
+    private apiService: ApiService,
+    private cryptoService: CryptoService
+  ) {}
 
-  constructor(private apiService: ApiService, private cryptoService: CryptoService) {}
-  
-    
-  
-    resolve(route: ActivatedRouteSnapshot): Observable<any> {
-  
-      let roles = of({});
-      let genderType = of({})
-      let getAllEmployee = of({})
-      let popDetails = of({});
+  resolve(route: ActivatedRouteSnapshot): Observable<any> {
+    let roles = of({});
+    let genderType = of({});
+    let getAllEmployee = of({});
+    let meetingDetails = of({});
 
-      if (route.queryParams['data']) {
+    if (route.queryParams['data']) {
       const decrypted = this.cryptoService.decrypt(route.queryParams['data']);
-      popDetails = of(decrypted as any);
+      meetingDetails = of(decrypted as any);
     }
-      
-      roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "Role" });
-      genderType = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, { entityValue: "genderType" });
-      getAllEmployee = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GET_USER_LIST, {});
-      
-  
-     return forkJoin({
+
+    roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, {
+      entityValue: 'Role',
+    });
+    genderType = this.apiService.postApiCall(
+      API_ENDPOINTS.SERVICE_GETROLETYPE,
+      { entityValue: 'genderType' }
+    );
+    getAllEmployee = this.apiService.postApiCall(
+      API_ENDPOINTS.SERVICE_GET_USER_LIST,
+      {}
+    );
+
+    return forkJoin({
       roles,
       genderType,
       getAllEmployee,
-      popDetails
-      });
-    }
+      meetingDetails,
+    });
+  }
 }

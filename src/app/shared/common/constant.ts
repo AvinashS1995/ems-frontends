@@ -16,5 +16,27 @@ export enum CheckInsStep {
 }
 
 export const APPROVAL_ROUTE_MAP: { [key: string]: string } = {
-  'Leave': '/employee-leave-approval-request-list',
-}
+  Leave: '/employee-leave-approval-request-list',
+};
+
+// Month List
+export const MONTH_LIST = [
+  { value: 1, label: 'January' },
+  { value: 2, label: 'February' },
+  { value: 3, label: 'March' },
+  { value: 4, label: 'April' },
+  { value: 5, label: 'May' },
+  { value: 6, label: 'June' },
+  { value: 7, label: 'July' },
+  { value: 8, label: 'August' },
+  { value: 9, label: 'September' },
+  { value: 10, label: 'October' },
+  { value: 11, label: 'November' },
+  { value: 12, label: 'December' },
+];
+
+// Year List → 2025 down to 2020
+export const YEAR_LIST = Array.from({ length: 6 }, (_, i) => {
+  const year = 2025 - i;
+  return { value: year, label: `${year}` };
+});

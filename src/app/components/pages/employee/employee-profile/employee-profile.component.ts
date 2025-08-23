@@ -104,6 +104,11 @@ export class EmployeeProfileComponent {
       joiningDate: [''],
       salary: [0],
       workType: [''],
+      bankName: [''],
+      bankAccNo: [''],
+      pfNo: [''],
+      uan: [''],
+      pan: [''],
     });
 
     const {
@@ -126,6 +131,11 @@ export class EmployeeProfileComponent {
       joiningDate,
       salary,
       workType,
+      bankName,
+      bankAccNo,
+      pfNo,
+      uan,
+      pan,
       profileImage,
     } = this.commonService.getCurrentUserDetails();
 
@@ -149,6 +159,11 @@ export class EmployeeProfileComponent {
       joiningDate: joiningDate || '',
       salary: salary || '',
       workType: workType || '',
+      bankName: bankName || '',
+      bankAccNo: bankAccNo || '',
+      pfNo: pfNo || '',
+      uan: uan || '',
+      pan: pan || '',
     });
 
     this.uploadedPhotoUrl = profileImage;

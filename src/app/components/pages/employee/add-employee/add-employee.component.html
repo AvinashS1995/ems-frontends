@@ -72,14 +72,20 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                                <mat-label>Country</mat-label>
-                                <mat-select formControlName="country">
-                                    <mat-option value="all">All Country</mat-option>
-                                    <mat-option *ngFor="let country of countryList" [value]="country.label">
-                                        {{ country.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="country">
+                    <mat-option value="all">All Country</mat-option>
+                    <mat-option *ngFor="let country of countryList" [value]="country.label">
+                        {{ country.label }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>PAN</mat-label>
+                <input matInput type="text" formControlName="pan">
+                
+            </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Role</mat-label>

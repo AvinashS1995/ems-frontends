@@ -13,6 +13,8 @@ import { ApprovalConfigurationResolverService } from './components/pages/approva
 import { RequestListResolverService } from './components/pages/approval/request-list/request-list-resolver.service';
 import { CreatePopupConfigResolverService } from './components/pages/configuration/popup/create-popup-configuration/create-popup-config-resolver.service';
 import { PopupConfigResolverService } from './components/pages/configuration/popup/popup-configuration/popup-config-resolver.service';
+import { CreateMeetingSchedulesResolverService } from './components/pages/meetings/create-meeting-schedules/create-meeting-schedules-resolver.service';
+import { PayrollManagementResolverService } from './components/pages/payroll-management/payroll-management-resolver.service';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -223,7 +225,7 @@ export const routes: Routes = [
         data: {
           title: 'Meeting Schedule',
         },
-        resolve: { data: PopupConfigResolverService },
+        // resolve: { data: PopupConfigResolverService },
       },
       {
         path: 'create-meeting-schedule',
@@ -234,7 +236,7 @@ export const routes: Routes = [
         data: {
           title: 'Create Meeting Schedule',
         },
-        resolve: { data: CreatePopupConfigResolverService },
+        resolve: { data: CreateMeetingSchedulesResolverService },
       },
       {
         path: 'project-task-list',
@@ -267,7 +269,7 @@ export const routes: Routes = [
         data: {
           title: 'Payroll Management',
         },
-        resolve: { data: CreatePopupConfigResolverService },
+        resolve: { data: PayrollManagementResolverService },
       },
     ],
   },

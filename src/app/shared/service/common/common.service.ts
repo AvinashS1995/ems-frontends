@@ -43,6 +43,11 @@ export class CommonService {
     joiningDate: '',
     salary: 0,
     workType: '',
+    bankName: '',
+    bankAccNo: '',
+    pfNo: '',
+    uan: '',
+    pan: '',
     profileImage: '',
     loginUserSecretkey: '',
   };
@@ -101,7 +106,7 @@ export class CommonService {
   }
 
   viewImageViewer(filename?: string, imageUrl?: string) {
-   return this.dialog.open(ImageViewerComponent, {
+    return this.dialog.open(ImageViewerComponent, {
       data: { filename, imageUrl },
       width: '95vw',
       height: '95vh',
@@ -112,7 +117,7 @@ export class CommonService {
   }
 
   viewDocumentViewer(filename?: string, fileUrl?: string) {
-   return this.dialog.open(DocumentViewerComponent, {
+    return this.dialog.open(DocumentViewerComponent, {
       data: { filename, fileUrl },
       width: '95vw',
       height: '95vh',

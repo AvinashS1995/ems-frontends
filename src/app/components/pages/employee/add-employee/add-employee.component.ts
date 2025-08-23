@@ -137,11 +137,12 @@ export class AddEmployeeComponent {
       joiningDate: [''],
       salary: [0],
       workType: [''],
+      pan: [''],
     });
     // debugger
     if (this.data.editData) {
       this.isEditMode = true;
-      // debugger
+      // debugger;
       this.employeeForm.patchValue({
         firstName: this.data.editData.firstName,
         middleName: this.data.editData.middleName,
@@ -161,6 +162,7 @@ export class AddEmployeeComponent {
         joiningDate: this.data.editData.joiningDate,
         salary: this.data.editData.salary,
         workType: this.data.editData.workType,
+        pan: this.data.editData.pan,
         // profileImage: this.data.editData.profileImage
       });
       console.log(this.data.editData.profileImage);
@@ -201,9 +203,12 @@ export class AddEmployeeComponent {
         joiningDate: newEmployee.joiningDate ? newEmployee.joiningDate : '',
         salary: newEmployee.salary ? newEmployee.salary : 0,
         workType: newEmployee.workType ? newEmployee.workType : '',
-        profileImage: newEmployee ? newEmployee.profileImage?.split('?')[0]?.split('/').pop() : '',
+        pan: newEmployee.pan ? newEmployee.pan : '',
+        profileImage: newEmployee
+          ? newEmployee.profileImage?.split('?')[0]?.split('/').pop()
+          : '',
       };
-      debugger;
+      // debugger;
       console.log('New employee data:', paylaod);
 
       const ENDPOINT = this.data.editData
@@ -253,7 +258,7 @@ export class AddEmployeeComponent {
       .subscribe({
         next: (res) => {
           const uploadedUrl = res?.data?.presignFileUrl;
-          
+
           this.previewUrl = uploadedUrl;
           console.log(this.previewUrl);
           this.fileKey = res?.data?.fileKey;

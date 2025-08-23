@@ -127,7 +127,7 @@ export class MeetingSchedulesComponent {
       ...element,
       mode: 'edit',
     };
-    this.router.navigate(['/create-popup-configuration'], {
+    this.router.navigate(['/create-meeting-schedule'], {
       queryParams: {
         data: this.cryptoService.encrypt(payload),
       },

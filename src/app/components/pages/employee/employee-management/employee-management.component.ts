@@ -228,10 +228,17 @@ export class EmployeeManagementComponent {
           );
 
           this.dataSource = res?.data?.userList || [];
+          this.dataSource = this.dataSource.map((user) => {
+            return {
+              ...user,
+              name: `${user.firstName} ${user.lastName}`,
+              teamLeader: user.reportedBy,
+            };
+          });
           this.totalRecords = res.data.totalRecords || 0;
           this.reportedByEmployee = this.dataSource.map((reportedBy) => {
             return {
-              label: `${reportedBy.name} - [${reportedBy.empNo}]`,
+              label: `${reportedBy.firstName} ${reportedBy.lastName}  - [${reportedBy.empNo}]`,
               value: reportedBy.empNo,
             };
           });
@@ -253,7 +260,7 @@ export class EmployeeManagementComponent {
   }
 
   editEmployee(employee: any) {
-    // debugger
+    // debugger;
     this.addEmployee(employee);
   }
 

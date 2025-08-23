@@ -132,7 +132,8 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Reported By</mat-label>
                             <mat-select formControlName="reportedBy">
-                                <mat-option *ngFor="let reportedBy of reportedByEmployeeList" [value]="reportedBy.label">{{
+                                <mat-option *ngFor="let reportedBy of reportedByEmployeeList"
+                                    [value]="reportedBy.label">{{
                                     reportedBy.label }}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -183,6 +184,45 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
+                    </div>
+                </mat-card>
+
+                <!-- Bank Details -->
+                <mat-card class="profile-card">
+                    <h3 class="card-title">Employee Bank Details </h3>
+                    <div class="reporting-form-section">
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Bank Name</mat-label>
+                            <input matInput type="text" formControlName="bankName">
+
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Bank Acc. No.</mat-label>
+                            <input matInput type="text" formControlName="bankAccNo">
+
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>PF No.</mat-label>
+                            <input matInput type="text" formControlName="pfNo">
+
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>UAN</mat-label>
+                            <input matInput type="text" formControlName="uan">
+
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>PAN</mat-label>
+                            <input matInput type="text" formControlName="pan">
+
+                        </mat-form-field>
+
+
                     </div>
                 </mat-card>
 

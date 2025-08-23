@@ -57,4 +57,6 @@ export const API_ENDPOINTS = {
   SERVICE_GET_ALL_MEETING_SCHEDULE: 'meeting/get-all-meeting-schedule',
   SERVICE_DELETE_MEETING_SCHEDULE: 'meeting/delete-meeting-schedule',
   SERVICE_UPDATE_MEETING_SCHEDULE: 'meeting/update-meeting-schedule',
+  SERVICE_GET_ALL_EMPLOYYEE_MONTHLY_PAYSLIP:
+    'payroll/get-all-employee-monthly-payslip',
 };

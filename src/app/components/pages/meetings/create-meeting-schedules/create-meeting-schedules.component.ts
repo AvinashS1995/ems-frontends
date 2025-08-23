@@ -47,12 +47,9 @@ export class CreateMeetingSchedulesComponent {
   editMode: boolean = false;
   descriptionLength = 0;
 
-  allEmployeeList = [
-    { label: 'Abhay Raichand - [EMP001]', value: 'EMP001' },
-    { label: 'Avinash Suryawanshi - [EMP002]', value: 'EMP002' },
-    { label: 'Kapil Ingle - [EMP003]', value: 'EMP003' },
-    { label: 'Suraj Narwade - [EMP004]', value: 'EMP004' },
-  ];
+  allEmployeeList: Array<any> = [];
+  meetingDetails: any;
+  meetingDetailID: any;
 
   constructor(
     private commonService: CommonService,
@@ -64,6 +61,7 @@ export class CreateMeetingSchedulesComponent {
 
   ngOnInit(): void {
     this.prepareCreatePopupConfigForm();
+    this.getparams();
   }
 
   prepareCreatePopupConfigForm() {
@@ -105,33 +103,81 @@ export class CreateMeetingSchedulesComponent {
     );
   }
 
+  getparams() {
+    this.activateRoute.data.subscribe((params) => {
+      console.log('Title ---->', params);
+
+      if (params['data']) {
+        this.allEmployeeList =
+          params['data'].attendeesList?.data?.userList || [];
+        this.allEmployeeList = this.allEmployeeList.map((attendeesEmployee) => {
+          return {
+            label: `${attendeesEmployee.firstName} ${attendeesEmployee.lastName} - [${attendeesEmployee.empNo}]`,
+            value: attendeesEmployee.empNo,
+          };
+        });
+
+        console.log('Roles--->', this.allEmployeeList);
+        debugger;
+        this.meetingDetails = params['data'].meetingDetails;
+
+        console.log('Meeting Details -----> ', this.meetingDetails);
+
+        if (this.meetingDetails.mode === 'edit') {
+          this.editMode = true;
+
+          const selectedEmpNos =
+            this.meetingDetails.attendees?.map(
+              (selectedAttendees: any) => selectedAttendees.empNo
+            ) || [];
+
+          this.createMeetingForm.patchValue({
+            title: this.meetingDetails.title || '',
+            date: this.meetingDetails.date || '',
+            startTime: this.meetingDetails.startTime || '',
+            endTime: this.meetingDetails.endTime || '',
+            meetingType: this.meetingDetails.meetingType || '',
+            platform: this.meetingDetails.platform || '',
+            location: this.meetingDetails.location || '',
+            description: this.meetingDetails.description || '',
+            attendees: selectedEmpNos,
+          });
+
+          this.meetingDetailID = this.meetingDetails._id;
+        }
+      }
+    });
+  }
+
   onSubmitMeetingForm() {
     const formValue = this.createMeetingForm.value;
+
+    const updateID = this.editMode ? this.meetingDetailID : '';
 
     const payload = {
       ...formValue,
       empNo: this.commonService.getCurrentUserDetails().empNo || '',
       attendees: formValue.attendees.map((empNo: string) => ({ empNo })),
+      id: updateID,
     };
 
     console.log('Submitting Meeting:', payload);
 
-    this.apiService
-      .postApiCall(API_ENDPOINTS.SERVICE_SAVE_MEETING_SCHEDULE, payload)
-      .subscribe({
-        next: (res: any) => {
-          console.log(
-            `${API_ENDPOINTS.SERVICE_SAVE_MEETING_SCHEDULE} Response : `,
-            res
-          );
+    const ENDPOINT = this.editMode
+      ? API_ENDPOINTS.SERVICE_UPDATE_MEETING_SCHEDULE
+      : API_ENDPOINTS.SERVICE_SAVE_MEETING_SCHEDULE;
 
-          this.commonService.openSnackbar(res.message, 'success');
-          this.router.navigateByUrl('/meeting-schedule-list');
-        },
-        error: (error) => {
-          this.commonService.openSnackbar(error.error.message, 'error');
-        },
-      });
+    this.apiService.postApiCall(ENDPOINT, payload).subscribe({
+      next: (res: any) => {
+        console.log(`${ENDPOINT} Response : `, res);
+
+        this.commonService.openSnackbar(res.message, 'success');
+        this.router.navigateByUrl('/meeting-schedule-list');
+      },
+      error: (error) => {
+        this.commonService.openSnackbar(error.error.message, 'error');
+      },
+    });
   }
 
   cancelMeeting() {

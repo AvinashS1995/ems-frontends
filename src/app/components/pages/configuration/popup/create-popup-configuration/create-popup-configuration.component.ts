@@ -6,7 +6,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SHARED_MATERIAL_MODULES } from '../../../../../shared/common/shared-material';
 import { API_ENDPOINTS } from '../../../../../shared/common/api-contant';
 import { Subject } from 'rxjs';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 export const MY_DATE_FORMATS = {
@@ -18,8 +22,8 @@ export const MY_DATE_FORMATS = {
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'DD/MM/YYYY',
     monthYearA11yLabel: 'MMMM YYYY',
-  }
-}
+  },
+};
 
 @Component({
   selector: 'app-create-popup-configuration',
@@ -28,13 +32,13 @@ export const MY_DATE_FORMATS = {
   templateUrl: './create-popup-configuration.component.html',
   styleUrl: './create-popup-configuration.component.scss',
   providers: [
-      {
-        provide: DateAdapter,
-        useClass: MomentDateAdapter,
-        deps: [MAT_DATE_LOCALE],
-      },
-      { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
-    ],
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+  ],
 })
 export class CreatePopupConfigurationComponent {
   private destroy$ = new Subject<void>();
@@ -140,7 +144,7 @@ export class CreatePopupConfigurationComponent {
       }
 
       this.popdetails = params['data'].popDetails;
-debugger
+
       if (this.popdetails.mode === 'edit') {
         this.editMode = true;
         this.createPopupConfigForm.patchValue({
@@ -158,8 +162,8 @@ debugger
           file: this.popdetails.uploadedFile || '',
           isActive: this.popdetails.isActive || '',
         });
-        console.log(this.allEmployeeList)
-       
+        console.log(this.allEmployeeList);
+
         this.popupDetailID = this.popdetails._id;
 
         this.uploadFileDocumentName =
