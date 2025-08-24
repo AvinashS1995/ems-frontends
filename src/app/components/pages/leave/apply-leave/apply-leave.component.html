@@ -17,6 +17,16 @@
                             <mat-option *ngFor="let leaveType of leaveTypeList" [value]="leaveType.label">{{
                                 leaveType.label }}</mat-option>
                         </mat-select>
+                        <div *ngIf="availableBalance !== null && remainingBalance !== null && remainingBalance !== undefined"
+                            class="leave-hint" [ngClass]="{ 'low-balance': remainingBalance < 0 }">
+                            <mat-icon color="primary" class="icon">event_available</mat-icon>
+                            <strong>{{ leaveTypeLabel }}</strong>
+                            <span class="available">Available: {{ availableBalance }}</span> |
+                            <mat-icon color="accent" class="icon">update</mat-icon>
+                            <span class="remaining">Remaining: {{ remainingBalance }}</span>
+                        </div>
+
+
                     </mat-form-field>
 
 

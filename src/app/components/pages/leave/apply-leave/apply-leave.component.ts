@@ -60,6 +60,11 @@ export class ApplyLeaveComponent {
   EmployeeNo: any;
   holidayDates: Array<any> = [];
 
+  leaveBalance: any = null;
+  availableBalance: number | null = null;
+  remainingBalance: number | null = null;
+  leaveTypeLabel: string = '';
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -82,6 +87,7 @@ export class ApplyLeaveComponent {
 
     console.log(this.holidayDates);
 
+    this.getLeaveBalance();
     // console.log(this.leaveReasonTypeList);
     this.setsubcription();
   }
@@ -144,13 +150,19 @@ export class ApplyLeaveComponent {
     this.leaveForm.controls['endDate'].valueChanges.subscribe(
       (selectedEndDate) => {
         if (selectedEndDate) {
-          const { startDate, endDate } = this.leaveForm.getRawValue();
-          const totalLeaveDays = this.calculateLeaveDays(startDate, endDate);
+          // const { startDate, endDate } = this.leaveForm.getRawValue();
+          // const totalLeaveDays = this.calculateLeaveDays(startDate, endDate);
 
-          console.log(totalLeaveDays);
+          // console.log(totalLeaveDays);
+
+          this.calculateAndUpdateRemainingBalance();
         }
       }
     );
+
+    this.leaveForm.controls['leaveType'].valueChanges.subscribe((leaveType) => {
+      this.updateAvailableBalance(leaveType);
+    });
   }
 
   dateFilter = (d: Date | null): boolean => {
@@ -313,6 +325,64 @@ export class ApplyLeaveComponent {
           this.commonService.openSnackbar(err.error.message, 'error');
         },
       });
+  }
+
+  getLeaveBalance() {
+    const user = this.commonService.getCurrentUserDetails();
+
+    const payload = {
+      empNo: user.empNo,
+      year: new Date().getFullYear(),
+    };
+
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_GET_EMPLOYEE_LEAVE_BALANCE, payload)
+      .subscribe({
+        next: (res: any) => {
+          this.leaveBalance = res.data.leaveBalance || [];
+          console.log('Leave Balance: ', this.leaveBalance);
+          this.commonService.openSnackbar(res.message, 'success');
+        },
+        error: (err) => {
+          this.commonService.openSnackbar(err.error.message, 'error');
+        },
+      });
+  }
+
+  updateAvailableBalance(leaveType: string) {
+    if (!this.leaveBalance) return;
+
+    if (
+      leaveType.includes('Paid') ||
+      leaveType.includes('Maternity') ||
+      leaveType.includes('Paternity') ||
+      leaveType.includes('Marriage')
+    ) {
+      this.availableBalance = this.leaveBalance.paidLeave;
+      this.leaveTypeLabel = 'Paid Leave';
+    } else if (leaveType.includes('Casual')) {
+      this.availableBalance = this.leaveBalance.casualLeave;
+      this.leaveTypeLabel = 'Casual Leave';
+    } else if (leaveType.includes('Sick')) {
+      this.availableBalance = this.leaveBalance.sickLeave;
+      this.leaveTypeLabel = 'Sick Leave';
+    } else {
+      this.availableBalance = null;
+      this.leaveTypeLabel = ''; // BL, LWP, CompOff → no balance
+    }
+
+    this.remainingBalance = this.availableBalance;
+  }
+
+  calculateAndUpdateRemainingBalance() {
+    const { startDate, endDate, leaveType } = this.leaveForm.getRawValue();
+    const totalLeaveDays = this.calculateLeaveDays(startDate, endDate);
+
+    if (this.availableBalance !== null) {
+      this.remainingBalance = this.availableBalance - totalLeaveDays;
+    } else {
+      this.remainingBalance = null; // for BL, LWP, CompOff
+    }
   }
 
   closeDialog() {

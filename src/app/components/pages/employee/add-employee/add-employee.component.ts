@@ -218,7 +218,10 @@ export class AddEmployeeComponent {
       this.apiService.postApiCall(ENDPOINT, paylaod).subscribe({
         next: (res: any) => {
           console.log(`${ENDPOINT} Response : `, res);
-
+          const empNo = this.data.editData
+            ? res?.data?.existingType?.empNo
+            : res?.data?.empNo;
+          this.saveEmployeeLeaveBalance(empNo);
           this.commonService.openSnackbar(res.message, 'success');
           this.dialogRef.close(this.data.editData ? 'updated' : 'saved');
         },
@@ -270,6 +273,32 @@ export class AddEmployeeComponent {
           this.commonService.openSnackbar(error.error.message, 'error');
         },
       });
+  }
+
+  saveEmployeeLeaveBalance(empNo: string) {
+    const { joiningDate } = this.employeeForm.getRawValue();
+
+    const paylaod = {
+      empNo: empNo || '',
+      doj: joiningDate || '',
+    };
+
+    console.log('New employee Leave Balance:', paylaod);
+
+    const ENDPOINT = this.data.editData
+      ? API_ENDPOINTS.SERVICE_UODATE_EMPLOYEE_LEAVE_BALANCE
+      : API_ENDPOINTS.SERVICE_SAVE_EMPLOYEE_LEAVE_BALANCE;
+
+    this.apiService.postApiCall(ENDPOINT, paylaod).subscribe({
+      next: (res: any) => {
+        console.log(`${ENDPOINT} Response : `, res);
+
+        this.commonService.openSnackbar(res.message, 'success');
+      },
+      error: (error) => {
+        this.commonService.openSnackbar(error.error.message, 'error');
+      },
+    });
   }
 
   cancel() {

@@ -350,6 +350,7 @@ export class EmployeeProfileComponent {
             `${API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST} Response : `,
             res
           );
+          this.saveEmployeeLeaveBalance(res?.data?.existingType?.empNo);
           this.isFormChanged = false;
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -361,6 +362,30 @@ export class EmployeeProfileComponent {
 
   cancelForm() {
     this.router.navigateByUrl('/dashboard');
+  }
+
+  saveEmployeeLeaveBalance(empNo: string) {
+    const { joiningDate } = this.updateEmployeeProfileForm.getRawValue();
+
+    const paylaod = {
+      empNo: empNo || '',
+      doj: joiningDate || '',
+    };
+
+    console.log('New employee Leave Balance:', paylaod);
+
+    const ENDPOINT = API_ENDPOINTS.SERVICE_SAVE_EMPLOYEE_LEAVE_BALANCE;
+
+    this.apiService.postApiCall(ENDPOINT, paylaod).subscribe({
+      next: (res: any) => {
+        console.log(`${ENDPOINT} Response : `, res);
+
+        this.commonService.openSnackbar(res.message, 'success');
+      },
+      error: (error) => {
+        this.commonService.openSnackbar(error.error.message, 'error');
+      },
+    });
   }
 
   ngOnDestroy(): void {

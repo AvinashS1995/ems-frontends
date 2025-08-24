@@ -59,4 +59,8 @@ export const API_ENDPOINTS = {
   SERVICE_UPDATE_MEETING_SCHEDULE: 'meeting/update-meeting-schedule',
   SERVICE_GET_ALL_EMPLOYYEE_MONTHLY_PAYSLIP:
     'payroll/get-all-employee-monthly-payslip',
+  SERVICE_SAVE_EMPLOYEE_LEAVE_BALANCE: 'leave/save-leave-balance',
+  SERVICE_GET_EMPLOYEE_LEAVE_BALANCE: 'leave/get-leave-balance',
+  SERVICE_GET_ALL_LEAVE_BALANCE: 'leave/get-all-leave-balance',
+  SERVICE_UODATE_EMPLOYEE_LEAVE_BALANCE: 'leave/update-leave-balance',
 };
