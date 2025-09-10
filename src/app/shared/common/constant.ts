@@ -16,7 +16,9 @@ export enum CheckInsStep {
 }
 
 export const APPROVAL_ROUTE_MAP: { [key: string]: string } = {
-  Leave: '/employee-leave-approval-request-list',
+  '1': '/employee-leave-approval-request-list',
+  '3': '/employee-leave-approval-request-list',
+  '4': '/assign-project-request-list',
 };
 
 // Month List
@@ -40,3 +42,22 @@ export const YEAR_LIST = Array.from({ length: 6 }, (_, i) => {
   const year = 2025 - i;
   return { value: year, label: `${year}` };
 });
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
+export enum RoleCategory {
+  MANAGER = 1,
+  TEAMLEADER = 2,
+  EMPLOYEE = 3,
+  HR = 4,
+}

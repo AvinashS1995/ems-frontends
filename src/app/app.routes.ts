@@ -15,6 +15,7 @@ import { CreatePopupConfigResolverService } from './components/pages/configurati
 import { PopupConfigResolverService } from './components/pages/configuration/popup/popup-configuration/popup-config-resolver.service';
 import { CreateMeetingSchedulesResolverService } from './components/pages/meetings/create-meeting-schedules/create-meeting-schedules-resolver.service';
 import { PayrollManagementResolverService } from './components/pages/payroll-management/payroll-management-resolver.service';
+import { CreateProjectTaskResolverService } from './components/pages/projects/create-project-task-management/create-project-task-resolver.service';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -258,7 +259,7 @@ export const routes: Routes = [
         data: {
           title: 'Create Project Task',
         },
-        resolve: { data: CreatePopupConfigResolverService },
+        resolve: { data: CreateProjectTaskResolverService },
       },
       {
         path: 'payroll',
@@ -270,6 +271,16 @@ export const routes: Routes = [
           title: 'Payroll Management',
         },
         resolve: { data: PayrollManagementResolverService },
+      },
+      {
+        path: 'assign-project-request-list',
+        loadComponent: () =>
+          import(
+            './components/pages/projects/assign-project-request-list/assign-project-request-list.component'
+          ).then((c) => c.AssignProjectRequestListComponent),
+        data: {
+          title: 'Assign Project Request List',
+        },
       },
     ],
   },

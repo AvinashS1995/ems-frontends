@@ -1,0 +1,159 @@
+.menu-configuration-container {
+  // background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+}
+
+.card-wrapper {
+  display: flex;
+  justify-content: center;   /* center horizontally */
+  align-items: center;       /* center vertically */
+  min-height: 100vh;         /* take full screen */
+  background: #f5f6fa; 
+}
+
+// mat-card {
+//   margin-top: 15px;
+//   border-radius: 5px;
+//   max-width: 600px;
+// }
+
+.create-mat-card {
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(88, 101, 164, 0.3);
+}
+
+.create-menu-form-container {
+  margin: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .parent-menu-field {
+    align-self: self-end;
+  }
+
+  @media (min-width: 600px) {
+    grid-template-columns:  1fr;
+  }
+
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr;
+
+  }
+}
+
+.form-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  justify-content: center;
+
+  button {
+    min-width: 130px;
+    font-weight: 600;
+    padding: 12px 24px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+  }
+
+}
+
+
+.custom-outline-upload {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.upload-field-main {
+  position: relative;
+  padding: 18px 10px 8px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  border-radius: 4px;
+  background-color: #f5f4f7;
+  transition: border 0.2s ease;
+}
+
+.upload-field-main.invalid {
+  border-color: #d32f2f;
+}
+
+.custom-label {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  background-color: #f5f4f7;
+  padding: 0 4px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.upload-field {
+  position: relative;
+  font-size: 15px;
+  color: #000;
+  cursor: pointer;
+  padding-right: 60px;
+}
+
+.upload-field.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  user-select: none;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-label {
+  width: 100%;
+  display: block;
+  padding: 4px 0;
+  cursor: pointer;
+  user-select: none;
+  font-size: 15px;
+  color: #000;
+}
+
+
+.attachment-icon {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#attach_file {
+  transform: rotate(45deg);
+  color: rgba(0, 0, 0, 0.54);
+}
+
+#done {
+  color: #388e3c;
+}
+
+#visibility {
+  color: #d32f2f !important;
+}
+
+.description {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+}

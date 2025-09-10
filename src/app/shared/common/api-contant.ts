@@ -63,4 +63,16 @@ export const API_ENDPOINTS = {
   SERVICE_GET_EMPLOYEE_LEAVE_BALANCE: 'leave/get-leave-balance',
   SERVICE_GET_ALL_LEAVE_BALANCE: 'leave/get-all-leave-balance',
   SERVICE_UODATE_EMPLOYEE_LEAVE_BALANCE: 'leave/update-leave-balance',
+  SERVICE_GET_MANAGER_WISE_TL: 'auth/get-manager-wise-team-leaders',
+  SERVICE_GET_TL_WISE_EMPLOYEE: 'auth/get-team-leader-wise-employees',
+  SERVICE_GET_MANAGERWISE_ALL_TL_EMPLOYEE:
+    'auth/get-manager-wise-teamleader-with-employees',
+  SERVICE_CREATE_NEW_PROJECT: 'project/create-project',
+  SERVICE_CREATE_TASK: 'project/create-task',
+  SERVICE_GET_PROJETS: 'project/projects',
+  SERVICE_GET_TASKSBYPROJECTS: 'project/tasks',
+  SERVICE_UPDATE_TASKS_STATUSBYPROJECTS: 'project/update-task-status',
+  SERVICE_GET_ALL_MODELS: 'approval/get-all-models',
+  SERVICE_PROJETS_ASSIGN_APPROVE_REJECT:
+    'project/project-assign-approve-reject',
 };

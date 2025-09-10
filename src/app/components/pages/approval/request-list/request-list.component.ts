@@ -39,12 +39,11 @@ export class RequestListComponent {
   }
 
   navigateToRequest(element: any) {
-    const route = APPROVAL_ROUTE_MAP[element.applicationTypeName];
+    const route = APPROVAL_ROUTE_MAP[element.applicationType];
     if (route) {
       this.router.navigate([route]);
     } else {
-      console.warn(`No route mapped for: ${element.applicationTypeName}`);
+      console.warn(`No route mapped for: ${element.applicationType}`);
     }
   }
-  
 }

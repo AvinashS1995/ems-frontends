@@ -37,108 +37,12 @@ mat-expansion-panel {
   border-radius: 5px;
 }
 
-.filter-field {
-  flex: 1 1 200px;
-  min-width: 200px;
-}
-
-.filter-button,
-.export-button {
-  height: 56px;
-  border-radius: 5px;
-}
-
-.attendance-table {
-  overflow-x: auto;
-}
-
-.employee-info {
-  display: flex;
-  align-items: center;
-}
 
 .filter-actions {
   display: flex;
   gap: 12px;
   margin-top: 16px;
 }
-
-
-.attendance-container {
-  padding: 20px;
-}
-
-.summary-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin: 20px 0;
-
-  @media (min-width: 1200px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.summary-card {
-  height: 160px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  transition: all 0.3s ease;
-
-  h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #222;
-  }
-
-  p {
-    font-size: 22px;
-    font-weight: bold;
-    color: #3f51b5;
-    margin: 0;
-  }
-
-  &:hover {
-    background-color: #3f51b5;
-
-    h3,
-    p {
-      color: #ffffff;
-    }
-  }
-}
-
-.summary-card.selected {
-  background-color: #3f51b5;
-
-  h3,
-  p {
-    color: #ffffff;
-  }
-}
-
-
-
-.dashboard-tabs {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-
-  .mat-tab-label-active {
-    background-color: #4c1d95;
-    color: white;
-    border-radius: 8px 8px 0 0;
-  }
-}
-
 
 
 .text-btn {
@@ -193,3 +97,120 @@ button {
     display: none;
   }
 }
+
+.container {
+  padding: 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #3f51b5;
+}
+
+.section-title {
+  margin: 16px 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+table {
+  width: 100%;
+  margin-top: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.in\ progress {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status.review {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.status.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.task-container {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+
+.status-field {
+  width: 160px;
+}
+
+.upload-field {
+  margin-top: 8px;
+}
+
+.uploaded-text {
+  font-size: 13px;
+  color: green;
+  margin-top: 5px;
+}
+
+.uploaded-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.table-container {
+  max-height: 400px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  overflow: auto;
+
+}
+
+table {
+  min-width: 1000px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+mat-header-row,
+mat-row {
+  display: table-row;
+}
+
+mat-header-cell,
+mat-cell {
+  padding: 16px;
+  white-space: nowrap;
+}
+
+::ng-deep .custom-select-panel {
+ width: auto !important;
+  min-width: 200px !important;   
+  max-width: 500px !important; 
+}
+

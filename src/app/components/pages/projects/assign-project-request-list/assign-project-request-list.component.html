@@ -1,0 +1,70 @@
+<div class="proejct-task-container">
+  <div class="header">
+    <div class="title">
+      <h1>Assign Projects</h1>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="table-container">
+
+      <table mat-table [dataSource]="assignProjectList" class="mat-elevation-z2">
+        
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Project ID</th>
+          <td mat-cell *matCellDef="let element">{{element.projectId}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Project</th>
+          <td mat-cell *matCellDef="let element">{{element.title}}</td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let element">{{element.description}}</td>
+        </ng-container>
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef>Priority</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.priority }}
+          </td>
+        </ng-container>
+
+         <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef>Created By</th>
+          <td mat-cell *matCellDef="let element">{{ element.createdBy?.name }} - [{{ element.createdBy?.role }}]</td>
+        </ng-container>
+
+        <ng-container matColumnDef="timeline">
+          <th mat-header-cell *matHeaderCellDef>Deadline</th>
+          <td mat-cell *matCellDef="let element">{{ element.deadline | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef> Project Document </th>
+                <td mat-cell *matCellDef="let element">
+                     <button mat-icon-button color="warn" (click)="onViewDocument(element.attachments.fileUrl, element.attachments.fileName)">
+                        <mat-icon class="custom-warn">visibility</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Approval Status</th>
+          <td mat-cell *matCellDef="let element">
+              <mat-select [(value)]="element.dropdownStatus" (selectionChange)="updateTaskStatus(element, $event.value)" [panelClass]="'custom-select-panel'">
+                <mat-option [value]="element.dropdownStatus" disabled>Select Approval</mat-option>
+                <mat-option value="Approved">Approved</mat-option>
+                <mat-option value="Rejected">Rejected</mat-option>
+              </mat-select> 
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    
+  </div>
+
+
+</div>

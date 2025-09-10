@@ -11,6 +11,7 @@ export interface UserDetails {
   address: string;
   country: string;
   role: string;
+  roleId: number;
   type: string;
   status: string;
   reportedBy: string;

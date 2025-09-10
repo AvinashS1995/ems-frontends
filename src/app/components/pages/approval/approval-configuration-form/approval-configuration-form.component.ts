@@ -30,8 +30,10 @@ export class ApprovalConfigurationFormComponent {
 
   isEditMode = false;
   selectedRequestType: RequestType | null = null;
+  selectedModelType: any;
   hierarchyRoles: Role[] = [];
   id: any;
+  modelList: Array<any> = [];
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -47,6 +49,7 @@ export class ApprovalConfigurationFormComponent {
 
   prepareCreateApprovalConfigurationForm() {
     this.createApprovalConfigurationForm = new FormGroup({
+      requestModel: new FormControl('', Validators.required),
       request: new FormControl('', Validators.required),
     });
   }
@@ -58,7 +61,6 @@ export class ApprovalConfigurationFormComponent {
         console.log('PARAMS--->', params);
 
         if (params['data']) {
-          debugger;
           this.requestTypeList = params['data']?.requestType?.data?.types || [];
           this.requestTypeList = this.requestTypeList.map(
             (requestType: any) => {
@@ -69,6 +71,14 @@ export class ApprovalConfigurationFormComponent {
             }
           );
 
+          this.modelList = params['data']?.models?.data?.models || [];
+          this.modelList = this.modelList.map((model: any) => {
+            return {
+              value: model.id,
+              label: model.modelName,
+            };
+          });
+
           this.roles = params['data'].roles?.data?.types || [];
           this.buildCategories(this.roles);
           console.log('Category Roles--->', this.roles);
@@ -77,23 +87,32 @@ export class ApprovalConfigurationFormComponent {
 
           if (approvalDetails?.mode === 'edit' && approvalDetails?.data) {
             this.isEditMode = true;
-
+            debugger;
             const approvalData = approvalDetails.data;
 
             this.id = approvalData._id;
 
             const matchedRequestType = this.requestTypeList.find(
               (item) =>
-                item.label === approvalData.typeName ||
-                item.value == approvalData.type
+                item.value == approvalData.type ||
+                item.label === approvalData.displayName
+            );
+
+            const matchedModelType = this.modelList.find(
+              (model) => model.label === approvalData.typeName
             );
 
             if (matchedRequestType) {
               this.selectedRequestType = matchedRequestType;
-              this.createApprovalConfigurationForm.patchValue({
-                request: matchedRequestType.label,
-              });
             }
+            if (matchedModelType) {
+              this.selectedModelType = matchedModelType;
+            }
+
+            this.createApprovalConfigurationForm.patchValue({
+              request: matchedRequestType || '',
+              requestModel: matchedModelType || '',
+            });
 
             const existingHierarchy =
               approvalData.listApprovalFlowDetails || [];
@@ -134,6 +153,13 @@ export class ApprovalConfigurationFormComponent {
     }
   }
 
+  onRequestModelSelect(value: RequestType): void {
+    this.selectedModelType = value;
+    if (!this.isEditMode) {
+      this.hierarchyRoles = [];
+    }
+  }
+
   toggleExpand(category: Category): void {
     category.expanded = !category.expanded;
   }
@@ -162,7 +188,9 @@ export class ApprovalConfigurationFormComponent {
     const payload = {
       id: this.isEditMode ? this.id : '',
       type: this.selectedRequestType.value || '',
-      typeName: this.selectedRequestType.label || '',
+      typeName: this.selectedModelType.label || '',
+      displayName: this.selectedRequestType.label || '',
+
       listApprovalFlowDetails:
         this.hierarchyRoles.map((role, index) => ({
           role: role.typeLabel,

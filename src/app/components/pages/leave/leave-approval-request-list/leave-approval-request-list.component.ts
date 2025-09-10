@@ -17,10 +17,6 @@ import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
 })
 export class LeaveApprovalRequestListComponent {
   leaveRequests: Array<any> = [];
-  EmployeeNo: any;
-  RoleName: any;
-  UserEmail: any;
-  pendingLeaveCount: number = 0;
 
   leaveType: Array<any> = [];
   leaveReasonType: Array<any> = [];
@@ -126,6 +122,4 @@ export class LeaveApprovalRequestListComponent {
         }
       });
   }
-
-  
 }

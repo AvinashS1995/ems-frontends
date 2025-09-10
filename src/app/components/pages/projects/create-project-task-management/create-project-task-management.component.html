@@ -1,1 +1,141 @@
-<p>create-project-task-management works!</p>
+<div class="menu-configuration-container">
+  <div class="header">
+    <div class="title">
+      <h2>{{ userInfo.role === 'Manager' ? 'Create Project & Assign to TL' : 'Create Task  & Assign to Employee' }}</h2>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div class="card-wrapper">
+    <mat-card class="create-mat-card">
+      <form [formGroup]="createProjectTaskForm">
+        <div class="create-menu-form-container">
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('projectId')">
+            <mat-label>Project ID</mat-label>
+            <mat-select formControlName="projectId">
+              <mat-option *ngFor="let project of projectList" [value]="project.value">
+                {{ project.label }} - [ {{ project.value }} ]
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('title')">
+            <mat-label>{{userInfo.role === 'Manager' ? 'Project Title' : 'Task Title'}}</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('description')">
+            <mat-label>{{userInfo.role === 'Manager' ? 'Project Description' : 'Task Description'}}</mat-label>
+            <textarea matInput rows="4" formControlName="description" (input)="updateDescriptionLength()"></textarea>
+            <mat-hint align="end">{{ descriptionLength }}/500</mat-hint>
+          </mat-form-field>
+
+          <div class="custom-outline-upload">
+            <ng-container *ngIf="createProjectTaskForm.controls['attachments']">
+              <div class="upload-field-main" [ngClass]="{
+        invalid: createProjectTaskForm.controls['attachments'].dirty &&
+                 createProjectTaskForm.controls['attachments'].invalid
+      }">
+                <label class="custom-label" *ngIf="uploadFileDocumentName">
+                  Attachments
+                </label>
+
+                <div class="upload-field" [class.disabled]="createProjectTaskForm.controls['attachments'].disabled">
+                  <input type="hidden" formControlName="attachments" />
+
+                  <input type="file" id="document-upload"
+                    (change)="uploadFile(createProjectTaskForm, 'attachments', $event)" />
+
+                  <label for="document-upload" class="file-label" *ngIf="!uploadFileDocumentName">
+                    Attachments
+                  </label>
+
+                  <label for="document-upload" class="file-label" *ngIf="uploadFileDocumentName">
+                    {{ uploadFileDocumentName }}
+                  </label>
+
+                  <div class="attachment-icon">
+                    <mat-icon id="attach_file">attach_file</mat-icon>
+                    <mat-icon id="done" *ngIf="createProjectTaskForm.controls['attachments'].value">done</mat-icon>
+                    <mat-icon id="visibility" *ngIf="uploadFileDocumentName"
+                      (click)="onViewDocument(createProjectTaskForm.controls['attachments'].value, uploadFileDocumentName)">
+                      visibility
+                    </mat-icon>
+                  </div>
+                </div>
+
+                <div class="description">
+                  MAX File Size: 5MB, Format: PDF
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('deadline')">
+            <mat-label>{{userInfo.role === 'Manager' ? 'Project Deadline' : 'Due Date'}}</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="deadline" />
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('priority')">
+            <mat-label>{{userInfo.role === 'Manager' ? 'Project Priority' : 'Task Priority'}}</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option value="High">High</mat-option>
+              <mat-option value="Medium">Medium</mat-option>
+              <mat-option value="Low">Low</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('assignTo')">
+            <mat-label>{{userInfo.role === 'Manager' ? 'Team Leader' : 'Employee'}}</mat-label>
+            <mat-select formControlName="assignTo">
+              <mat-option *ngFor="let user of assignToList" [value]="user.empNo">
+                {{ user.name }} - [ {{ user.designation }} ]
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('deliverables')">
+            <mat-label>Deliverables</mat-label>
+            <input matInput formControlName="deliverables" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('milestones')">
+            <mat-label>Milestones</mat-label>
+            <input matInput formControlName="milestones" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('expectedOutput')">
+            <mat-label>Expected Output</mat-label>
+            <input matInput formControlName="expectedOutput" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="createProjectTaskForm.contains('status')">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="Pending">Pending</mat-option>
+              <mat-option value="In Progress">In Progress</mat-option>
+              <mat-option value="Completed">Completed</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <div class="form-buttons    ">
+          <button mat-flat-button color="primary" type="submit" [disabled]="createProjectTaskForm.invalid"
+            (click)="onCreateProjectTaskForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
+          </button>
+          <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+
+    </mat-card>
+  </div>
+
+</div>

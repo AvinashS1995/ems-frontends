@@ -21,7 +21,7 @@ export class ApproavalConfigurationComponent {
 
   approvalconfigFilterForm!: FormGroup;
 
-  displayedColumns: string[] = ['srno', 'typeName', 'action'];
+  displayedColumns: string[] = ['srno', 'typeName', 'displayName', 'action'];
 
   dataSource: Array<any> = [];
   requestTypeList: Array<any> = [];

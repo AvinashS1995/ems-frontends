@@ -6,15 +6,27 @@
     </div>
     <mat-divider></mat-divider>
 
-    <mat-card class="filter-card">
+    <mat-card>
         <form [formGroup]="createApprovalConfigurationForm">
+            <div class="filter-card">
+                 <mat-form-field appearance="outline">
+                    <mat-label>Select Model Type</mat-label>
+                    <mat-select [(value)]="selectedModelType" (selectionChange)="onRequestModelSelect($event.value)" formControlName="requestModel">
+                        <mat-option *ngFor="let model of modelList" [value]="model">
+                            {{ model.label }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" class="request-type">
-                <mat-label>Select Request Type</mat-label>
-                <mat-select [(value)]="selectedRequestType" (selectionChange)="onRequestTypeSelect($event.value)">
-                    <mat-option *ngFor="let type of requestTypeList" [value]="type">{{ type.label }}</mat-option>
-                </mat-select>
-            </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Select Request Type</mat-label>
+                    <mat-select [(value)]="selectedRequestType" (selectionChange)="onRequestTypeSelect($event.value)" formControlName="request">
+                        <mat-option *ngFor="let type of requestTypeList" [value]="type">{{ type.label }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+               
+            </div>
 
         </form>
 
@@ -63,7 +75,8 @@
 
     <div class="form-buttons">
         <button mat-flat-button color="primary" type="submit" [disabled]="createApprovalConfigurationForm.invalid"
-           [disabled]="createApprovalConfigurationForm.invalid && hierarchyRoles.length === 0" (click)="onSubmitApprovalConfigurationForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
+            [disabled]="createApprovalConfigurationForm.invalid && hierarchyRoles.length === 0"
+            (click)="onSubmitApprovalConfigurationForm()"> {{ isEditMode ? 'Update' : 'Submit' }}
         </button>
         <button mat-stroked-button color="warn" type="button" (click)="cancelForm()">
             Cancel

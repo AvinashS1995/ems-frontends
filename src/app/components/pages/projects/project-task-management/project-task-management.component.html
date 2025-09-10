@@ -1,83 +1,145 @@
 <div class="proejct-task-container">
-    <div class="header">
-        <div class="title">
-            <h1>Project & Task Management</h1>
-        </div>
-        <div class="action-buttons">
-            <button mat-flat-button color="primary" class="text-btn" type="button"
-                matTooltip="Create New Project & Task" (click)="CreateTask()">
-                + Create New Project & Task
-            </button>
-
-            <button mat-icon-button class="icon-btn circular-icon-btn" color="primary" (click)="CreateTask()"
-                matTooltip="Create New Project & Task">
-                <mat-icon class="bold-plus-icon">add</mat-icon>
-            </button>
-        </div>
+  <div class="header">
+    <div class="title">
+      <h1>{{ userInfo.role === 'Manager' ? 'Project Management' : 'Task Management'}}</h1>
     </div>
-
-    <mat-divider></mat-divider>
-
-    <div class="summary-cards">
-        <mat-card class="summary-card">
-            <h3>Total Projects & Task</h3>
-            <p>5</p>
-        </mat-card>
-
-        <mat-card class="summary-card">
-            <h3>Completed Projects & Task</h3>
-            <p>5</p>
-        </mat-card>
-
-        <mat-card class="summary-card">
-            <h3>Ongoing Project & Task</h3>
-            <p>3</p>
-        </mat-card>
-
-        <mat-card class="summary-card">
-            <h3>Under Review Projects & Task</h3>
-            <p>14</p>
-        </mat-card>
-
+    <div class="action-buttons" *ngIf="userInfo.role !== 'Employee'">
+      <button mat-flat-button color="primary" class="text-btn" type="button"
+        matTooltip="{{ userInfo.role === 'Manager' ? 'Create New Project' : 'Create New Task' }}"
+        (click)="CreateTask()">
+        + {{ userInfo.role === 'Manager' ? 'Create Project' : 'Create Task' }}
+      </button>
+      <button mat-icon-button class="icon-btn circular-icon-btn" color="primary" (click)="CreateTask()"
+        matTooltip="Create New Project & Task">
+        <mat-icon class="bold-plus-icon">add</mat-icon>
+      </button>
     </div>
+  </div>
 
-    <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Filter Employees Project & Task
-            </mat-panel-title>
-        </mat-expansion-panel-header>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Filter Employees {{ userInfo.role === 'Manager' ? 'Project' : 'Task' }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <form [formGroup]="employeeProjectTaskFilterForm">
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Search</mat-label>
+          <input matInput placeholder="Search by name, role, department" formControlName="name">
+        </mat-form-field>
+      </div>
+    </form>
+    <div class="filter-actions">
+      <button mat-flat-button (click)="applyFilters()">Apply</button>
+      <button mat-flat-button (click)="clearFilters()">Clear</button>
+    </div>
+  </mat-expansion-panel>
 
-        <form [formGroup]="employeeProjectTaskFilterForm">
-            <div class="filters">
-                <mat-form-field appearance="outline">
-                    <mat-label>Search</mat-label>
-                    <input matInput placeholder="Search by name, role, department" formControlName="name">
-                </mat-form-field>
+  <mat-divider></mat-divider>
 
-            </div>
-        </form>
+  <div class="table-container">
 
-        <div class="filter-actions">
-            <button mat-flat-button class="example-full-width" (click)="applyFilters()">Apply</button>
-            <button mat-flat-button class="example-full-width" (click)="clearFilters()">Clear</button>
-        </div>
+      <table mat-table [dataSource]="userInfo.role === 'Manager' ? projects : tasks" class="mat-elevation-z2">
+        
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Project ID</th>
+          <td mat-cell *matCellDef="let p">{{p.projectId}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Project</th>
+          <td mat-cell *matCellDef="let p">{{p.title}}</td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let p">{{p.description}}</td>
+        </ng-container>
+        <ng-container matColumnDef="teamLeader">
+          <th mat-header-cell *matHeaderCellDef>Assign To</th>
+          <td mat-cell *matCellDef="let p">
+            {{ p.assignTo?.name }} - [{{ p.assignTo?.designation }}]
+          </td>
+        </ng-container>
 
-    </mat-expansion-panel>
+        <ng-container matColumnDef="timeline">
+          <th mat-header-cell *matHeaderCellDef>Deadline</th>
+          <td mat-cell *matCellDef="let p">{{ p.deadline | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
 
-    <mat-divider></mat-divider>
+        <ng-container matColumnDef="projectId">
+          <th mat-header-cell *matHeaderCellDef>Project ID</th>
+          <td mat-cell *matCellDef="let t">{{t.projectId}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="taskName">
+          <th mat-header-cell *matHeaderCellDef>Task Title</th>
+          <td mat-cell *matCellDef="let t">{{t.title}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="taskdescription">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let t">{{t.description}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="employee">
+          <th mat-header-cell *matHeaderCellDef>Employee</th>
+          <td mat-cell *matCellDef="let t">{{ t.assignTo?.name }} - [{{ t.assignTo?.designation }}]</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Role</th>
+          <td mat-cell *matCellDef="let t">{{t.assignTo?.role}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Due Date</th>
+          <td mat-cell *matCellDef="let t">{{t.deadline | date:'dd/MM/yyyy'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let t">
+
+            <ng-container *ngIf="userInfo.role === 'Employee'; else viewOnly">
+              <mat-select [(value)]="t.status" (selectionChange)="updateTaskStatus(t, $event.value)" [panelClass]="'custom-select-panel'">
+                <mat-option value="Pending">Pending</mat-option>
+                <mat-option value="In Progress">In Progress</mat-option>
+                <mat-option value="Completed">Completed</mat-option>
+              </mat-select>
+            </ng-container>
+
+            <ng-template #viewOnly>
+              {{ t.status }}
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="upload" *ngIf="userInfo.role === 'Employee'">
+          <th mat-header-cell *matHeaderCellDef>Upload</th>
+          <td mat-cell *matCellDef="let t">
+            <ng-container *ngIf="t.status === 'Completed'">
+              <button mat-raised-button color="primary" (click)="fileInput.click()">
+                <mat-icon>upload</mat-icon> Upload File
+              </button>
+              <input #fileInput type="file" hidden multiple (change)="uploadFiles($event, t)" />
+
+              <div *ngIf="t.files?.length" class="uploaded-files mt-2">
+                <mat-chip-listbox>
+                  <mat-chip-option *ngFor="let f of t.files" color="accent" selected>
+                    <mat-icon matChipAvatar>insert_drive_file</mat-icon>
+                    {{ f }}
+                  </mat-chip-option>
+                </mat-chip-listbox>
+              </div>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
     
-    <mat-tab-group class="dashboard-tabs" mat-stretch-tabs>
-        <mat-tab label="My Projects">
-            <app-project-management></app-project-management>
-        </mat-tab>
-        <mat-tab label="My Tasks">
-            <app-task-management></app-task-management>
-        </mat-tab>
-        <mat-tab label="My Reminders">
-            <app-reminder></app-reminder>
-        </mat-tab>
-    </mat-tab-group>
+  </div>
+
+
 </div>

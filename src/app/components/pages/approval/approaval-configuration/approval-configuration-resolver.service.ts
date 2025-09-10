@@ -18,6 +18,7 @@ export class ApprovalConfigurationResolverService {
     let requestType = of({});
     let roles = of({});
     let approvalDetails = of({});
+    let models = of({});
 
     requestType = this.apiService.postApiCall(
       API_ENDPOINTS.SERVICE_GETROLETYPE,
@@ -26,7 +27,11 @@ export class ApprovalConfigurationResolverService {
     roles = this.apiService.postApiCall(API_ENDPOINTS.SERVICE_GETROLETYPE, {
       entityValue: 'Role',
     });
-    
+    models = this.apiService.postApiCall(
+      API_ENDPOINTS.SERVICE_GET_ALL_MODELS,
+      {}
+    );
+
     if (route.queryParams['data']) {
       const decrypted = this.cryptoService.decrypt(route.queryParams['data']);
       approvalDetails = of(decrypted as any);
@@ -36,6 +41,7 @@ export class ApprovalConfigurationResolverService {
       requestType,
       roles,
       approvalDetails,
+      models,
     });
   }
 }

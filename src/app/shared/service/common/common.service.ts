@@ -35,6 +35,7 @@ export class CommonService {
     address: '',
     country: '',
     role: '',
+    roleId: 0,
     type: '',
     status: '',
     reportedBy: '',
