@@ -170,6 +170,7 @@ export class ProjectTaskManagementComponent {
       case 'Employee':
         this.displayedColumns = [
           'projectId',
+          'taskId',
           'taskName',
           'taskdescription',
           'employee',

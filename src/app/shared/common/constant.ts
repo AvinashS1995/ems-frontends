@@ -19,6 +19,7 @@ export const APPROVAL_ROUTE_MAP: { [key: string]: string } = {
   '1': '/employee-leave-approval-request-list',
   '3': '/employee-leave-approval-request-list',
   '4': '/assign-project-request-list',
+  '5': '/assign-task-request-list',
 };
 
 // Month List

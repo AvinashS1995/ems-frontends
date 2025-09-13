@@ -1,24 +1,20 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
+import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
+import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-material';
 import { CommonService } from '../../../../shared/service/common/common.service';
 import { ApiService } from '../../../../shared/service/api/api.service';
-import { SHARED_MATERIAL_MODULES } from '../../../../shared/common/shared-material';
-import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
+import { MatDialog } from '@angular/material/dialog';
 import { RejectCommentDialogComponent } from '../../../../shared/widget/dialog/reject-comment-dialog/reject-comment-dialog.component';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-assign-project-request-list',
+  selector: 'app-assign-task-request-list',
   standalone: true,
   imports: [SHARED_MATERIAL_MODULES],
-  templateUrl: './assign-project-request-list.component.html',
-  styleUrl: './assign-project-request-list.component.scss',
+  templateUrl: './assign-task-request-list.component.html',
+  styleUrl: './assign-task-request-list.component.scss',
 })
-export class AssignProjectRequestListComponent {
-  assignProjectList: Array<any> = [];
+export class AssignTaskRequestListComponent {
+  assignTaskList: Array<any> = [];
 
   displayedColumns: string[] = [
     'id',
@@ -48,27 +44,20 @@ export class AssignProjectRequestListComponent {
     };
 
     this.apiService
-      .postApiCall(API_ENDPOINTS.SERVICE_GET_PROJETS, payload)
+      .postApiCall(API_ENDPOINTS.SERVICE_GET_TASKSBYPROJECTS, payload)
       .subscribe({
         next: (res: any) => {
-          console.log(`${API_ENDPOINTS.SERVICE_GET_PROJETS} Response : `, res);
-
-          this.assignProjectList = (res.data.projects || []).map(
-            (proj: any) => {
-              const approver = proj.approvalStatus.find(
-                (a: any) => a.empNo === empNo
-              );
-
-              return {
-                ...proj,
-                dropdownStatus:
-                  approver?.status === 'Pending'
-                    ? 'Select Approval'
-                    : approver?.status,
-              };
-            }
+          console.log(
+            `${API_ENDPOINTS.SERVICE_GET_TASKSBYPROJECTS} Response : `,
+            res
           );
-          console.log('projects----->', this.assignProjectList);
+
+          this.assignTaskList = res.data.tasks.map((task: any) => ({
+            ...task,
+            dropdownStatus: 'Pending',
+          }));
+
+          console.log('projects----->', this.assignTaskList);
 
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -107,12 +96,13 @@ export class AssignProjectRequestListComponent {
   }
 
   approveReject(element: any, decision: string, previousValue: string) {
-    const { projectId } = element;
+    const { projectId, taskId } = element;
     const currentUser = this.commonService.getCurrentUserDetails();
 
     if (decision === 'Approved') {
       const payload = {
         projectId: projectId || '',
+        taskId: taskId || '',
         action: decision || '',
         comments: 'Project Approved',
         approverEmpNo: currentUser.empNo || '',
@@ -134,6 +124,7 @@ export class AssignProjectRequestListComponent {
         if (comment) {
           const payload = {
             projectId: projectId || '',
+            taskId: taskId || '',
             action: decision || '',
             comments: comment || '',
             approverEmpNo: currentUser.empNo || '',
@@ -153,7 +144,7 @@ export class AssignProjectRequestListComponent {
   sendDecision(payload: any) {
     console.log(payload);
     this.apiService
-      .postApiCall(API_ENDPOINTS.SERVICE_PROJETS_ASSIGN_APPROVE_REJECT, payload)
+      .postApiCall(API_ENDPOINTS.SERVICE_TASK_ASSIGN_APPROVE_REJECT, payload)
       .subscribe({
         next: (res: any) => {
           this.applyFilters();

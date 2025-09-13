@@ -75,4 +75,5 @@ export const API_ENDPOINTS = {
   SERVICE_GET_ALL_MODELS: 'approval/get-all-models',
   SERVICE_PROJETS_ASSIGN_APPROVE_REJECT:
     'project/project-assign-approve-reject',
+  SERVICE_TASK_ASSIGN_APPROVE_REJECT: 'project/task-assign-approve-reject',
 };

@@ -282,6 +282,16 @@ export const routes: Routes = [
           title: 'Assign Project Request List',
         },
       },
+      {
+        path: 'assign-task-request-list',
+        loadComponent: () =>
+          import(
+            './components/pages/projects/assign-task-request-list/assign-task-request-list.component'
+          ).then((c) => c.AssignTaskRequestListComponent),
+        data: {
+          title: 'Assign Task Request List',
+        },
+      },
     ],
   },
 ];

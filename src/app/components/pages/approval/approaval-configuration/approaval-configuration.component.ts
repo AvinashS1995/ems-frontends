@@ -57,7 +57,7 @@ export class ApproavalConfigurationComponent {
         console.log('PARAMS--->', params);
 
         if (params['data']) {
-          debugger;
+          // debugger;
           this.requestTypeList = params['data']?.requestType?.data?.types || [];
           this.requestTypeList = this.requestTypeList.map((requestType) => {
             return {

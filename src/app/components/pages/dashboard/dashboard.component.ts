@@ -84,9 +84,9 @@ export class DashboardComponent {
   ngOnInit(): void {
     this.openCheckIns();
     this.getparams();
-    if (this.commonService.getCurrentUserDetails().role !== 'Employee') {
-      this.getEmployeeRequestList();
-    }
+    // if (this.commonService.getCurrentUserDetails().role !== 'Employee') {
+    this.getEmployeeRequestList();
+    // }
     const currentUser = this.commonService.getCurrentUserDetails();
     this.profileImage = currentUser.profileImage
       ? currentUser.profileImage

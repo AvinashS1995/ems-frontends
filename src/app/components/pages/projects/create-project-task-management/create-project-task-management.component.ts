@@ -360,7 +360,12 @@ export class CreateProjectTaskManagementComponent {
           description: formValue.description,
           deadline: formValue.deadline,
           attachments: formValue.attachments
-            ? [{ fileUrl: this.uploadFileDocumentName }]
+            ? [
+                {
+                  fileUrl: this.uploadFileDocumentPath,
+                  fileName: this.uploadFileDocumentName,
+                },
+              ]
             : [],
           priority: formValue.priority,
           expectedOutput: formValue.expectedOutput,

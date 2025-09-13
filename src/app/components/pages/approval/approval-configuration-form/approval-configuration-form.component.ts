@@ -87,7 +87,7 @@ export class ApprovalConfigurationFormComponent {
 
           if (approvalDetails?.mode === 'edit' && approvalDetails?.data) {
             this.isEditMode = true;
-            debugger;
+            // debugger;
             const approvalData = approvalDetails.data;
 
             this.id = approvalData._id;
