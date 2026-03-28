@@ -104,7 +104,7 @@ src/app/
 ## Demo / Deployment
 
 - Live demo: [https://ems-project-kappa.vercel.app/login](https://ems-project-kappa.vercel.app/login)
-- Preview screenshot: `![Screenshot](<SCREENSHOT_LINK>)`
+- Preview screenshot: ![App preview](public/assets/ems-screenshot.png)
 - Deployment tips: build with `ng build --configuration production`, serve `dist/ems-frontend`, and point `environment.prod.ts` API to the production backend before release.
 
 ## Contributing
