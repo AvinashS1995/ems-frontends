@@ -1,4 +1,4 @@
-# EMS Frontend Portal
+# EMS Portal
 
 A modern Angular 18+ single-page HR/EMS dashboard built with Angular Material, CDK, and standalone components for attendance, leave, approvals, payroll, and project collaboration.
 
@@ -103,7 +103,7 @@ src/app/
 
 ## Demo / Deployment
 
-- Live demo: `<https://ems-project-kappa.vercel.app/login>`
+- Live demo: `https://ems-project-kappa.vercel.app/login`
 - Preview screenshot: `![Screenshot](<SCREENSHOT_LINK>)`
 - Deployment tips: build with `ng build --configuration production`, serve `dist/ems-frontend`, and point `environment.prod.ts` API to the production backend before release.
 
