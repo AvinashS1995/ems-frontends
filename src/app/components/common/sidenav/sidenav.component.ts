@@ -10,7 +10,7 @@ import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { SHARED_MATERIAL_MODULES } from '../../../shared/common/shared-material';
-import { Sidenav } from '../../../shared/interface/sidenav';
+import { Notification, Sidenav } from '../../../shared/interface/sidenav';
 import { ApiService } from '../../../shared/service/api/api.service';
 import { CommonService } from '../../../shared/service/common/common.service';
 import { API_ENDPOINTS } from '../../../shared/common/api-contant';
@@ -23,7 +23,7 @@ import { SHARED_CUSTOM_PIPES } from '../../../shared/common/shared-pipe';
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [SHARED_MATERIAL_MODULES, NgClass, SHARED_CUSTOM_PIPES],
+  imports: [SHARED_MATERIAL_MODULES, SHARED_CUSTOM_PIPES],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
   animations: [
@@ -59,18 +59,24 @@ export class SidenavComponent implements OnInit {
   defaultAvatar: string =
     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
 
+  department: string = '';
+  EmployeeNo: string = '';
+
   constructor(
     private apiService: ApiService,
     public commonService: CommonService,
     private storageService: StorageService,
     private router: Router,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
     this.observeScreenSize();
     this.commonService.setUserDetailsFromToken();
     const currentUser = this.commonService.getCurrentUserDetails();
+    this.EmployeeNo = currentUser.empNo;
+    this.RoleName = currentUser.role;
+    this.department = currentUser.department;
     this.RoleName = currentUser.role;
     this.UserName = `${currentUser.firstName} ${currentUser.lastName}`;
     this.profileImage = currentUser.profileImage
@@ -102,14 +108,14 @@ export class SidenavComponent implements OnInit {
           console.log(menus);
 
           const nestedMenus = menus.map((menu: any) =>
-            this.transformMenu(menu)
+            this.transformMenu(menu),
           );
           console.log(nestedMenus);
           this.menuItems.set(
             nestedMenus.sort(
               (a: { sequence: number }, b: { sequence: number }) =>
-                a.sequence - b.sequence
-            )
+                a.sequence - b.sequence,
+            ),
           );
         }
       });
@@ -212,7 +218,7 @@ export class SidenavComponent implements OnInit {
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `,
-            res
+            res,
           );
 
           this.commonService.openSnackbar(res.message, 'success');
@@ -244,5 +250,72 @@ export class SidenavComponent implements OnInit {
 
   isDefaultAvatar(): boolean {
     return !this.profileImage || this.profileImage === this.defaultAvatar;
+  }
+
+  gotoDashboard() {
+    this.router.navigate(['./dashboard']);
+  }
+
+  goToProfile(): void {
+    this.router.navigate(['./employee-profile']);
+  }
+
+  notifications: Notification[] = [
+    {
+      id: 1,
+      title: 'Leave Approved',
+      message: 'Your leave request has been approved by HR.',
+      time: '2 min ago',
+      icon: 'event_available',
+      color: '#4CAF50',
+      isRead: false,
+    },
+    {
+      id: 2,
+      title: 'Attendance Reminder',
+      message: 'You forgot to check out today.',
+      time: '15 min ago',
+      icon: 'schedule',
+      color: '#FF9800',
+      isRead: false,
+    },
+    {
+      id: 3,
+      title: 'Payroll Generated',
+      message: 'Salary generated successfully.',
+      time: 'Yesterday',
+      icon: 'payments',
+      color: '#2196F3',
+      isRead: true,
+    },
+    {
+      id: 4,
+      title: 'Meeting Reminder',
+      message: 'Daily Scrum starts at 10:30 AM.',
+      time: 'Today',
+      icon: 'groups',
+      color: '#9C27B0',
+      isRead: false,
+    },
+  ];
+
+  get unreadCount(): number {
+    return this.notifications.filter((x) => !x.isRead).length;
+  }
+
+  openNotification(item: Notification) {
+    item.isRead = true;
+
+    console.log(item);
+  }
+
+  markAllRead(event: MouseEvent) {
+    event.stopPropagation();
+
+    this.notifications.forEach((x) => (x.isRead = true));
+  }
+
+  viewAllNotifications() {
+    this.router.navigate(['/notifications']);
   }
 }

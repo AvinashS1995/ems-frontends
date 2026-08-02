@@ -13,6 +13,7 @@ import { CommonService } from '../../../../shared/service/common/common.service'
 import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
 import { REGEX } from '../../../../shared/common/constant';
 import { Subject, takeUntil } from 'rxjs';
+import { SHARED_CUSTOM_PIPES } from '../../../../shared/common/shared-pipe';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -29,7 +30,7 @@ export const MY_DATE_FORMATS = {
 @Component({
   selector: 'app-employee-profile',
   standalone: true,
-  imports: [SHARED_MATERIAL_MODULES],
+  imports: [SHARED_MATERIAL_MODULES, SHARED_CUSTOM_PIPES],
   templateUrl: './employee-profile.component.html',
   styleUrl: './employee-profile.component.scss',
   providers: [
@@ -61,12 +62,14 @@ export class EmployeeProfileComponent {
   previewUrl: string | ArrayBuffer | null = null;
   defaultAvatar: any;
 
+  user: any = {};
+
   constructor(
     private fb: FormBuilder,
     private activateRoute: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {}
 
   ngOnInit() {
@@ -166,6 +169,17 @@ export class EmployeeProfileComponent {
       pan: pan || '',
     });
 
+    this.user = {
+      name: `${firstName} ${lastName} `,
+      empNo: empNo,
+      role: designation,
+      department: department,
+      email: email,
+      phone: mobile,
+      joinDate: joiningDate,
+      location: address,
+    };
+
     this.uploadedPhotoUrl = profileImage;
     this.updateEmployeeProfileForm.patchValue({
       profileImage: this.uploadedPhotoUrl,
@@ -215,7 +229,7 @@ export class EmployeeProfileComponent {
               value: experienceLevel.typeValue,
               label: experienceLevel.typeLabel,
             };
-          }
+          },
         );
 
         this.workTypeList = params['data'].workType?.data?.types || [];
@@ -242,7 +256,7 @@ export class EmployeeProfileComponent {
               value: departmentType.typeValue,
               label: departmentType.typeLabel,
             };
-          }
+          },
         );
 
         this.reportedByEmployeeList =
@@ -253,7 +267,7 @@ export class EmployeeProfileComponent {
               label: `${allEmployee.firstName} ${allEmployee.lastName} - [${allEmployee.empNo}]`,
               value: allEmployee.empNo,
             };
-          }
+          },
         );
       }
     });
@@ -348,7 +362,7 @@ export class EmployeeProfileComponent {
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_UPDATE_EMPLOYEE_LIST} Response : `,
-            res
+            res,
           );
           this.saveEmployeeLeaveBalance(res?.data?.existingType?.empNo);
           this.isFormChanged = false;

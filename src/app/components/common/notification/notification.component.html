@@ -1,0 +1,159 @@
+<div class="notification-page">
+
+  <mat-card class="notification-card">
+
+    <!-- Header -->
+    <div class="header">
+
+      <div>
+
+        <h2>Notifications</h2>
+
+        <span>{{filteredNotifications.length}} Notifications</span>
+
+      </div>
+
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="markAllRead()">
+
+        <mat-icon>done_all</mat-icon>
+
+        Mark All Read
+
+      </button>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Search -->
+
+    <div class="toolbar">
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>Search</mat-label>
+
+        <input
+          matInput
+          [(ngModel)]="searchText"
+          (keyup)="filterNotifications()">
+
+        <mat-icon matSuffix>search</mat-icon>
+
+      </mat-form-field>
+
+      <mat-button-toggle-group
+          [(ngModel)]="filterType"
+          (change)="filterNotifications()">
+
+          <mat-button-toggle value="all">
+
+              All
+
+          </mat-button-toggle>
+
+          <mat-button-toggle value="unread">
+
+              Unread
+
+          </mat-button-toggle>
+
+          <mat-button-toggle value="read">
+
+              Read
+
+          </mat-button-toggle>
+
+      </mat-button-toggle-group>
+
+    </div>
+
+    <!-- List -->
+
+    <div class="notification-list">
+
+      <mat-card
+          class="item"
+          *ngFor="let item of filteredNotifications"
+          [class.unread]="!item.isRead">
+
+          <div class="icon"
+               [style.background]="item.color">
+
+              <mat-icon>
+
+                  {{item.icon}}
+
+              </mat-icon>
+
+          </div>
+
+          <div class="details">
+
+              <h3>
+
+                  {{item.title}}
+
+              </h3>
+
+              <p>
+
+                  {{item.message}}
+
+              </p>
+
+              <small>
+
+                  {{item.time}}
+
+              </small>
+
+          </div>
+
+          <div class="actions">
+
+              <button
+                  mat-icon-button
+                  (click)="markRead(item)"
+                  matTooltip="Mark Read">
+
+                  <mat-icon>
+
+                      done
+
+                  </mat-icon>
+
+              </button>
+
+              <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="deleteNotification(item.id)"
+                  matTooltip="Delete">
+
+                  <mat-icon>
+
+                      delete
+
+                  </mat-icon>
+
+              </button>
+
+          </div>
+
+          <div
+             class="status-dot"
+             *ngIf="!item.isRead">
+
+          </div>
+
+      </mat-card>
+
+    </div>
+
+  </mat-card>
+
+</div>

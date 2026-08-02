@@ -1,64 +1,420 @@
-<mat-sidenav-container class="sidenav-container" [autosize]="true">
-  <mat-sidenav #sidenav [mode]="sidenavMode" [opened]="!isSmallScreen"
-    [ngClass]="commonService.expandSidenav() ? 'expand' : 'colaps'">
-    <!-- <div class="sidenav-header">
-      <img [src]="profileImage" alt="">
-      <div class="header-text">
-        <h2>{{ UserName }}</h2>
-        <p>{{ RoleName }}</p>
-      </div>
-    </div> -->
-     <div class="sidenav-header">
-      <div class="profile-wrapper">
-        <ng-container *ngIf="isDefaultAvatar(); else userImage">
-          <div class="initials-avatar">{{ UserName | initialName }}</div>
-        </ng-container>
-        <ng-template #userImage>
-          <img [src]="profileImage" alt="User" class="profile-image" />
-        </ng-template>
-      </div>
-      <div class="header-text">
-        <h2>{{ UserName }}</h2>
-        <p>{{ RoleName }}</p>
-      </div>
-    </div>
+<mat-sidenav-container class="layout-container" [autosize]="true">
+
+  <!-- Mobile Side Navigation -->
+  <mat-sidenav #sidenav mode="over" [opened]="false" class="mobile-sidenav" *ngIf="isSmallScreen">
+
+    <!-- <div class="mobile-header">
+
+          <div class="profile-wrapper">
+
+              <ng-container *ngIf="isDefaultAvatar(); else userImage">
+
+                  <div class="initials-avatar">
+                      {{ UserName | initialName }}
+                  </div>
+
+              </ng-container>
+
+              <ng-template #userImage>
+
+                  <img
+                      [src]="profileImage"
+                      class="profile-image">
+
+              </ng-template>
+
+          </div>
+
+          <h3>{{UserName}}</h3>
+
+          <p>{{RoleName}}</p>
+
+      </div> -->
 
     <mat-nav-list>
 
       <ng-container *ngFor="let item of menuItems(); trackBy: trackById">
-        <ng-template [ngTemplateOutlet]="renderMenu" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+
+        <a mat-list-item (click)="item.children.length ? toggleSubMenu(item.id) : navigateTO(item.route)">
+
+          <mat-icon>{{item.icon}}</mat-icon>
+
+          <span>{{item.title}}</span>
+
+          <span class="flex"></span>
+
+          <mat-icon *ngIf="item.children.length">
+
+            {{isExpanded(item.id) ? 'expand_more':'chevron_right'}}
+
+          </mat-icon>
+
+        </a>
+
+        <div class="child-menu" *ngIf="item.children.length && isExpanded(item.id)">
+
+          <a mat-list-item *ngFor="let child of item.children" (click)="navigateTO(child.route)">
+
+            <mat-icon>{{child.icon}}</mat-icon>
+            {{child.title}}
+
+          </a>
+
+        </div>
+
       </ng-container>
 
+      <!-- <a mat-list-item (click)="confirmLogout()">
 
-      <a mat-list-item (click)="confirmLogout()">
-        <mat-icon matListItemIcon>logout</mat-icon>
-        <span *ngIf="commonService.expandSidenav()">Logout</span>
-      </a>
+        <mat-icon>logout</mat-icon>
+
+        Logout
+
+      </a> -->
+
     </mat-nav-list>
+
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <ng-content></ng-content>
-  </mat-sidenav-content>
-</mat-sidenav-container>
 
+    <!-- Top Navigation -->
 
-<ng-template #renderMenu let-item>
-  <a mat-list-item (click)="item.children.length ? toggleSubMenu(item.id) : navigateTO(item.route)">
-    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-    <div class="menu-text-wrapper" *ngIf="commonService.expandSidenav()">
-      <span>{{ item.title }}</span>
-      <mat-icon *ngIf="item.children.length" class="arrow-icon">
-        {{ isExpanded(item.id) ? 'expand_more' : 'chevron_right' }}
-      </mat-icon>
+    <mat-toolbar class="top-navbar">
+
+      <div class="logo" (click)="gotoDashboard()">
+
+        <img src="assets/company-logo.png">
+
+      </div>
+
+      <span class="spacer"></span>
+
+      <!-- Desktop Menu -->
+
+      <ng-container *ngIf="!isSmallScreen">
+
+        <ng-container *ngFor="let item of menuItems()">
+
+          <button mat-button *ngIf="!item.children.length" (click)="navigateTO(item.route)">
+
+            {{item.title}}
+
+          </button>
+
+          <button mat-button *ngIf="item.children.length" [matMenuTriggerFor]="menu">
+
+            {{item.title}}
+
+            <mat-icon>keyboard_arrow_down</mat-icon>
+
+          </button>
+
+          <mat-menu #menu="matMenu">
+
+            <button mat-menu-item *ngFor="let child of item.children" (click)="navigateTO(child.route)">
+
+              {{child.title}}
+
+            </button>
+
+          </mat-menu>
+
+        </ng-container>
+
+      </ng-container>
+
+      <span class="spacer"></span>
+
+      <button mat-icon-button *ngIf="isSmallScreen" (click)="toggle()">
+
+        <mat-icon>menu</mat-icon>
+
+      </button>
+
+      <!-- <button mat-icon-button>
+
+        <mat-icon>notifications</mat-icon>
+
+      </button> -->
+
+      <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="notificationMenu">
+
+        <mat-icon matBadge="{{unreadCount}}" matBadgeColor="warn" [matBadgeHidden]="unreadCount==0">
+
+          notifications
+
+        </mat-icon>
+
+      </button>
+
+      <mat-menu #notificationMenu="matMenu" class="notification-menu" xPosition="before">
+
+        <div class="notification-wrapper">
+
+          <div class="notification-header">
+
+            <div>
+
+              <h3>Notifications</h3>
+
+              <p>{{unreadCount}} Unread</p>
+
+            </div>
+
+            <button mat-flat-button color="primary" (click)="markAllRead($event)">
+
+              Mark all
+
+            </button>
+
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="notification-body">
+
+            <div class="notification-card" *ngFor="let item of notifications" (click)="openNotification(item)"
+              [class.unread]="!item.isRead">
+
+              <div class="notification-icon" [style.background]="item.color">
+
+                <mat-icon>
+
+                  {{item.icon}}
+
+                </mat-icon>
+
+              </div>
+
+              <div class="notification-content">
+
+                <div class="title">
+
+                  {{item.title}}
+
+                </div>
+
+                <div class="message">
+
+                  {{item.message}}
+
+                </div>
+
+                <div class="time">
+
+                  {{item.time}}
+
+                </div>
+
+              </div>
+
+              <div class="unread-dot" *ngIf="!item.isRead">
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="notification-footer">
+
+            <button mat-flat-button color="primary" (click)="viewAllNotifications()">
+
+              View All Notifications
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </mat-menu>
+
+      <!-- <button mat-icon-button>
+
+        <img [src]="profileImage" class="toolbar-avatar">
+
+      </button> -->
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="avatar-btn">
+
+        <div class="avatar-circle">
+
+          <!-- <ng-container *ngIf="isDefaultAvatar(); else profileImg"> -->
+
+            {{ UserName | initialName }}
+
+          <!-- </ng-container> -->
+
+          <!-- <ng-template #profileImg>
+
+            <img [src]="profileImage" class="toolbar-avatar">
+
+          </ng-template> -->
+
+        </div>
+
+      </button>
+
+      <mat-menu #userMenu="matMenu" xPosition="before" class="profile-menu">
+
+        <div class="profile-header" (click)="$event.stopPropagation()">
+
+          <div class="avatar-wrapper">
+
+            <div class="profile-avatar">
+
+              <!-- <ng-container *ngIf="isDefaultAvatar(); else profile"> -->
+
+                {{ UserName | initialName }}
+
+              <!-- </ng-container> -->
+
+              <!-- <ng-template #profile>
+
+                <img [src]="profileImage" class="profile-image">
+
+              </ng-template> -->
+
+            </div>
+
+            <button mat-mini-fab color="primary" class="edit-btn" (click)="goToProfile()">
+
+              <mat-icon>
+
+                edit
+
+              </mat-icon>
+
+            </button>
+
+          </div>
+
+          <div class="emp-name">
+
+            {{UserName}}
+
+          </div>
+
+          <div class="emp-role">
+
+            {{RoleName}}
+
+          </div>
+
+          <div class="emp-info">
+
+            {{EmployeeNo}} • {{department}}
+
+          </div>
+
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="goToProfile()">
+
+          <mat-icon>
+
+            person
+
+          </mat-icon>
+
+          <span>
+
+            My Profile
+
+          </span>
+
+          <span class="spacer"></span>
+
+          <mat-icon>
+
+            chevron_right
+
+          </mat-icon>
+
+        </button>
+
+        <button mat-menu-item>
+
+          <mat-icon>
+
+            settings
+
+          </mat-icon>
+
+          <span>
+
+            Settings
+
+          </span>
+
+          <span class="spacer"></span>
+
+          <mat-icon>
+
+            chevron_right
+
+          </mat-icon>
+
+        </button>
+
+        <button mat-menu-item>
+
+          <mat-icon>
+
+            help_outline
+
+          </mat-icon>
+
+          <span>
+
+            Help & Support
+
+          </span>
+
+          <span class="spacer"></span>
+
+          <mat-icon>
+
+            chevron_right
+
+          </mat-icon>
+
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item class="logout-item" (click)="logout()">
+
+          <mat-icon>
+
+            logout
+
+          </mat-icon>
+
+          <span>
+
+            Sign Out
+
+          </span>
+
+        </button>
+
+      </mat-menu>
+
+    </mat-toolbar>
+
+    <div class="page-content">
+
+      <ng-content></ng-content>
+
     </div>
-  </a>
 
+  </mat-sidenav-content>
 
-  <div class="child-menu-container" *ngIf="item.children.length && isExpanded(item.id)" [@expandCollapseAnimation]>
-    <ng-container *ngFor="let child of item.children">
-
-      <ng-template [ngTemplateOutlet]="renderMenu" [ngTemplateOutletContext]="{ $implicit: child }"></ng-template>
-    </ng-container>
-  </div>
-</ng-template>
+</mat-sidenav-container>

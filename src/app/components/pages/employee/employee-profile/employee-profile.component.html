@@ -6,7 +6,65 @@
     </div>
     <mat-divider></mat-divider>
 
-    <mat-card class="parent-card">
+    <div class="profile-page">
+
+        <div class="profile-banner">
+            <div class="profile-avatar">
+                {{ user.name | initialName }}
+
+                <button mat-mini-fab class="edit-avatar">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+
+            <h2>{{ user.name }}</h2>
+            <p class="emp-no">{{ user.empNo }}</p>
+            <p class="designation">
+                {{ user.role }} · {{ user.department }}
+            </p>
+        </div>
+
+        <div class="profile-content">
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+                    <mat-icon>work</mat-icon>
+                    <div>
+                        <span>Role</span>
+                        <strong>{{ user.role }}</strong>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <mat-icon>apartment</mat-icon>
+                    <div>
+                        <span>Department</span>
+                        <strong>{{ user.department }}</strong>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <mat-icon>event</mat-icon>
+                    <div>
+                        <span>Joined On</span>
+                        <strong>{{ user.joinDate | date:'dd MMM yyyy' }}</strong>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <mat-icon>place</mat-icon>
+                    <div>
+                        <span>Location</span>
+                        <strong>{{ user.location }}</strong>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- <mat-card class="parent-card"> -->
         <form [formGroup]="updateEmployeeProfileForm">
             <div class="create-menu-form-container">
 
@@ -240,6 +298,11 @@
 
         </form>
 
-    </mat-card>
+        <!-- </mat-card> -->
+
+
+    </div>
+
+
 
 </div>

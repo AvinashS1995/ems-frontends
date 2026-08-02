@@ -23,15 +23,15 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('../app/components/user/login/login.component').then(
-        (c) => c.LoginComponent
+        (c) => c.LoginComponent,
       ),
   },
   {
     path: 'forgot-password',
     loadComponent: () =>
-      import(
-        '../app/components/user/forgot-password/forgot-password.component'
-      ).then((c) => c.ForgotPasswordComponent),
+      import('../app/components/user/forgot-password/forgot-password.component').then(
+        (c) => c.ForgotPasswordComponent,
+      ),
   },
 
   {
@@ -42,7 +42,7 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('../app/components/pages/dashboard/dashboard.component').then(
-            (c) => c.DashboardComponent
+            (c) => c.DashboardComponent,
           ),
         data: {
           title: 'Dashboard',
@@ -52,9 +52,9 @@ export const routes: Routes = [
       {
         path: 'employee-profile',
         loadComponent: () =>
-          import(
-            '../app/components/pages/employee/employee-profile/employee-profile.component'
-          ).then((c) => c.EmployeeProfileComponent),
+          import('../app/components/pages/employee/employee-profile/employee-profile.component').then(
+            (c) => c.EmployeeProfileComponent,
+          ),
         data: {
           title: 'Employee Profile',
         },
@@ -63,9 +63,9 @@ export const routes: Routes = [
       {
         path: 'employee-management',
         loadComponent: () =>
-          import(
-            '../app/components/pages/employee/employee-management/employee-management.component'
-          ).then((c) => c.EmployeeManagementComponent),
+          import('../app/components/pages/employee/employee-management/employee-management.component').then(
+            (c) => c.EmployeeManagementComponent,
+          ),
         data: {
           title: 'Employee Management',
         },
@@ -74,16 +74,16 @@ export const routes: Routes = [
       {
         path: 'add-employee',
         loadComponent: () =>
-          import(
-            '../app/components/pages/employee/add-employee/add-employee.component'
-          ).then((c) => c.AddEmployeeComponent),
+          import('../app/components/pages/employee/add-employee/add-employee.component').then(
+            (c) => c.AddEmployeeComponent,
+          ),
       },
       {
         path: 'attendence-management',
         loadComponent: () =>
-          import(
-            '../app/components/pages/attendence/attendence-management/attendence-management.component'
-          ).then((c) => c.AttendenceManagementComponent),
+          import('../app/components/pages/attendence/attendence-management/attendence-management.component').then(
+            (c) => c.AttendenceManagementComponent,
+          ),
         data: {
           title: 'Attendence Management',
         },
@@ -92,9 +92,9 @@ export const routes: Routes = [
       {
         path: 'leave-management',
         loadComponent: () =>
-          import(
-            './components/pages/leave/leave-management/leave-management.component'
-          ).then((c) => c.LeaveManagementComponent),
+          import('./components/pages/leave/leave-management/leave-management.component').then(
+            (c) => c.LeaveManagementComponent,
+          ),
         data: {
           title: 'Leave Management',
         },
@@ -103,9 +103,9 @@ export const routes: Routes = [
       {
         path: 'employee-leave-approval-request-list',
         loadComponent: () =>
-          import(
-            './components/pages/leave/leave-approval-request-list/leave-approval-request-list.component'
-          ).then((c) => c.LeaveApprovalRequestListComponent),
+          import('./components/pages/leave/leave-approval-request-list/leave-approval-request-list.component').then(
+            (c) => c.LeaveApprovalRequestListComponent,
+          ),
         data: {
           title: 'Employee Leave Approval Request List',
         },
@@ -114,9 +114,9 @@ export const routes: Routes = [
       {
         path: 'option-type-configuration',
         loadComponent: () =>
-          import(
-            './components/pages/configuration/configuration/configuration.component'
-          ).then((c) => c.ConfigurationComponent),
+          import('./components/pages/configuration/configuration/configuration.component').then(
+            (c) => c.ConfigurationComponent,
+          ),
         data: {
           title: 'Configuration',
         },
@@ -125,16 +125,16 @@ export const routes: Routes = [
       {
         path: 'add-new-role-type',
         loadComponent: () =>
-          import(
-            './components/pages/configuration/add-new-role-type/add-new-role-type.component'
-          ).then((c) => c.AddNewRoleTypeComponent),
+          import('./components/pages/configuration/add-new-role-type/add-new-role-type.component').then(
+            (c) => c.AddNewRoleTypeComponent,
+          ),
       },
       {
         path: 'menu-configuration',
         loadComponent: () =>
-          import(
-            './components/pages/configuration/menu/menu-configuration/menu-configuration.component'
-          ).then((c) => c.MenuConfigurationComponent),
+          import('./components/pages/configuration/menu/menu-configuration/menu-configuration.component').then(
+            (c) => c.MenuConfigurationComponent,
+          ),
         data: {
           title: 'Menu Configuration List',
         },
@@ -143,9 +143,9 @@ export const routes: Routes = [
       {
         path: 'create-menu',
         loadComponent: () =>
-          import(
-            './components/pages/configuration/menu/create-menu-configuration/create-menu-configuration.component'
-          ).then((c) => c.CreateMenuConfigurationComponent),
+          import('./components/pages/configuration/menu/create-menu-configuration/create-menu-configuration.component').then(
+            (c) => c.CreateMenuConfigurationComponent,
+          ),
         data: {
           title: 'Create Menu Configuration',
         },
@@ -154,9 +154,9 @@ export const routes: Routes = [
       {
         path: 'role-wise-menu-configuration',
         loadComponent: () =>
-          import(
-            './components/pages/configuration/menu/role-wise-menu-configuration/role-wise-menu-configuration.component'
-          ).then((c) => c.RoleWiseMenuConfigurationComponent),
+          import('./components/pages/configuration/menu/role-wise-menu-configuration/role-wise-menu-configuration.component').then(
+            (c) => c.RoleWiseMenuConfigurationComponent,
+          ),
         data: {
           title: 'Role Wise Menu Configuration',
         },
@@ -165,9 +165,9 @@ export const routes: Routes = [
       {
         path: 'approval-configuration-list',
         loadComponent: () =>
-          import(
-            './components/pages/approval/approaval-configuration/approaval-configuration.component'
-          ).then((c) => c.ApproavalConfigurationComponent),
+          import('./components/pages/approval/approaval-configuration/approaval-configuration.component').then(
+            (c) => c.ApproavalConfigurationComponent,
+          ),
         data: {
           title: 'Approval Configuration List',
         },
@@ -176,9 +176,9 @@ export const routes: Routes = [
       {
         path: 'create-approval-configuration',
         loadComponent: () =>
-          import(
-            './components/pages/approval/approval-configuration-form/approval-configuration-form.component'
-          ).then((c) => c.ApprovalConfigurationFormComponent),
+          import('./components/pages/approval/approval-configuration-form/approval-configuration-form.component').then(
+            (c) => c.ApprovalConfigurationFormComponent,
+          ),
         data: {
           title: 'Create Approval Configuration',
         },
@@ -187,9 +187,9 @@ export const routes: Routes = [
       {
         path: 'request-list',
         loadComponent: () =>
-          import(
-            './components/pages/approval/request-list/request-list.component'
-          ).then((c) => c.RequestListComponent),
+          import('./components/pages/approval/request-list/request-list.component').then(
+            (c) => c.RequestListComponent,
+          ),
         data: {
           title: 'Request List',
         },
@@ -198,9 +198,9 @@ export const routes: Routes = [
       {
         path: 'popup-configuration',
         loadComponent: () =>
-          import(
-            './components/pages/configuration/popup/popup-configuration/popup-configuration.component'
-          ).then((c) => c.PopupConfigurationComponent),
+          import('./components/pages/configuration/popup/popup-configuration/popup-configuration.component').then(
+            (c) => c.PopupConfigurationComponent,
+          ),
         data: {
           title: 'Popup Configuration',
         },
@@ -209,9 +209,9 @@ export const routes: Routes = [
       {
         path: 'create-popup-configuration',
         loadComponent: () =>
-          import(
-            './components/pages/configuration/popup/create-popup-configuration/create-popup-configuration.component'
-          ).then((c) => c.CreatePopupConfigurationComponent),
+          import('./components/pages/configuration/popup/create-popup-configuration/create-popup-configuration.component').then(
+            (c) => c.CreatePopupConfigurationComponent,
+          ),
         data: {
           title: 'Create Popup Configuration',
         },
@@ -220,9 +220,9 @@ export const routes: Routes = [
       {
         path: 'meeting-schedule-list',
         loadComponent: () =>
-          import(
-            './components/pages/meetings/meeting-schedules/meeting-schedules.component'
-          ).then((c) => c.MeetingSchedulesComponent),
+          import('./components/pages/meetings/meeting-schedules/meeting-schedules.component').then(
+            (c) => c.MeetingSchedulesComponent,
+          ),
         data: {
           title: 'Meeting Schedule',
         },
@@ -231,9 +231,9 @@ export const routes: Routes = [
       {
         path: 'create-meeting-schedule',
         loadComponent: () =>
-          import(
-            './components/pages/meetings/create-meeting-schedules/create-meeting-schedules.component'
-          ).then((c) => c.CreateMeetingSchedulesComponent),
+          import('./components/pages/meetings/create-meeting-schedules/create-meeting-schedules.component').then(
+            (c) => c.CreateMeetingSchedulesComponent,
+          ),
         data: {
           title: 'Create Meeting Schedule',
         },
@@ -242,9 +242,9 @@ export const routes: Routes = [
       {
         path: 'project-task-list',
         loadComponent: () =>
-          import(
-            './components/pages/projects/project-task-management/project-task-management.component'
-          ).then((c) => c.ProjectTaskManagementComponent),
+          import('./components/pages/projects/project-task-management/project-task-management.component').then(
+            (c) => c.ProjectTaskManagementComponent,
+          ),
         data: {
           title: 'Project Task List',
         },
@@ -253,9 +253,9 @@ export const routes: Routes = [
       {
         path: 'create-project-task',
         loadComponent: () =>
-          import(
-            './components/pages/projects/create-project-task-management/create-project-task-management.component'
-          ).then((c) => c.CreateProjectTaskManagementComponent),
+          import('./components/pages/projects/create-project-task-management/create-project-task-management.component').then(
+            (c) => c.CreateProjectTaskManagementComponent,
+          ),
         data: {
           title: 'Create Project Task',
         },
@@ -264,9 +264,9 @@ export const routes: Routes = [
       {
         path: 'payroll',
         loadComponent: () =>
-          import(
-            './components/pages/payroll-management/payroll-management.component'
-          ).then((c) => c.PayrollManagementComponent),
+          import('./components/pages/payroll-management/payroll-management.component').then(
+            (c) => c.PayrollManagementComponent,
+          ),
         data: {
           title: 'Payroll Management',
         },
@@ -275,9 +275,9 @@ export const routes: Routes = [
       {
         path: 'assign-project-request-list',
         loadComponent: () =>
-          import(
-            './components/pages/projects/assign-project-request-list/assign-project-request-list.component'
-          ).then((c) => c.AssignProjectRequestListComponent),
+          import('./components/pages/projects/assign-project-request-list/assign-project-request-list.component').then(
+            (c) => c.AssignProjectRequestListComponent,
+          ),
         data: {
           title: 'Assign Project Request List',
         },
@@ -285,11 +285,21 @@ export const routes: Routes = [
       {
         path: 'assign-task-request-list',
         loadComponent: () =>
-          import(
-            './components/pages/projects/assign-task-request-list/assign-task-request-list.component'
-          ).then((c) => c.AssignTaskRequestListComponent),
+          import('./components/pages/projects/assign-task-request-list/assign-task-request-list.component').then(
+            (c) => c.AssignTaskRequestListComponent,
+          ),
         data: {
           title: 'Assign Task Request List',
+        },
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import('./components/common/notification/notification-list/notification-list.component').then(
+            (c) => c.NotificationListComponent,
+          ),
+        data: {
+          title: 'Notifications',
         },
       },
     ],

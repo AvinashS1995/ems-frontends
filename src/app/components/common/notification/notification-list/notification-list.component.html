@@ -1,0 +1,401 @@
+<div class="notification-page">
+
+    <!-- ================= Header ================= -->
+
+    <div class="notification-header">
+
+        <div>
+
+            <h2>Notifications</h2>
+
+            <span>{{ unreadCount }} Unread</span>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                mat-stroked-button
+                color="primary"
+                (click)="markAllRead()">
+
+                <mat-icon>done_all</mat-icon>
+
+                Mark all read
+
+            </button>
+
+            <button
+                mat-icon-button
+                color="warn"
+                matTooltip="Clear All"
+                (click)="clearAll()">
+
+                <mat-icon>delete_sweep</mat-icon>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- ================= Toolbar ================= -->
+
+    <div class="toolbar">
+
+        <mat-form-field
+            appearance="outline"
+            class="search-box">
+
+            <mat-label>
+
+                Search Notifications
+
+            </mat-label>
+
+            <input
+                matInput
+                [(ngModel)]="searchText"
+                (keyup)="filterNotifications()">
+
+            <mat-icon matSuffix>
+
+                search
+
+            </mat-icon>
+
+        </mat-form-field>
+
+        <mat-chip-listbox
+            [(ngModel)]="filterType"
+            (ngModelChange)="filterNotifications()">
+
+            <mat-chip-option value="all">
+
+                All
+
+            </mat-chip-option>
+
+            <mat-chip-option value="unread">
+
+                Unread
+
+            </mat-chip-option>
+
+            <mat-chip-option value="read">
+
+                Read
+
+            </mat-chip-option>
+
+        </mat-chip-listbox>
+
+    </div>
+
+    <!-- ================= TODAY ================= -->
+
+    <ng-container *ngIf="todayNotifications.length">
+
+        <div class="group-title">
+
+            Today
+
+        </div>
+
+        <div
+            class="notification-item"
+            *ngFor="let item of todayNotifications"
+            (click)="markRead(item)">
+
+            <div
+                class="notification-icon"
+                [style.background]="item.color">
+
+                <mat-icon>
+
+                    {{item.icon}}
+
+                </mat-icon>
+
+            </div>
+
+            <div class="notification-content">
+
+                <div class="notification-top">
+
+                    <span class="title">
+
+                        {{item.title}}
+
+                    </span>
+
+                    <span class="time">
+
+                        {{item.timeAgo}}
+
+                    </span>
+
+                </div>
+
+                <div class="message">
+
+                    {{item.message}}
+
+                </div>
+
+            </div>
+
+            <div class="notification-actions">
+
+                <button
+                    mat-icon-button
+                    matTooltip="Mark Read"
+                    (click)="markRead(item); $event.stopPropagation()">
+
+                    <mat-icon>
+
+                        done
+
+                    </mat-icon>
+
+                </button>
+
+                <button
+                    mat-icon-button
+                    color="warn"
+                    matTooltip="Delete"
+                    (click)="deleteNotification(item.id); $event.stopPropagation()">
+
+                    <mat-icon>
+
+                        delete
+
+                    </mat-icon>
+
+                </button>
+
+            </div>
+
+            <div
+                class="unread-dot"
+                *ngIf="!item.isRead">
+
+            </div>
+
+        </div>
+
+    </ng-container>
+
+    <!-- ================= YESTERDAY ================= -->
+
+    <ng-container *ngIf="yesterdayNotifications.length">
+
+        <div class="group-title">
+
+            Yesterday
+
+        </div>
+
+        <div
+            class="notification-item"
+            *ngFor="let item of yesterdayNotifications"
+            (click)="markRead(item)">
+
+            <div
+                class="notification-icon"
+                [style.background]="item.color">
+
+                <mat-icon>
+
+                    {{item.icon}}
+
+                </mat-icon>
+
+            </div>
+
+            <div class="notification-content">
+
+                <div class="notification-top">
+
+                    <span class="title">
+
+                        {{item.title}}
+
+                    </span>
+
+                    <span class="time">
+
+                        {{item.timeAgo}}
+
+                    </span>
+
+                </div>
+
+                <div class="message">
+
+                    {{item.message}}
+
+                </div>
+
+            </div>
+
+            <div class="notification-actions">
+
+                <button
+                    mat-icon-button
+                    (click)="markRead(item); $event.stopPropagation()">
+
+                    <mat-icon>
+
+                        done
+
+                    </mat-icon>
+
+                </button>
+
+                <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="deleteNotification(item.id); $event.stopPropagation()">
+
+                    <mat-icon>
+
+                        delete
+
+                    </mat-icon>
+
+                </button>
+
+            </div>
+
+            <div
+                class="unread-dot"
+                *ngIf="!item.isRead">
+
+            </div>
+
+        </div>
+
+    </ng-container>
+
+    <!-- ================= EARLIER ================= -->
+
+    <ng-container *ngIf="earlierNotifications.length">
+
+        <div class="group-title">
+
+            Earlier
+
+        </div>
+
+        <div
+            class="notification-item"
+            *ngFor="let item of earlierNotifications"
+            (click)="markRead(item)">
+
+            <div
+                class="notification-icon"
+                [style.background]="item.color">
+
+                <mat-icon>
+
+                    {{item.icon}}
+
+                </mat-icon>
+
+            </div>
+
+            <div class="notification-content">
+
+                <div class="notification-top">
+
+                    <span class="title">
+
+                        {{item.title}}
+
+                    </span>
+
+                    <span class="time">
+
+                        {{item.timeAgo}}
+
+                    </span>
+
+                </div>
+
+                <div class="message">
+
+                    {{item.message}}
+
+                </div>
+
+            </div>
+
+            <div class="notification-actions">
+
+                <button
+                    mat-icon-button
+                    (click)="markRead(item); $event.stopPropagation()">
+
+                    <mat-icon>
+
+                        done
+
+                    </mat-icon>
+
+                </button>
+
+                <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="deleteNotification(item.id); $event.stopPropagation()">
+
+                    <mat-icon>
+
+                        delete
+
+                    </mat-icon>
+
+                </button>
+
+            </div>
+
+            <div
+                class="unread-dot"
+                *ngIf="!item.isRead">
+
+            </div>
+
+        </div>
+
+    </ng-container>
+
+    <!-- ================= EMPTY ================= -->
+
+    <div
+        class="empty-state"
+        *ngIf="filteredNotifications.length==0">
+
+        <mat-icon>
+
+            notifications_off
+
+        </mat-icon>
+
+        <h3>
+
+            No Notifications
+
+        </h3>
+
+        <p>
+
+            You're all caught up.
+
+        </p>
+
+    </div>
+
+</div>
