@@ -71,7 +71,7 @@ export class AttendenceManagementComponent {
   hasCheckedIn: any;
 
   totalRecords = 0;
-  pageSize = 5;
+  pageSize = 100;
   currentPage: number = 1;
   totalEmployee: any;
   presentEmployee: any;
@@ -87,7 +87,7 @@ export class AttendenceManagementComponent {
     private activateRoute: ActivatedRoute,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnInit() {
@@ -117,7 +117,7 @@ export class AttendenceManagementComponent {
           params['data'].todayAttendenceSummary?.summary || {};
         console.log(
           'todayAttendenceSummary ---->',
-          this.todayAttendenceSummary
+          this.todayAttendenceSummary,
         );
       }
     });
@@ -159,7 +159,7 @@ export class AttendenceManagementComponent {
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_GET_USER_ATTENDENCE} Response : `,
-            res
+            res,
           );
 
           this.dataSource = res?.data?.employeeAttendenceList || [];
@@ -195,7 +195,7 @@ export class AttendenceManagementComponent {
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_WORK_SUMMARY_ATTENDENCE} Response : `,
-            res
+            res,
           );
 
           this.startTimerFrom(res.totalWorkSeconds);

@@ -183,8 +183,13 @@ export class EmployeeManagementComponent {
   addEmployee(employeeTypeData?: any) {
     // debugger
     const dialogRef = this.dialog.open(AddEmployeeComponent, {
-      width: '500px',
+      width: '720px',
+      maxWidth: '95vw',
+
+      height: '90vh',
+      maxHeight: '90vh',
       disableClose: true,
+      autoFocus: false,
       data: {
         editData: employeeTypeData || null,
         Roles: this.roles,
@@ -209,6 +214,7 @@ export class EmployeeManagementComponent {
     const { name, role, status, type } = this.employeeFilterForm.getRawValue();
 
     const paylaod = {
+      empNo: this.commonService.getCurrentUserDetails()?.empNo || '',
       name: name ? name : '',
       role: role ? role : '',
       status: status ? status : '',

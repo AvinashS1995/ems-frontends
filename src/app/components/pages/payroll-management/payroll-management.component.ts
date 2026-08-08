@@ -25,7 +25,7 @@ export class PayrollManagementComponent {
   employeeMonthlyPayrollList: Array<any> = [];
 
   totalRecords = 0;
-  pageSize = 10;
+  pageSize = 100;
   currentPage: number = 1;
 
   displayedColumns: string[] = [
@@ -45,7 +45,7 @@ export class PayrollManagementComponent {
     private commonService: CommonService,
     private apiService: ApiService,
     private fb: FormBuilder,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -102,13 +102,13 @@ export class PayrollManagementComponent {
     this.apiService
       .postApiCall(
         API_ENDPOINTS.SERVICE_GET_ALL_EMPLOYYEE_MONTHLY_PAYSLIP,
-        payload
+        payload,
       )
       .subscribe({
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_GET_ALL_EMPLOYYEE_MONTHLY_PAYSLIP} Response : `,
-            res
+            res,
           );
 
           this.employeeMonthlyPayrollList = res.data.formattedPayslips || [];

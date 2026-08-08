@@ -17,6 +17,7 @@ import { KeyService } from '../../../shared/service/common/key.service';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
+  hidePassword = true;
 
   constructor(
     private fb: FormBuilder,
@@ -24,7 +25,7 @@ export class LoginComponent {
     private commonService: CommonService,
     private apiService: ApiService,
     private storageService: StorageService,
-    private keyService: KeyService
+    private keyService: KeyService,
   ) {}
 
   ngOnInit() {
@@ -67,7 +68,7 @@ export class LoginComponent {
                 this.storageService.setItem(
                   'rememberedEmail',
                   resp.user.email,
-                  storage
+                  storage,
                 );
               }
               this.storageService.setItem('token', resp.token, storage);

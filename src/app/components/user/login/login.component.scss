@@ -1,15 +1,13 @@
 mat-form-field {
+  width: calc(100% - 16px);
   margin: 8px;
 }
 
-.example-full-width {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.btn {
-  border-radius: 5px;
-  height: 52px;
+.login-header {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
 }
 
 .loginform {
@@ -17,8 +15,24 @@ mat-form-field {
   flex-direction: column;
 }
 
+.example-full-width {
+  width: calc(100% - 16px);
+  margin: 10px 8px 0;
+}
+
+.btn {
+  height: 52px;
+  border-radius: 5px;
+}
+
 .resetpassword {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 8px 10px;
+}
+
+.forgot-password {
+  min-width: auto;
+  padding: 0 8px;
 }
