@@ -76,7 +76,7 @@ export class EmployeeManagementComponent {
   workTypeList: Array<any> = [];
 
   totalRecords = 0;
-  pageSize = 5;
+  pageSize = 100;
   currentPage: number = 1;
   genderTypeList: Array<any> = [];
   departmentTypeList: Array<any> = [];
@@ -88,7 +88,7 @@ export class EmployeeManagementComponent {
     private activateRoute: ActivatedRoute,
     private apiService: ApiService,
     private fb: FormBuilder,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -138,7 +138,7 @@ export class EmployeeManagementComponent {
               value: experienceLevel.typeValue,
               label: experienceLevel.typeLabel,
             };
-          }
+          },
         );
 
         this.workTypeList = params['data'].workType?.data?.types || [];
@@ -165,7 +165,7 @@ export class EmployeeManagementComponent {
               value: departmentType.typeValue,
               label: departmentType.typeLabel,
             };
-          }
+          },
         );
       }
     });
@@ -224,7 +224,7 @@ export class EmployeeManagementComponent {
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `,
-            res
+            res,
           );
 
           this.dataSource = res?.data?.userList || [];
@@ -277,7 +277,7 @@ export class EmployeeManagementComponent {
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_DELETE_EMPLOYEE_LIST} Response : `,
-            res
+            res,
           );
           this.getEmployees();
 

@@ -96,124 +96,303 @@
 
 
   </div>
+  <!-- =========================================================
+     DASHBOARD CONTENT
+========================================================= -->
+
   <div class="dashboard-content">
-    <div class="upcoming-holiday-card">
-      <mat-card class="events-card">
-        <div class="card-header">
-          <div class="header-icon">
-            <mat-icon>calendar_today</mat-icon>
-          </div>
-          <span class="card-title">Meeting & Schedules</span>
-        </div>
-        <ng-container *ngIf="eventList && eventList.length > 0; else noMeetingsTemplate">
-          <div class="event-item" *ngFor="let event of eventList.slice(0, 2)" (click)="openAllEventsDialog()"
-            style="cursor: pointer">
-            <div class="date-box" [ngStyle]="{ 'background-color': getColorByDay(event.date) }">
-              <span class="date">{{ event.date | date: 'dd' }}</span>
-              <span class="month">{{ event.date | date: 'MMM' }}</span>
-            </div>
-            <div class="event-details">
-              <h4>{{ event.title }}</h4>
-              <p class="event-time">{{ event.startTime }} - {{ event.endTime }} <span class="location">, {{
-                  event.location }}</span></p>
-              <p class="description">{{ event.description }}</p>
 
-              <div class="attendees">
-                <img *ngFor="let person of event.attendees.slice(0, 3)" [src]="person.avatar"
-                  [alt]="person.attendeesName" matTooltip="{{ person.attendeesName }}" />
-                <span *ngIf="event.attendees.length > 3" class="more">+{{ event.attendees.length - 3 }}</span>
-              </div>
-            </div>
-          </div>
-        </ng-container>
+    <!-- =======================================================
+       1. MEETING & SCHEDULES
+  ======================================================== -->
 
-        <ng-template #noMeetingsTemplate>
-          <div class="empty-state">
-            <img src="assets/no-event.png" alt="No Meetings" class="empty-icon" />
-            <p>No Meetings & Schedules Available</p>
-          </div>
-        </ng-template>
-      </mat-card>
+    <mat-card class="events-card">
 
-    </div>
+      <!-- Card Header -->
+      <div class="card-header">
 
-    <div class="upcoming-holiday-card">
-      <mat-card class="birthday-card today-card">
-        <div class="today-header">
-          <mat-icon class="today-icon">auto_awesome</mat-icon>
-          <span class="card-title">Today</span>
+        <div class="header-icon">
+          <mat-icon>event</mat-icon>
         </div>
 
-        <div class="today-tabs">
-          <button mat-button [ngClass]="{ 'active-tab': activeTab === 'birthdays' }"
-            (click)="changeTab('birthdays')">Birthdays</button>
-          <button mat-button [ngClass]="{ 'active-tab': activeTab === 'anniversaries' }"
-            (click)="changeTab('anniversaries')">Work Anniversaries</button>
-          <button mat-button [ngClass]="{ 'active-tab': activeTab === 'newJoinees' }"
-            (click)="changeTab('newJoinees')">New Joinees</button>
+        <div class="card-title">
+          Meeting & Schedules
         </div>
 
-        <div class="today-content">
-          <!-- <div class="welcome-image" *ngIf="activeTab === 'newJoinees'">
-            <img src="assets/images/welcome.png" alt="Welcome" />
-          </div> -->
+      </div>
 
-          <div class="profile-carousel" *ngIf="currentPerson.name">
-            <button mat-icon-button (click)="prevPerson()">
-              <mat-icon>chevron_left</mat-icon>
-            </button>
 
-            <div class="profile-info">
-              <img [src]="profileImage" class="avatar" />
-              <span>{{ currentPerson.name }}</span>
+      <!-- Meetings Available -->
+      <ng-container *ngIf="eventList.length > 0; else noMeetingsTemplate">
+
+        <div class="event-item" *ngFor="let event of eventList.slice(0, 2)" (click)="openAllEventsDialog()">
+
+          <!-- Date -->
+          <div class="date-box" [style.background]="event.color || 'linear-gradient(135deg, #673ab7, #9575cd)'">
+
+            <span class="date">
+              {{ event.date | date: 'dd' }}
+            </span>
+
+            <span class="month">
+              {{ event.date | date: 'MMM' }}
+            </span>
+
+          </div>
+
+
+          <!-- Event Details -->
+          <div class="event-details">
+
+            <h4>
+              {{ event.title }}
+            </h4>
+
+
+            <!-- Time -->
+            <div class="event-time">
+
+              <span>
+                <mat-icon>schedule</mat-icon>
+                {{ event.startTime }} - {{ event.endTime }}
+              </span>
+
+              <span *ngIf="event.location" class="location">
+                <mat-icon>location_on</mat-icon>
+                {{ event.location }}
+              </span>
+
             </div>
 
-            <button mat-icon-button (click)="nextPerson()">
-              <mat-icon>chevron_right</mat-icon>
-            </button>
-          </div>
 
-          <div class="wish-input">
-            <input matInput placeholder="Wish here..." [(ngModel)]="wishMessage" />
-            <button mat-icon-button (click)="sendWish()">
-              <mat-icon color="primary">send</mat-icon>
-            </button>
-          </div>
-        </div>
-      </mat-card>
+            <!-- Description -->
+            <p class="description" *ngIf="event.description">
+              {{ event.description }}
+            </p>
 
 
+            <!-- Attendees -->
+            <div class="attendees" *ngIf="event.attendees?.length">
 
-    </div>
-    <div class="upcoming-holiday-card">
-      <mat-card class="summary-card">
-        <div class="holidays-section">
-          <h3>Upcoming Holidays</h3>
-          <div class="holiday-list">
-            <div [@scrollUp]="animationState" (@scrollUp.done)="onAnimationDone($event)" class="scroll-list">
-              <div class="scroll-item" *ngFor="let holiday of upcomingHolidays">
-                <div class="holiday-info">
-                  <strong>{{ holiday.name }}</strong>
-                  <small>{{ holiday.date | date: 'fullDate' }}</small>
-                </div>
+              <img *ngFor="let person of event.attendees.slice(0, 3)" [src]="person.avatar" [alt]="person.attendeesName"
+                [matTooltip]="person.attendeesName" />
 
-              </div>
+
+              <span *ngIf="event.attendees.length > 3" class="more">
+                +{{ event.attendees.length - 3 }}
+              </span>
+
             </div>
-          </div>
-        </div>
-      </mat-card>
 
-    </div>
+          </div>
+
+        </div>
+
+      </ng-container>
+
+
+      <!-- No Meetings -->
+      <ng-template #noMeetingsTemplate>
+
+        <div class="empty-state">
+
+          <img src="assets/no-event.png" alt="No Meetings" class="empty-icon" />
+
+          <p>
+            No Meetings & Schedules Available
+          </p>
+
+        </div>
+
+      </ng-template>
+
+    </mat-card>
+
+
+
+    <!-- =======================================================
+       2. TODAY CARD
+  ======================================================== -->
+
+    <mat-card class="today-card">
+
+      <!-- Header -->
+      <div class="today-header">
+
+        <mat-icon class="today-icon">
+          auto_awesome
+        </mat-icon>
+
+        <span class="card-title">
+          Today
+        </span>
+
+      </div>
+
+
+      <!-- Tabs -->
+      <div class="today-tabs">
+
+        <button mat-button [ngClass]="{
+          'active-tab': activeTab === 'birthdays'
+        }" (click)="changeTab('birthdays')">
+          Birthdays
+        </button>
+
+
+        <button mat-button [ngClass]="{
+          'active-tab': activeTab === 'anniversaries'
+        }" (click)="changeTab('anniversaries')">
+          Work Anniversaries
+        </button>
+
+
+        <button mat-button [ngClass]="{
+          'active-tab': activeTab === 'newJoinees'
+        }" (click)="changeTab('newJoinees')">
+          New Joinees
+        </button>
+
+      </div>
+
+
+      <!-- Content -->
+      <div class="today-content">
+
+
+        <!-- Profile Carousel -->
+        <div class="profile-carousel" *ngIf="currentPerson?.name">
+
+          <!-- Previous -->
+          <button mat-icon-button class="carousel-button" (click)="prevPerson()" aria-label="Previous">
+            <mat-icon>
+              chevron_left
+            </mat-icon>
+          </button>
+
+
+          <!-- Profile -->
+          <div class="profile-info">
+
+            <img [src]="profileImage" [alt]="currentPerson.name" class="avatar" />
+
+            <span>
+              {{ currentPerson.name }}
+            </span>
+
+          </div>
+
+
+          <!-- Next -->
+          <button mat-icon-button class="carousel-button" (click)="nextPerson()" aria-label="Next">
+            <mat-icon>
+              chevron_right
+            </mat-icon>
+          </button>
+
+        </div>
+
+
+        <!-- Wish Input -->
+        <div class="wish-input">
+
+          <input matInput type="text" placeholder="Wish here..." [(ngModel)]="wishMessage" (keyup.enter)="sendWish()" />
+
+          <button mat-icon-button color="primary" (click)="sendWish()" aria-label="Send wish">
+
+            <mat-icon>
+              send
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </mat-card>
+
+
+
+    <!-- =======================================================
+       3. UPCOMING HOLIDAYS
+  ======================================================== -->
+
+    <mat-card class="holiday-card">
+
+      <!-- Header -->
+      <div class="holiday-header">
+
+        <div class="holiday-header-left">
+
+          <mat-icon class="holiday-icon">
+            event_available
+          </mat-icon>
+
+          <span class="card-title">
+            Upcoming Holidays
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Holiday List -->
+      <div class="holiday-list">
+
+        <div class="holiday-item" *ngFor="let holiday of upcomingHolidays">
+
+          <!-- Holiday Icon -->
+          <div class="holiday-date-icon">
+
+            <mat-icon>
+              celebration
+            </mat-icon>
+
+          </div>
+
+
+          <!-- Holiday Details -->
+          <div class="holiday-info">
+
+            <strong>
+              {{ holiday.name }}
+            </strong>
+
+            <small>
+              {{ holiday.date | date: 'fullDate' }}
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <!-- Empty -->
+        <div class="empty-state" *ngIf="!upcomingHolidays?.length">
+
+          <img src="assets/no-event.png" alt="No Holidays" class="empty-icon" />
+
+          <p>
+            No Upcoming Holidays
+          </p>
+
+        </div>
+
+      </div>
+
+    </mat-card>
 
   </div>
 
-   <!-- 🟣 Chatbot launcher at bottom-right -->
+  <!-- 🟣 Chatbot launcher at bottom-right -->
   <!-- Beautiful Floating Chatbot Launcher -->
-<div class="chatbot-launcher" (click)="openChatbotDialog()">
-  <div class="chatbot-inner">
-    <img src="assets/smiling-chatbot.png" alt="Chatbot" />
+  <div class="chatbot-launcher" (click)="openChatbotDialog()">
+    <div class="chatbot-inner">
+      <img src="assets/smiling-chatbot.png" alt="Chatbot" />
+    </div>
   </div>
-</div>
 
 
 

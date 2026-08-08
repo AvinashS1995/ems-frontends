@@ -138,93 +138,111 @@
 
       </button> -->
 
+      <!-- Notification Button -->
+
       <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="notificationMenu">
-
-        <mat-icon matBadge="{{unreadCount}}" matBadgeColor="warn" [matBadgeHidden]="unreadCount==0">
-
+        <mat-icon [matBadge]="unreadCount" matBadgeColor="warn" [matBadgeHidden]="unreadCount == 0">
           notifications
-
         </mat-icon>
-
       </button>
+
+
+      <!-- Notification Menu -->
 
       <mat-menu #notificationMenu="matMenu" class="notification-menu" xPosition="before">
 
         <div class="notification-wrapper">
 
+          <!-- Header -->
           <div class="notification-header">
 
-            <div>
+            <div class="notification-header-info">
 
-              <h3>Notifications</h3>
+              <h3>
+                Notifications
+              </h3>
 
-              <p>{{unreadCount}} Unread</p>
+              <p>
+                {{ unreadCount }} Unread
+              </p>
 
             </div>
 
-            <button mat-flat-button color="primary" (click)="markAllRead($event)">
-
+            <button mat-flat-button color="primary" class="mark-all-btn" (click)="markAllRead($event)">
               Mark all
-
             </button>
 
           </div>
 
+
           <mat-divider></mat-divider>
 
+
+          <!-- Notification Body -->
           <div class="notification-body">
 
             <div class="notification-card" *ngFor="let item of notifications" (click)="openNotification(item)"
               [class.unread]="!item.isRead">
 
+              <!-- Icon -->
               <div class="notification-icon" [style.background]="item.color">
 
                 <mat-icon>
-
-                  {{item.icon}}
-
+                  {{ item.icon }}
                 </mat-icon>
 
               </div>
 
+
+              <!-- Content -->
               <div class="notification-content">
 
                 <div class="title">
-
-                  {{item.title}}
-
+                  {{ item.title }}
                 </div>
 
                 <div class="message">
-
-                  {{item.message}}
-
+                  {{ item.message }}
                 </div>
 
                 <div class="time">
-
-                  {{item.time}}
-
+                  {{ item.time }}
                 </div>
 
               </div>
 
-              <div class="unread-dot" *ngIf="!item.isRead">
 
+              <!-- Unread Dot -->
+              <div class="unread-dot" *ngIf="!item.isRead">
               </div>
+
+            </div>
+
+
+            <!-- Empty -->
+            <div class="notification-empty" *ngIf="!notifications?.length">
+
+              <mat-icon>
+                notifications_none
+              </mat-icon>
+
+              <p>
+                No notifications
+              </p>
 
             </div>
 
           </div>
 
+
           <mat-divider></mat-divider>
 
+
+          <!-- Footer -->
           <div class="notification-footer">
 
             <button mat-flat-button color="primary" (click)="viewAllNotifications()">
-
               View All Notifications
-
             </button>
 
           </div>
@@ -233,11 +251,7 @@
 
       </mat-menu>
 
-      <!-- <button mat-icon-button>
 
-        <img [src]="profileImage" class="toolbar-avatar">
-
-      </button> -->
 
       <button mat-icon-button [matMenuTriggerFor]="userMenu" class="avatar-btn">
 
@@ -245,7 +259,7 @@
 
           <!-- <ng-container *ngIf="isDefaultAvatar(); else profileImg"> -->
 
-            {{ UserName | initialName }}
+          {{ UserName | initialName }}
 
           <!-- </ng-container> -->
 
@@ -269,7 +283,7 @@
 
               <!-- <ng-container *ngIf="isDefaultAvatar(); else profile"> -->
 
-                {{ UserName | initialName }}
+              {{ UserName | initialName }}
 
               <!-- </ng-container> -->
 
