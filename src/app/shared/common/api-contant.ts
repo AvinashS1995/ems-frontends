@@ -73,6 +73,12 @@ export const API_ENDPOINTS = {
   SERVICE_GET_TASKSBYPROJECTS: 'project/tasks',
   SERVICE_UPDATE_TASKS_STATUSBYPROJECTS: 'project/update-task-status',
   SERVICE_GET_ALL_MODELS: 'approval/get-all-models',
+  SERVICE_GET_NOTIFICATIONS: 'notifications/get-notifications',
+  SERVICE_GET_UNREAD_NOTIFICATIONS_COUNT:
+    'notifications/get-unread-notifications-count',
+  SERVICE_MARK_READ_NOTIFICATIONS: 'notifications/mark-read-notifications',
+  SERVICE_MARK_ALL_READ_NOTIFICATIONS:
+    'notifications/mark-all-read-notification',
   SERVICE_PROJETS_ASSIGN_APPROVE_REJECT:
     'project/project-assign-approve-reject',
   SERVICE_TASK_ASSIGN_APPROVE_REJECT: 'project/task-assign-approve-reject',

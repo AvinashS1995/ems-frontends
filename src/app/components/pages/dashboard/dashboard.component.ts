@@ -52,7 +52,7 @@ interface EventItem {
           keyframes([
             style({ transform: 'translateY(0%)', opacity: 1, offset: 0 }),
             style({ transform: 'translateY(-100%)', opacity: 0.5, offset: 1 }),
-          ])
+          ]),
         ),
       ]),
     ]),
@@ -78,7 +78,7 @@ export class DashboardComponent {
     private activateRoute: ActivatedRoute,
     private apiService: ApiService,
     private fb: FormBuilder,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +91,13 @@ export class DashboardComponent {
     this.profileImage = currentUser.profileImage
       ? currentUser.profileImage
       : this.defaultAvatar;
+
+    if (typeof window !== 'undefined') {
+      this.hasCheckedIn = sessionStorage.getItem('checkIns');
+      if (this.hasCheckedIn) {
+        this.commonService.refreshNotifications();
+      }
+    }
   }
 
   openCheckIns() {
@@ -110,6 +117,7 @@ export class DashboardComponent {
         if (result) {
           console.log(result);
           this.showEmployeePopupIfAny();
+          this.commonService.refreshNotifications();
         }
       });
     }
@@ -128,7 +136,7 @@ export class DashboardComponent {
           params['data'].getUpcomingHoliday?.data?.upComingHolidays || [];
 
         this.upcomingHolidays = this.getCurrentAndNextMonthHolidays(
-          this.upcomingHolidays
+          this.upcomingHolidays,
         );
 
         this.eventList =
@@ -140,7 +148,7 @@ export class DashboardComponent {
           params['data'].todayAttendenceSummary?.summary || {};
         console.log(
           'todayAttendenceSummary ---->',
-          this.todayAttendenceSummary
+          this.todayAttendenceSummary,
         );
       }
     });
@@ -189,13 +197,13 @@ export class DashboardComponent {
     this.apiService
       .postApiCall(
         API_ENDPOINTS.SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST,
-        paylaod
+        paylaod,
       )
       .subscribe({
         next: (res: any) => {
           console.log(
             `${API_ENDPOINTS.SERVICE_GET_EMPLOYEE_APPROVAL_REQUEST_LIST} Response : `,
-            res
+            res,
           );
 
           this.pendingRequestCount = res?.totalRecords || '';
@@ -338,7 +346,7 @@ export class DashboardComponent {
   sendWish() {
     if (this.wishMessage.trim()) {
       console.log(
-        `Wish sent to ${this.currentPerson.name}: ${this.wishMessage}`
+        `Wish sent to ${this.currentPerson.name}: ${this.wishMessage}`,
       );
       this.wishMessage = '';
     }

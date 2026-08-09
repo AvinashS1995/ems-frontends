@@ -19,6 +19,7 @@ import { KeyService } from '../../../shared/service/common/key.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SHARED_CUSTOM_PIPES } from '../../../shared/common/shared-pipe';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-sidenav',
@@ -40,6 +41,7 @@ import { SHARED_CUSTOM_PIPES } from '../../../shared/common/shared-pipe';
 })
 export class SidenavComponent implements OnInit {
   @Output() navigateEvent = new EventEmitter<string>();
+  private destroy$ = new Subject<void>();
 
   menuItems = signal<Sidenav[]>([]);
   expandedMenus = new Set<string>();
@@ -61,6 +63,12 @@ export class SidenavComponent implements OnInit {
 
   department: string = '';
   EmployeeNo: string = '';
+
+  notifications: Array<any> = [];
+
+  unreadCount: number = 0;
+
+  isNotificationLoading = false;
 
   constructor(
     private apiService: ApiService,
@@ -92,6 +100,7 @@ export class SidenavComponent implements OnInit {
 
     if (this.token) {
       this.loadRoleBasedMenus();
+      this.getSubscribingNotifications();
     }
   }
 
@@ -220,6 +229,7 @@ export class SidenavComponent implements OnInit {
             `${API_ENDPOINTS.SERVICE_SAVE_NEW_USER} Response : `,
             res,
           );
+          this.getSubscribingNotifications();
 
           this.commonService.openSnackbar(res.message, 'success');
         },
@@ -260,62 +270,216 @@ export class SidenavComponent implements OnInit {
     this.router.navigate(['./employee-profile']);
   }
 
-  notifications: Notification[] = [
-    {
-      id: 1,
-      title: 'Leave Approved',
-      message: 'Your leave request has been approved by HR.',
-      time: '2 min ago',
-      icon: 'event_available',
-      color: '#4CAF50',
-      isRead: false,
-    },
-    {
-      id: 2,
-      title: 'Attendance Reminder',
-      message: 'You forgot to check out today.',
-      time: '15 min ago',
-      icon: 'schedule',
-      color: '#FF9800',
-      isRead: false,
-    },
-    {
-      id: 3,
-      title: 'Payroll Generated',
-      message: 'Salary generated successfully.',
-      time: 'Yesterday',
-      icon: 'payments',
-      color: '#2196F3',
-      isRead: true,
-    },
-    {
-      id: 4,
-      title: 'Meeting Reminder',
-      message: 'Daily Scrum starts at 10:30 AM.',
-      time: 'Today',
-      icon: 'groups',
-      color: '#9C27B0',
-      isRead: false,
-    },
-  ];
+  loadNotifications(): void {
+    const payload = {
+      empNo: this.EmployeeNo,
+      page: 1,
+      limit: 10,
+    };
 
-  get unreadCount(): number {
-    return this.notifications.filter((x) => !x.isRead).length;
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_GET_NOTIFICATIONS, payload)
+      .subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            const notifications = res.data.notifications || [];
+
+            const formatted = notifications.map((item: Notification) => ({
+              ...item,
+              time: this.getNotificationTime(item.createdAt),
+            }));
+
+            // 🔥 Update BehaviorSubject
+            this.commonService.setNotifications(formatted);
+          }
+        },
+
+        error: (error) => {
+          console.error('Notification API Error:', error);
+        },
+      });
   }
 
-  openNotification(item: Notification) {
-    item.isRead = true;
+  loadUnreadNotificationCount(): void {
+    const payload = {
+      empNo: this.EmployeeNo,
+    };
 
-    console.log(item);
+    this.apiService
+      .postApiCall(
+        API_ENDPOINTS.SERVICE_GET_UNREAD_NOTIFICATIONS_COUNT,
+        payload,
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            const count = res.data.unreadCount || 0;
+
+            // 🔥 Update BehaviorSubject
+            this.commonService.setUnreadCount(count);
+          }
+        },
+
+        error: (error) => {
+          console.error('Unread count API Error:', error);
+        },
+      });
   }
 
-  markAllRead(event: MouseEvent) {
+  openNotification(item: Notification): void {
+    if (!item.isRead) {
+      this.markNotificationAsRead(item);
+    }
+
+    // Optional navigation
+    if (item.route) {
+      this.router.navigate([item.route]);
+    }
+  }
+
+  markNotificationAsRead(item: Notification): void {
+    if (!item._id || item.isRead) {
+      return;
+    }
+
+    const payload = {
+      notificationId: item._id,
+      empNo: this.EmployeeNo,
+    };
+
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_MARK_READ_NOTIFICATIONS, payload)
+      .subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            item.isRead = true;
+
+            item.readAt =
+              res?.data?.notification?.readAt || new Date().toISOString();
+
+            // Badge update immediately
+            this.unreadCount = Math.max(this.unreadCount - 1, 0);
+          }
+        },
+
+        error: (error) => {
+          console.error('Mark Notification Read Error:', error);
+        },
+      });
+  }
+
+  markAllRead(event: MouseEvent): void {
     event.stopPropagation();
 
-    this.notifications.forEach((x) => (x.isRead = true));
+    if (!this.EmployeeNo) {
+      return;
+    }
+
+    if (this.unreadCount === 0) {
+      return;
+    }
+
+    const payload = {
+      empNo: this.EmployeeNo,
+    };
+
+    this.apiService
+      .postApiCall(API_ENDPOINTS.SERVICE_MARK_ALL_READ_NOTIFICATIONS, payload)
+      .subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            this.notifications = this.notifications.map((item) => ({
+              ...item,
+              isRead: true,
+              readAt: new Date().toISOString(),
+            }));
+
+            this.unreadCount = 0;
+          }
+        },
+
+        error: (error) => {
+          console.error('Mark All Notifications Read Error:', error);
+        },
+      });
+  }
+
+  getNotificationTime(createdAt: string): string {
+    if (!createdAt) {
+      return '';
+    }
+
+    const created = new Date(createdAt).getTime();
+
+    const now = new Date().getTime();
+
+    const difference = Math.floor((now - created) / 1000);
+
+    if (difference < 60) {
+      return 'Just now';
+    }
+
+    const minutes = Math.floor(difference / 60);
+
+    if (minutes < 60) {
+      return `${minutes} min ago`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+
+    if (hours < 24) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    }
+
+    const days = Math.floor(hours / 24);
+
+    if (days < 7) {
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    }
+
+    return new Date(createdAt).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
   }
 
   viewAllNotifications() {
     this.router.navigate(['/notifications']);
+  }
+
+  getSubscribingNotifications() {
+    this.commonService.notifications$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((notifications) => {
+        this.notifications = notifications;
+      });
+
+    this.commonService.unreadCount$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((count) => {
+        this.unreadCount = count;
+      });
+
+    this.commonService.notificationRefresh$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((refresh) => {
+        if (refresh) {
+          this.refreshNotificationData();
+        }
+      });
+
+    this.refreshNotificationData();
+  }
+
+  refreshNotificationData(): void {
+    this.loadNotifications();
+
+    this.loadUnreadNotificationCount();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

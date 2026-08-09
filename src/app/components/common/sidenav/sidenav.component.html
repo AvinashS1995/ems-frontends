@@ -140,10 +140,21 @@
 
       <!-- Notification Button -->
 
-      <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="notificationMenu">
+      <!-- <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="notificationMenu">
         <mat-icon [matBadge]="unreadCount" matBadgeColor="warn" [matBadgeHidden]="unreadCount == 0">
           notifications
         </mat-icon>
+      </button> -->
+
+      <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="notificationMenu"
+        (menuOpened)="loadNotifications()">
+
+        <mat-icon [matBadge]="unreadCount" matBadgeColor="warn" [matBadgeHidden]="unreadCount === 0">
+
+          notifications
+
+        </mat-icon>
+
       </button>
 
 
@@ -206,7 +217,7 @@
                 </div>
 
                 <div class="time">
-                  {{ item.time }}
+                  {{ getNotificationTime(item.createdAt) }}
                 </div>
 
               </div>

@@ -3,7 +3,7 @@ import {
   AlertDialogData,
   ConfirmationDialogData,
 } from '../../interface/dialog';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AlertDialogComponent } from '../../widget/dialog/alert-dialog/alert-dialog.component';
 import { ConfirmationDialogComponent } from '../../widget/dialog/confirmation-dialog/confirmation-dialog.component';
 import { SnackBarComponent } from '../../widget/snack-bar/snack-bar.component';
@@ -54,16 +54,43 @@ export class CommonService {
   };
 
   private userDetailsSubject = new BehaviorSubject<UserDetails>(
-    this.userDetails
+    this.userDetails,
   );
 
   userDetails$ = this.userDetailsSubject.asObservable();
+
+  // ==========================================
+  // NOTIFICATION LIST
+  // ==========================================
+
+  private notificationsSubject = new BehaviorSubject<Notification[]>([]);
+
+  notifications$ = this.notificationsSubject.asObservable();
+
+  // ==========================================
+  // UNREAD COUNT
+  // ==========================================
+
+  private unreadCountSubject = new BehaviorSubject<number>(0);
+
+  unreadCount$ = this.unreadCountSubject.asObservable();
+
+  // ==========================================
+  // REFRESH TRIGGER
+  // ==========================================
+
+  private notificationRefreshSubject = new BehaviorSubject<boolean>(false);
+
+  notificationRefresh$ = this.notificationRefreshSubject.asObservable();
+
+  // Call this whenever a new notification
+  // is created/updated
 
   constructor(
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private storageService: StorageService,
-    private keyService: KeyService
+    private keyService: KeyService,
   ) {
     // this.setUserDetailsFromToken();
   }
@@ -195,5 +222,35 @@ export class CommonService {
   clearUserDetails(): void {
     this.userDetailsSubject.next(this.userDetails);
     this.keyService.clearKey();
+  }
+
+  // ==========================================
+  // SET NOTIFICATIONS
+  // ==========================================
+
+  setNotifications(notifications: Notification[]): void {
+    this.notificationsSubject.next(notifications);
+  }
+
+  // ==========================================
+  // SET UNREAD COUNT
+  // ==========================================
+
+  setUnreadCount(count: number): void {
+    this.unreadCountSubject.next(count);
+  }
+
+  refreshNotifications(): void {
+    this.notificationRefreshSubject.next(true);
+  }
+
+  // ==========================================
+  // CLEAR
+  // ==========================================
+
+  clearNotifications(): void {
+    this.notificationsSubject.next([]);
+
+    this.unreadCountSubject.next(0);
   }
 }

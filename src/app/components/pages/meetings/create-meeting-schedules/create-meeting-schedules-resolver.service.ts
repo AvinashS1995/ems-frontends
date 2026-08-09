@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from '../../../../shared/common/api-contant';
 import { forkJoin, Observable, of } from 'rxjs';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { CryptoService } from '../../../../shared/service/common/crypto.service';
+import { CommonService } from '../../../../shared/service/common/common.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,8 @@ import { CryptoService } from '../../../../shared/service/common/crypto.service'
 export class CreateMeetingSchedulesResolverService {
   constructor(
     private apiService: ApiService,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private commonService: CommonService,
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
@@ -20,7 +22,7 @@ export class CreateMeetingSchedulesResolverService {
 
     attendeesList = this.apiService.postApiCall(
       API_ENDPOINTS.SERVICE_GET_USER_LIST,
-      {}
+      { empNo: this.commonService.getCurrentUserDetails()?.empNo || '' },
     );
     debugger;
     if (route.queryParams['data']) {
