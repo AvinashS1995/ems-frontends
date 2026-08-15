@@ -1,27 +1,164 @@
 <div class="chatbot-dialog">
-  <!-- 🟣 Header -->
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
   <div class="chatbot-header">
-    <img src="assets/smiling-chatbot.png" class="bot-avatar" alt="AI Bot" />
-    <span class="title">EMS Bot AI</span>
-    <button mat-icon-button (click)="closeDialog()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
 
-  <!-- 📨 Chat Body -->
-  <div class="chatbot-body" #scrollContainer>
-    <div *ngFor="let msg of messages" class="message-wrapper" [ngClass]="msg.sender">
-      <div class="chat-bubble">
-        {{ msg.text }}
+    <div class="bot-profile">
+
+      <div class="bot-avatar-wrapper">
+
+        <img
+          src="assets/smiling-chatbot.png"
+          class="bot-avatar"
+          alt="EMS AI" />
+
+        <span class="bot-online"></span>
+
       </div>
+
+      <div class="bot-info">
+
+        <div class="title">
+          EMS AI Assistant
+        </div>
+
+        <div class="status">
+          <span></span>
+          Online • Ready to help
+        </div>
+
+      </div>
+
     </div>
+
+
+    <button
+      mat-icon-button
+      class="close-button"
+      (click)="closeDialog()"
+      aria-label="Close">
+
+      <mat-icon>
+        close
+      </mat-icon>
+
+    </button>
+
   </div>
 
-  <!-- 💬 Input -->
-  <div class="chatbot-footer">
-    <input [(ngModel)]="userMessage" placeholder="Ask me anything..." (keydown.enter)="sendMessage()" />
-    <button (click)="sendMessage()">
-      <mat-icon>arrow_upward</mat-icon>
-    </button>
+
+  <!-- =====================================================
+       CHAT BODY
+  ====================================================== -->
+
+  <div
+    class="chatbot-body"
+    #scrollContainer>
+
+
+    <!-- Welcome -->
+    <div
+      class="welcome-message"
+      *ngIf="messages.length === 1">
+
+      <div class="welcome-icon">
+
+        <mat-icon>
+          auto_awesome
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        How can I help?
+      </h3>
+
+      <p>
+        Ask me about leaves, attendance,
+        payroll or your EMS application.
+      </p>
+
+      <div class="quick-actions">
+
+        <button
+          type="button"
+          (click)="userMessage='My leave balance'; sendMessage()">
+
+          <mat-icon>event_busy</mat-icon>
+          Leave Balance
+
+        </button>
+
+        <button
+          type="button"
+          (click)="userMessage='My attendance'; sendMessage()">
+
+          <mat-icon>access_time</mat-icon>
+          Attendance
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- Messages -->
+    <div
+      *ngFor="let msg of messages"
+      class="message-wrapper"
+      [ngClass]="msg.sender">
+
+
+      <div class="message-avatar" *ngIf="msg.sender === 'bot'">
+
+        <img
+          src="assets/smiling-chatbot.png"
+          alt="AI" />
+
+      </div>
+
+
+      <div class="chat-bubble">
+
+        {{ msg.text }}
+
+      </div>
+
+    </div>
+
+
   </div>
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
+  <div class="chatbot-footer">
+
+    <input
+      [(ngModel)]="userMessage"
+      placeholder="Ask EMS AI..."
+      maxlength="500"
+      (keydown.enter)="sendMessage()" />
+
+
+    <button
+      mat-icon-button
+      [disabled]="!userMessage.trim()"
+      (click)="sendMessage()"
+      aria-label="Send">
+
+      <mat-icon>
+        arrow_upward
+      </mat-icon>
+
+    </button>
+
+  </div>
+
 </div>

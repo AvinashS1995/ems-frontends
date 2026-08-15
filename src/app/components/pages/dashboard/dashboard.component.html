@@ -211,112 +211,247 @@
 
 
     <!-- =======================================================
-       2. TODAY CARD
-  ======================================================== -->
+     TODAY / PEOPLE MOMENTS
+======================================================== -->
 
     <mat-card class="today-card">
 
       <!-- Header -->
       <div class="today-header">
 
-        <mat-icon class="today-icon">
-          auto_awesome
-        </mat-icon>
+        <div class="today-header-left">
 
-        <span class="card-title">
-          Today
-        </span>
+          <div class="today-icon-wrapper">
+            <mat-icon>auto_awesome</mat-icon>
+          </div>
+
+          <div class="today-heading">
+            <div class="card-title">Today</div>
+            <div class="today-subtitle">
+              Celebrate your colleagues
+            </div>
+          </div>
+
+        </div>
+
+        <div class="today-count" *ngIf="currentList.length">
+          {{ currentIndex + 1 }}/{{ currentList.length }}
+        </div>
 
       </div>
 
 
-      <!-- Tabs -->
+      <!-- Category Tabs -->
       <div class="today-tabs">
 
-        <button mat-button [ngClass]="{
-          'active-tab': activeTab === 'birthdays'
-        }" (click)="changeTab('birthdays')">
-          Birthdays
+        <button type="button" mat-button [class.active-tab]="activeTab === 'birthdays'"
+          (click)="changeTab('birthdays')">
+
+          <mat-icon>cake</mat-icon>
+
+          <span>Birthdays</span>
+
         </button>
 
 
-        <button mat-button [ngClass]="{
-          'active-tab': activeTab === 'anniversaries'
-        }" (click)="changeTab('anniversaries')">
-          Work Anniversaries
+        <button type="button" mat-button [class.active-tab]="activeTab === 'anniversaries'"
+          (click)="changeTab('anniversaries')">
+
+          <mat-icon>workspace_premium</mat-icon>
+
+          <span>Anniversaries</span>
+
         </button>
 
 
-        <button mat-button [ngClass]="{
-          'active-tab': activeTab === 'newJoinees'
-        }" (click)="changeTab('newJoinees')">
-          New Joinees
+        <button type="button" mat-button [class.active-tab]="activeTab === 'newJoinees'"
+          (click)="changeTab('newJoinees')">
+
+          <mat-icon>person_add</mat-icon>
+
+          <span>New Joinees</span>
+
         </button>
 
       </div>
 
 
-      <!-- Content -->
-      <div class="today-content">
+      <!-- =====================================================
+       PEOPLE CONTENT
+  ====================================================== -->
+
+      <div class="today-content" *ngIf="currentPerson?.name; else noPeople">
 
 
-        <!-- Profile Carousel -->
-        <div class="profile-carousel" *ngIf="currentPerson?.name">
+        <!-- Navigation -->
+        <div class="profile-carousel">
 
-          <!-- Previous -->
-          <button mat-icon-button class="carousel-button" (click)="prevPerson()" aria-label="Previous">
-            <mat-icon>
-              chevron_left
-            </mat-icon>
+          <button mat-icon-button class="carousel-button" [disabled]="currentIndex === 0" (click)="prevPerson()"
+            aria-label="Previous employee">
+
+            <mat-icon>chevron_left</mat-icon>
+
           </button>
 
 
-          <!-- Profile -->
-          <div class="profile-info">
+          <!-- Employee Profile -->
+          <div class="profile-card">
 
-            <img [src]="profileImage" [alt]="currentPerson.name" class="avatar" />
+            <!-- Avatar -->
+            <div class="profile-avatar-wrapper">
 
-            <span>
-              {{ currentPerson.name }}
-            </span>
+              <img [src]="currentPerson.image || defaultAvatar" [alt]="currentPerson.name" class="today-avatar"
+                (error)="currentPerson.image = defaultAvatar" />
+
+              <!-- Online / Active indicator -->
+              <span class="online-indicator"></span>
+
+            </div>
+
+
+            <!-- Employee Details -->
+            <div class="profile-details">
+
+              <div class="employee-name">
+                {{ currentPerson.name }}
+              </div>
+
+              <div class="employee-role" *ngIf="currentPerson.designation">
+
+                {{ currentPerson.designation }}
+
+              </div>
+
+              <div class="employee-department" *ngIf="currentPerson.department">
+
+                <mat-icon>business</mat-icon>
+
+                {{ currentPerson.department }}
+
+              </div>
+
+
+              <!-- Occasion -->
+              <div class="occasion-badge">
+
+                <mat-icon *ngIf="activeTab === 'birthdays'">
+                  cake
+                </mat-icon>
+
+                <mat-icon *ngIf="activeTab === 'anniversaries'">
+                  workspace_premium
+                </mat-icon>
+
+                <mat-icon *ngIf="activeTab === 'newJoinees'">
+                  waving_hand
+                </mat-icon>
+
+                <span>
+
+                  {{
+                  activeTab === 'birthdays'
+                  ? 'Birthday Today'
+                  : activeTab === 'anniversaries'
+                  ? 'Work Anniversary'
+                  : 'Welcome to the Team'
+                  }}
+
+                </span>
+
+              </div>
+
+            </div>
 
           </div>
 
 
-          <!-- Next -->
-          <button mat-icon-button class="carousel-button" (click)="nextPerson()" aria-label="Next">
-            <mat-icon>
-              chevron_right
-            </mat-icon>
+          <button mat-icon-button class="carousel-button" [disabled]="currentIndex === currentList.length - 1"
+            (click)="nextPerson()" aria-label="Next employee">
+
+            <mat-icon>chevron_right</mat-icon>
+
           </button>
 
         </div>
 
 
-        <!-- Wish Input -->
-        <div class="wish-input">
+        <!-- Dots -->
+        <div class="carousel-dots" *ngIf="currentList.length > 1">
 
-          <input matInput type="text" placeholder="Wish here..." [(ngModel)]="wishMessage" (keyup.enter)="sendWish()" />
+          <span *ngFor="let person of currentList; let i = index" [class.active]="i === currentIndex"
+            (click)="currentIndex = i">
+          </span>
 
-          <button mat-icon-button color="primary" (click)="sendWish()" aria-label="Send wish">
+        </div>
 
-            <mat-icon>
-              send
+
+        <!-- Wish Box -->
+        <div class="wish-section">
+
+          <div class="wish-input">
+
+            <mat-icon class="wish-icon">
+              chat_bubble_outline
             </mat-icon>
 
-          </button>
+            <input matInput type="text" [(ngModel)]="wishMessage" placeholder="Write a wish..." maxlength="150"
+              (keyup.enter)="sendWish()" />
+
+
+            <button mat-icon-button color="primary" [disabled]="!wishMessage.trim()" (click)="sendWish()"
+              aria-label="Send wish">
+
+              <mat-icon>send</mat-icon>
+
+            </button>
+
+          </div>
+
+          <div class="wish-hint">
+            Press Enter to send your wishes
+          </div>
 
         </div>
 
       </div>
 
+
+      <!-- =====================================================
+       EMPTY STATE
+  ====================================================== -->
+
+      <ng-template #noPeople>
+
+        <div class="today-empty-state">
+
+          <div class="empty-illustration">
+
+            <mat-icon>
+              sentiment_satisfied_alt
+            </mat-icon>
+
+          </div>
+
+          <h4>No celebrations today</h4>
+
+          <p>
+            There are no {{ activeTab === 'birthdays'
+            ? 'birthdays'
+            : activeTab === 'anniversaries'
+            ? 'work anniversaries'
+            : 'new joinees' }}
+            today.
+          </p>
+
+        </div>
+
+      </ng-template>
+
     </mat-card>
 
-
-
     <!-- =======================================================
-       3. UPCOMING HOLIDAYS
-  ======================================================== -->
+     UPCOMING HOLIDAYS
+======================================================== -->
 
     <mat-card class="holiday-card">
 
@@ -325,60 +460,161 @@
 
         <div class="holiday-header-left">
 
-          <mat-icon class="holiday-icon">
-            event_available
-          </mat-icon>
+          <div class="holiday-icon-wrapper">
+            <mat-icon>event_available</mat-icon>
+          </div>
 
-          <span class="card-title">
-            Upcoming Holidays
-          </span>
+          <div class="holiday-heading">
+
+            <div class="card-title">
+              Upcoming Holidays
+            </div>
+
+            <div class="holiday-subtitle">
+              Plan your days ahead
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Holiday Count -->
+        <div class="holiday-count" *ngIf="upcomingHolidays?.length">
+
+          {{ upcomingHolidays.length }}
+
+          {{ upcomingHolidays.length === 1 ? 'Holiday' : 'Holidays' }}
 
         </div>
 
       </div>
 
 
-      <!-- Holiday List -->
-      <div class="holiday-list">
+      <!-- =====================================================
+       HOLIDAY LIST
+  ====================================================== -->
 
-        <div class="holiday-item" *ngFor="let holiday of upcomingHolidays">
+      <div class="holiday-list" *ngIf="upcomingHolidays?.length; else noUpcomingHolidays">
 
-          <!-- Holiday Icon -->
-          <div class="holiday-date-icon">
+
+        <!-- Holiday Item -->
+        <div class="holiday-item" *ngFor="
+        let holiday of upcomingHolidays;
+        let i = index
+      " [class.next-holiday]="i === 0">
+
+
+          <!-- Date Box -->
+          <div class="holiday-date-box">
+
+            <span class="holiday-day">
+              {{ holiday.dateObj | date: 'dd' }}
+            </span>
+
+            <span class="holiday-month">
+              {{ holiday.dateObj | date: 'MMM' }}
+            </span>
+
+          </div>
+
+
+          <!-- Holiday Information -->
+          <div class="holiday-info">
+
+            <div class="holiday-name">
+
+              {{ holiday.name }}
+
+            </div>
+
+
+            <div class="holiday-date">
+
+              <mat-icon>
+                calendar_today
+              </mat-icon>
+
+              {{ holiday.dateObj | date: 'EEEE, dd MMMM yyyy' }}
+
+            </div>
+
+
+            <!-- Optional Holiday Type -->
+            <div class="holiday-type" *ngIf="holiday.type">
+
+              <mat-icon>
+                label
+              </mat-icon>
+
+              {{ holiday.type }}
+
+            </div>
+
+          </div>
+
+
+          <!-- Right Side -->
+          <div class="holiday-status">
+
+            <span class="next-badge" *ngIf="i === 0">
+
+              Next
+
+            </span>
 
             <mat-icon>
-              celebration
+              chevron_right
             </mat-icon>
 
           </div>
 
+        </div>
 
-          <!-- Holiday Details -->
-          <div class="holiday-info">
 
-            <strong>
-              {{ holiday.name }}
-            </strong>
+      </div>
 
-            <small>
-              {{ holiday.date | date: 'fullDate' }}
-            </small>
+
+      <!-- =====================================================
+       EMPTY STATE
+  ====================================================== -->
+
+      <ng-template #noUpcomingHolidays>
+
+        <div class="holiday-empty-state">
+
+          <div class="holiday-empty-icon">
+
+            <mat-icon>
+              event_busy
+            </mat-icon>
 
           </div>
 
-        </div>
-
-
-        <!-- Empty -->
-        <div class="empty-state" *ngIf="!upcomingHolidays?.length">
-
-          <img src="assets/no-event.png" alt="No Holidays" class="empty-icon" />
+          <h4>
+            No upcoming holidays
+          </h4>
 
           <p>
-            No Upcoming Holidays
+            There are no holidays scheduled for
+            this month or next month.
           </p>
 
         </div>
+
+      </ng-template>
+
+
+      <!-- Footer -->
+      <div class="holiday-footer" *ngIf="upcomingHolidays?.length">
+
+        <mat-icon>
+          info_outline
+        </mat-icon>
+
+        <span>
+          Showing holidays for this month and next month
+        </span>
 
       </div>
 
@@ -386,14 +622,77 @@
 
   </div>
 
-  <!-- 🟣 Chatbot launcher at bottom-right -->
-  <!-- Beautiful Floating Chatbot Launcher -->
-  <div class="chatbot-launcher" (click)="openChatbotDialog()">
-    <div class="chatbot-inner">
-      <img src="assets/smiling-chatbot.png" alt="Chatbot" />
+  <!-- =========================================================
+       AI CHATBOT FLOATING ASSISTANT
+  ========================================================= -->
+
+  <div class="chatbot-widget" (click)="openChatbotDialog()" role="button" tabindex="0"
+    aria-label="Open EMS AI Assistant" (keydown.enter)="openChatbotDialog()" (keydown.space)="openChatbotDialog()">
+
+
+    <!-- Greeting -->
+    <div class="chatbot-greeting">
+
+      <div class="greeting-content">
+
+        <strong>
+          Need help?
+        </strong>
+
+        <span>
+          Ask EMS AI Assistant
+        </span>
+
+      </div>
+
+      <mat-icon>
+        close
+      </mat-icon>
+
     </div>
+
+
+    <!-- Floating Button -->
+    <div class="chatbot-button">
+
+
+      <!-- Pulse Ring -->
+      <span class="chatbot-pulse"></span>
+
+
+      <!-- Avatar -->
+      <div class="chatbot-avatar">
+
+        <img src="assets/smiling-chatbot.png" alt="EMS AI Assistant" />
+
+      </div>
+
+
+      <!-- Online Indicator -->
+      <span class="chatbot-online"></span>
+
+
+      <!-- Notification Dot -->
+      <span class="chatbot-notification">
+        <mat-icon>auto_awesome</mat-icon>
+      </span>
+
+    </div>
+
+
+    <!-- Desktop Label -->
+    <div class="chatbot-label">
+
+      <div class="chatbot-label-title">
+        EMS AI
+      </div>
+
+      <div class="chatbot-label-status">
+        <span></span>
+        Online
+      </div>
+
+    </div>
+
   </div>
-
-
-
 </div>

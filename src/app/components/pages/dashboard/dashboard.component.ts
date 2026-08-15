@@ -70,6 +70,51 @@ export class DashboardComponent {
   defaultAvatar: string =
     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
 
+  birthdayList = [
+    // {
+    //   name: 'Aditi Sharma',
+    //   image: 'assets/images/aditi.png',
+    //   designation: 'Software Engineer',
+    //   department: 'Technology',
+    // },
+    // {
+    //   name: 'Ravi Kumar',
+    //   image: 'assets/images/ravi.png',
+    //   designation: 'Senior Executive',
+    //   department: 'Finance',
+    // },
+  ];
+
+  anniversaryList = [
+    {
+      name: 'Neha Jain',
+      image: 'assets/images/neha.png',
+      designation: 'HR Manager',
+      department: 'Human Resources',
+    },
+    {
+      name: 'Manoj Tiwari',
+      image: 'assets/images/manoj.png',
+      designation: 'Project Manager',
+      department: 'Technology',
+    },
+  ];
+
+  joineeList = [
+    {
+      name: 'Vedangi Pandav',
+      image: 'assets/images/vedangi.png',
+      designation: 'Angular Developer',
+      department: 'Technology',
+    },
+    {
+      name: 'Siddharth Rao',
+      image: 'assets/images/siddharth.png',
+      designation: 'Business Analyst',
+      department: 'Operations',
+    },
+  ];
+
   todayAttendenceSummary: any;
 
   constructor(
@@ -156,6 +201,7 @@ export class DashboardComponent {
 
   getCurrentAndNextMonthHolidays(holidays: any[]): any[] {
     const now = new Date();
+
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
@@ -165,6 +211,7 @@ export class DashboardComponent {
     return holidays
       .map((holiday) => {
         const dateObj = new Date(holiday.date);
+
         return {
           ...holiday,
           dateObj,
@@ -174,6 +221,7 @@ export class DashboardComponent {
       .filter((holiday) => {
         const m = holiday.dateObj.getMonth();
         const y = holiday.dateObj.getFullYear();
+
         return (
           (m === currentMonth && y === currentYear) ||
           (m === nextMonth && y === nextMonthYear)
@@ -294,45 +342,31 @@ export class DashboardComponent {
 
   activeTab: 'birthdays' | 'anniversaries' | 'newJoinees' = 'newJoinees';
 
-  birthdayList = [
-    { name: 'Aditi Sharma', image: 'assets/images/aditi.png' },
-    { name: 'Ravi Kumar', image: 'assets/images/ravi.png' },
-  ];
-
-  anniversaryList = [
-    { name: 'Neha Jain', image: 'assets/images/neha.png' },
-    { name: 'Manoj Tiwari', image: 'assets/images/manoj.png' },
-  ];
-
-  joineeList = [
-    { name: 'Vedangi Pandav', image: 'assets/images/vedangi.png' },
-    { name: 'Siddharth Rao', image: 'assets/images/siddharth.png' },
-  ];
-
   currentIndex = 0;
   wishMessage = '';
 
-  // Dynamically get current list based on active tab
   get currentList() {
     switch (this.activeTab) {
       case 'birthdays':
         return this.birthdayList;
+
       case 'anniversaries':
         return this.anniversaryList;
+
       case 'newJoinees':
       default:
         return this.joineeList;
     }
   }
 
-  // Currently visible person
   get currentPerson() {
-    return this.currentList[this.currentIndex] || { name: '', image: '' };
+    return this.currentList[this.currentIndex] || null;
   }
 
   changeTab(tab: 'birthdays' | 'anniversaries' | 'newJoinees') {
     this.activeTab = tab;
     this.currentIndex = 0;
+    this.wishMessage = '';
   }
 
   prevPerson() {
