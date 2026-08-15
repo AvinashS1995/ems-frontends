@@ -280,140 +280,224 @@
        PEOPLE CONTENT
   ====================================================== -->
 
-      <div class="today-content" *ngIf="currentPerson?.name; else noPeople">
+      <ng-container *ngIf="currentPerson as person; else noPeople">
+
+  <div class="today-content">
+
+    <div class="profile-carousel">
+
+      <button
+        mat-icon-button
+        class="carousel-button"
+        [disabled]="currentIndex === 0"
+        (click)="prevPerson()"
+        aria-label="Previous employee">
+
+        <mat-icon>chevron_left</mat-icon>
+
+      </button>
 
 
-        <!-- Navigation -->
-        <div class="profile-carousel">
+      <div class="profile-card">
 
-          <button mat-icon-button class="carousel-button" [disabled]="currentIndex === 0" (click)="prevPerson()"
-            aria-label="Previous employee">
+        <!-- Avatar -->
+        <div class="profile-avatar-wrapper">
 
-            <mat-icon>chevron_left</mat-icon>
+          <img
+            [src]="person.image || defaultAvatar"
+            [alt]="person.name"
+            class="today-avatar"
+            (error)="person.image = defaultAvatar"
+          />
 
-          </button>
+          <span class="online-indicator"></span>
 
-
-          <!-- Employee Profile -->
-          <div class="profile-card">
-
-            <!-- Avatar -->
-            <div class="profile-avatar-wrapper">
-
-              <img [src]="currentPerson.image || defaultAvatar" [alt]="currentPerson.name" class="today-avatar"
-                (error)="currentPerson.image = defaultAvatar" />
-
-              <!-- Online / Active indicator -->
-              <span class="online-indicator"></span>
-
-            </div>
+        </div>
 
 
-            <!-- Employee Details -->
-            <div class="profile-details">
+        <!-- Employee Details -->
+        <div class="profile-details">
 
-              <div class="employee-name">
-                {{ currentPerson.name }}
-              </div>
-
-              <div class="employee-role" *ngIf="currentPerson.designation">
-
-                {{ currentPerson.designation }}
-
-              </div>
-
-              <div class="employee-department" *ngIf="currentPerson.department">
-
-                <mat-icon>business</mat-icon>
-
-                {{ currentPerson.department }}
-
-              </div>
+          <div class="employee-name">
+            {{ person.name }}
+          </div>
 
 
-              <!-- Occasion -->
-              <div class="occasion-badge">
+          <div
+            class="employee-role"
+            *ngIf="person.designation">
 
-                <mat-icon *ngIf="activeTab === 'birthdays'">
-                  cake
-                </mat-icon>
+            {{ person.designation }}
 
-                <mat-icon *ngIf="activeTab === 'anniversaries'">
-                  workspace_premium
-                </mat-icon>
+          </div>
 
-                <mat-icon *ngIf="activeTab === 'newJoinees'">
-                  waving_hand
-                </mat-icon>
 
-                <span>
+          <div
+            class="employee-department"
+            *ngIf="person.department">
 
-                  {{
-                  activeTab === 'birthdays'
+            <mat-icon>business</mat-icon>
+
+            {{ person.department }}
+
+          </div>
+
+
+          <!-- Occasion -->
+          <div class="occasion-badge">
+
+            <mat-icon *ngIf="activeTab === 'birthdays'">
+              cake
+            </mat-icon>
+
+            <mat-icon *ngIf="activeTab === 'anniversaries'">
+              workspace_premium
+            </mat-icon>
+
+            <mat-icon *ngIf="activeTab === 'newJoinees'">
+              waving_hand
+            </mat-icon>
+
+
+            <span>
+              {{
+                activeTab === 'birthdays'
                   ? 'Birthday Today'
                   : activeTab === 'anniversaries'
                   ? 'Work Anniversary'
                   : 'Welcome to the Team'
-                  }}
-
-                </span>
-
-              </div>
-
-            </div>
+              }}
+            </span>
 
           </div>
 
 
-          <button mat-icon-button class="carousel-button" [disabled]="currentIndex === currentList.length - 1"
-            (click)="nextPerson()" aria-label="Next employee">
+          <!-- Anniversary -->
+          <div
+            class="anniversary-info"
+            *ngIf="
+              activeTab === 'anniversaries' &&
+              person.yearsCompleted
+            ">
 
-            <mat-icon>chevron_right</mat-icon>
+            <mat-icon>celebration</mat-icon>
 
-          </button>
+            <span>
+              {{ person.yearsCompleted }} Year
+              {{ person.yearsCompleted === 1 ? '' : 's' }}
+              Completed
+            </span>
 
-        </div>
-
-
-        <!-- Dots -->
-        <div class="carousel-dots" *ngIf="currentList.length > 1">
-
-          <span *ngFor="let person of currentList; let i = index" [class.active]="i === currentIndex"
-            (click)="currentIndex = i">
-          </span>
-
-        </div>
-
-
-        <!-- Wish Box -->
-        <div class="wish-section">
-
-          <div class="wish-input">
-
-            <mat-icon class="wish-icon">
-              chat_bubble_outline
-            </mat-icon>
-
-            <input matInput type="text" [(ngModel)]="wishMessage" placeholder="Write a wish..." maxlength="150"
-              (keyup.enter)="sendWish()" />
-
-
-            <button mat-icon-button color="primary" [disabled]="!wishMessage.trim()" (click)="sendWish()"
-              aria-label="Send wish">
-
-              <mat-icon>send</mat-icon>
-
-            </button>
-
-          </div>
-
-          <div class="wish-hint">
-            Press Enter to send your wishes
           </div>
 
         </div>
 
       </div>
+
+
+      <button
+        mat-icon-button
+        class="carousel-button"
+        [disabled]="currentIndex === currentList.length - 1"
+        (click)="nextPerson()"
+        aria-label="Next employee">
+
+        <mat-icon>chevron_right</mat-icon>
+
+      </button>
+
+    </div>
+
+
+    <!-- Dots -->
+    <div
+      class="carousel-dots"
+      *ngIf="currentList.length > 1">
+
+      <span
+        *ngFor="let personItem of currentList; let i = index"
+        [class.active]="i === currentIndex"
+        (click)="currentIndex = i">
+      </span>
+
+    </div>
+
+
+   <!-- Wish -->
+<div class="wish-section">
+
+  <div class="wish-input">
+
+    <mat-icon class="wish-icon">
+      chat_bubble_outline
+    </mat-icon>
+
+    <input
+      matInput
+      type="text"
+      [(ngModel)]="wishMessage"
+      placeholder="Write a wish..."
+      maxlength="150"
+      (keyup.enter)="sendWish()"
+    />
+
+    <button
+      mat-icon-button
+      color="primary"
+      [disabled]="!wishMessage.trim()"
+      (click)="sendWish()"
+      aria-label="Send wish">
+
+      <mat-icon>send</mat-icon>
+
+    </button>
+
+  </div>
+
+  <div class="wish-hint">
+    Press Enter to send your wishes
+  </div>
+
+
+  <!-- =========================================
+       VIEW WISHES
+       ONLY CELEBRATION PERSON CAN SEE
+  ========================================== -->
+
+  <div
+  class="view-wishes-section"
+  *ngIf="isCurrentUserCelebrationPerson()">
+
+  <button
+    mat-stroked-button
+    class="view-wishes-btn"
+    type="button"
+    (click)="openWishesDialogWithData()">
+
+    <mat-icon>favorite</mat-icon>
+
+    View Wishes
+
+    <span
+      class="wish-count"
+      *ngIf="wishes.length">
+
+      {{ wishes.length }}
+
+    </span>
+
+  </button>
+
+</div>
+
+
+  
+
+</div>
+
+  </div>
+
+</ng-container>
 
 
       <!-- =====================================================

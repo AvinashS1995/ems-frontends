@@ -17,6 +17,8 @@ import { API_ENDPOINTS } from '../../../shared/common/api-contant';
 import { CheckInsComponent } from '../attendence/check-ins/check-ins.component';
 import { EventsDialogComponent } from '../../../shared/widget/dialog/events-dialog/events-dialog.component';
 import { ChatBotDialogComponent } from '../../../shared/widget/dialog/chat-bot-dialog/chat-bot-dialog.component';
+import { EmployeeWish, TodayPerson } from '../../../shared/interface/user';
+import { EmployeeWishesDialogComponent } from '../../../shared/widget/dialog/employee-wishes-dialog/employee-wishes-dialog.component';
 
 interface EventItem {
   _id: string;
@@ -70,50 +72,23 @@ export class DashboardComponent {
   defaultAvatar: string =
     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
 
-  birthdayList = [
-    // {
-    //   name: 'Aditi Sharma',
-    //   image: 'assets/images/aditi.png',
-    //   designation: 'Software Engineer',
-    //   department: 'Technology',
-    // },
-    // {
-    //   name: 'Ravi Kumar',
-    //   image: 'assets/images/ravi.png',
-    //   designation: 'Senior Executive',
-    //   department: 'Finance',
-    // },
-  ];
+  activeTab: 'birthdays' | 'anniversaries' | 'newJoinees' = 'newJoinees';
 
-  anniversaryList = [
-    {
-      name: 'Neha Jain',
-      image: 'assets/images/neha.png',
-      designation: 'HR Manager',
-      department: 'Human Resources',
-    },
-    {
-      name: 'Manoj Tiwari',
-      image: 'assets/images/manoj.png',
-      designation: 'Project Manager',
-      department: 'Technology',
-    },
-  ];
+  currentIndex = 0;
+  wishMessage = '';
 
-  joineeList = [
-    {
-      name: 'Vedangi Pandav',
-      image: 'assets/images/vedangi.png',
-      designation: 'Angular Developer',
-      department: 'Technology',
-    },
-    {
-      name: 'Siddharth Rao',
-      image: 'assets/images/siddharth.png',
-      designation: 'Business Analyst',
-      department: 'Operations',
-    },
-  ];
+  birthdayList: TodayPerson[] = [];
+
+  anniversaryList: TodayPerson[] = [];
+
+  joineeList: TodayPerson[] = [];
+  wishes: EmployeeWish[] = [];
+
+  wishCount = 0;
+
+  isLoadingWishes = false;
+
+  showWishes = false;
 
   todayAttendenceSummary: any;
 
@@ -129,9 +104,8 @@ export class DashboardComponent {
   ngOnInit(): void {
     this.openCheckIns();
     this.getparams();
-    // if (this.commonService.getCurrentUserDetails().role !== 'Employee') {
     this.getEmployeeRequestList();
-    // }
+    this.getTodayPeopleMoments();
     const currentUser = this.commonService.getCurrentUserDetails();
     this.profileImage = currentUser.profileImage
       ? currentUser.profileImage
@@ -146,7 +120,7 @@ export class DashboardComponent {
   }
 
   openCheckIns() {
-    // debugger
+    //
     if (typeof window !== 'undefined') {
       this.hasCheckedIn = sessionStorage.getItem('checkIns');
     }
@@ -340,12 +314,7 @@ export class DashboardComponent {
     }
   }
 
-  activeTab: 'birthdays' | 'anniversaries' | 'newJoinees' = 'newJoinees';
-
-  currentIndex = 0;
-  wishMessage = '';
-
-  get currentList() {
+  get currentList(): TodayPerson[] {
     switch (this.activeTab) {
       case 'birthdays':
         return this.birthdayList;
@@ -359,31 +328,282 @@ export class DashboardComponent {
     }
   }
 
-  get currentPerson() {
+  get currentPerson(): TodayPerson | null {
     return this.currentList[this.currentIndex] || null;
   }
 
-  changeTab(tab: 'birthdays' | 'anniversaries' | 'newJoinees') {
+  changeTab(tab: 'birthdays' | 'anniversaries' | 'newJoinees'): void {
     this.activeTab = tab;
+
     this.currentIndex = 0;
+
     this.wishMessage = '';
+
+    this.wishes = [];
+
+    this.showWishes = false;
   }
 
-  prevPerson() {
-    if (this.currentIndex > 0) this.currentIndex--;
-  }
+  prevPerson(): void {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
 
-  nextPerson() {
-    if (this.currentIndex < this.currentList.length - 1) this.currentIndex++;
-  }
+      this.wishes = [];
 
-  sendWish() {
-    if (this.wishMessage.trim()) {
-      console.log(
-        `Wish sent to ${this.currentPerson.name}: ${this.wishMessage}`,
-      );
-      this.wishMessage = '';
+      this.showWishes = false;
     }
+  }
+
+  nextPerson(): void {
+    if (this.currentIndex < this.currentList.length - 1) {
+      this.currentIndex++;
+
+      this.wishes = [];
+
+      this.showWishes = false;
+    }
+  }
+
+  getTodayPeopleMoments(): void {
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_GET_TODAY_CELEBRATIONS_PEOPLE, {})
+      .subscribe({
+        next: (res: any) => {
+          console.log('Today People Moments:', res);
+
+          this.birthdayList = res?.data?.birthdays || [];
+
+          this.anniversaryList = res?.data?.anniversaries || [];
+
+          this.joineeList = res?.data?.newJoinees || [];
+
+          this.currentIndex = 0;
+          this.loadCurrentUserWishes();
+        },
+
+        error: (error) => {
+          this.commonService.openSnackbar(error.error.message, 'error');
+
+          this.birthdayList = [];
+
+          this.anniversaryList = [];
+
+          this.joineeList = [];
+
+          this.currentIndex = 0;
+        },
+      });
+  }
+
+  sendWish(): void {
+    const message = this.wishMessage.trim();
+
+    if (!message || !this.currentPerson) {
+      return;
+    }
+    const occasionType =
+      this.activeTab === 'birthdays'
+        ? 'birthday'
+        : this.activeTab === 'anniversaries'
+          ? 'anniversary'
+          : 'newJoinee';
+
+    const payload = {
+      recipientEmpNo: this.currentPerson.empNo,
+
+      occasionType,
+
+      message,
+    };
+
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_SEND_EMPLOYEE_WISH, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log('Wish sent:', res);
+
+          this.wishMessage = '';
+
+          this.commonService.openSnackbar(
+            'Wish sent successfully 🎉',
+            'success',
+          );
+
+          // Refresh wishes if currently viewing
+        },
+
+        error: (error) => {
+          console.error('Send wish error:', error);
+
+          this.commonService.openSnackbar(
+            error?.error?.message || 'Unable to send wish',
+            'error',
+          );
+        },
+      });
+  }
+
+  getEmployeeWishes(
+    occasionType?: 'birthday' | 'anniversary' | 'newJoinee',
+  ): void {
+    const currentUser = this.commonService.getCurrentUserDetails();
+
+    if (!currentUser?.empNo) {
+      return;
+    }
+
+    const finalOccasionType =
+      occasionType ||
+      (this.activeTab === 'birthdays'
+        ? 'birthday'
+        : this.activeTab === 'anniversaries'
+          ? 'anniversary'
+          : 'newJoinee');
+
+    const payload = {
+      EmpNo: currentUser.empNo,
+      occasionType: finalOccasionType,
+    };
+
+    console.log('Get Employee Wishes Payload:', payload);
+
+    this.isLoadingWishes = true;
+
+    this.apiService
+      .authApiCall(API_ENDPOINTS.SERVICE_GET_EMPLOYEE_WISHES, payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log('Employee Wishes Response:', res);
+
+          this.wishes = res?.data?.wishes || [];
+
+          this.wishCount = this.wishes.length;
+
+          this.isLoadingWishes = false;
+        },
+
+        error: (error) => {
+          console.error('Get wishes error:', error);
+
+          this.wishes = [];
+
+          this.wishCount = 0;
+
+          this.isLoadingWishes = false;
+        },
+      });
+  }
+
+  isCurrentUserCelebrationPerson(): boolean {
+    const currentUser = this.commonService.getCurrentUserDetails();
+
+    return (
+      !!currentUser?.empNo &&
+      !!this.currentPerson?.empNo &&
+      currentUser.empNo === this.currentPerson.empNo
+    );
+  }
+
+  openWishesDialogWithData(): void {
+    const currentPerson = this.currentPerson;
+
+    if (!currentPerson) {
+      return;
+    }
+
+    const occasion =
+      this.activeTab === 'birthdays'
+        ? 'birthday'
+        : this.activeTab === 'anniversaries'
+          ? 'anniversary'
+          : 'newJoinee';
+
+    this.dialog.open(EmployeeWishesDialogComponent, {
+      width: '620px',
+
+      maxWidth: '94vw',
+
+      maxHeight: '90vh',
+
+      autoFocus: false,
+
+      panelClass: 'employee-wishes-dialog',
+
+      data: {
+        employeeName: currentPerson.name,
+
+        occasion: occasion,
+
+        wishes: this.wishes,
+
+        defaultAvatar: this.defaultAvatar,
+      },
+    });
+  }
+
+  loadCurrentUserWishes(): void {
+    const currentUser = this.commonService.getCurrentUserDetails();
+
+    if (!currentUser?.empNo) {
+      return;
+    }
+
+    const empNo = currentUser.empNo;
+
+    // Check birthday
+    const birthdayPerson = this.birthdayList.find(
+      (person) => person.empNo === empNo,
+    );
+
+    if (birthdayPerson) {
+      this.activeTab = 'birthdays';
+
+      this.currentIndex = this.birthdayList.findIndex(
+        (person) => person.empNo === empNo,
+      );
+
+      this.getEmployeeWishes('birthday');
+
+      return;
+    }
+
+    // Check anniversary
+    const anniversaryPerson = this.anniversaryList.find(
+      (person) => person.empNo === empNo,
+    );
+
+    if (anniversaryPerson) {
+      this.activeTab = 'anniversaries';
+
+      this.currentIndex = this.anniversaryList.findIndex(
+        (person) => person.empNo === empNo,
+      );
+
+      this.getEmployeeWishes('anniversary');
+
+      return;
+    }
+
+    // Check new joinee
+    const joineePerson = this.joineeList.find(
+      (person) => person.empNo === empNo,
+    );
+
+    if (joineePerson) {
+      this.activeTab = 'newJoinees';
+
+      this.currentIndex = this.joineeList.findIndex(
+        (person) => person.empNo === empNo,
+      );
+
+      this.getEmployeeWishes('newJoinee');
+
+      return;
+    }
+
+    // Current user has no celebration today
+    this.wishes = [];
+    this.wishCount = 0;
   }
 
   openAllEventsDialog() {

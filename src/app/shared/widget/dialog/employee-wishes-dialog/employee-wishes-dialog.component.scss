@@ -1,0 +1,540 @@
+:host {
+  display: block;
+}
+
+.wishes-dialog {
+  width: 100%;
+  max-height: 85vh;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.wishes-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 22px;
+
+  background: linear-gradient(
+    135deg,
+    #f7f5ff 0%,
+    #ffffff 100%
+  );
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-icon {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    135deg,
+    #673ab7,
+    #9575cd
+  );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 6px 15px rgba(103, 58, 183, 0.22);
+}
+
+.header-icon mat-icon {
+  font-size: 25px;
+  width: 25px;
+  height: 25px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #202124;
+}
+
+.header-subtitle {
+  margin-top: 3px;
+
+  font-size: 12px;
+  color: #777777;
+}
+
+.close-button {
+  color: #777777;
+}
+
+.close-button:hover {
+  background: #f1f1f1;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.wishes-summary {
+  margin: 18px 20px 10px;
+
+  padding: 14px 16px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  background: #faf9ff;
+
+  border: 1px solid #eeeafd;
+
+  border-radius: 14px;
+}
+
+.summary-icon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f0ebff;
+
+  color: #673ab7;
+}
+
+.summary-icon mat-icon {
+  font-size: 21px;
+}
+
+.summary-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #303030;
+}
+
+.summary-subtitle {
+  margin-top: 3px;
+
+  font-size: 12px;
+  color: #777777;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+.wishes-body {
+  padding: 10px 20px 18px;
+
+  overflow-y: auto;
+
+  max-height: 430px;
+}
+
+
+/* =====================================================
+   WISH CARD
+===================================================== */
+
+.wish-card {
+  display: flex;
+
+  gap: 13px;
+
+  padding: 15px;
+
+  margin-bottom: 12px;
+
+  background: #ffffff;
+
+  border: 1px solid #eeeeee;
+
+  border-radius: 15px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+
+    border-color: #ddd4f5;
+
+    box-shadow:
+      0 7px 20px rgba(0, 0, 0, 0.07);
+  }
+}
+
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+.wish-avatar-wrapper {
+  position: relative;
+
+  flex-shrink: 0;
+}
+
+.wish-avatar {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 2px solid #ffffff;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.avatar-status {
+  position: absolute;
+
+  right: 0;
+  bottom: 1px;
+
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: #4caf50;
+
+  border: 2px solid #ffffff;
+}
+
+
+/* =====================================================
+   WISH DETAILS
+===================================================== */
+
+.wish-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.wish-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.sender-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #252525;
+}
+
+.sender-designation {
+  margin-top: 3px;
+
+  font-size: 11px;
+  color: #858585;
+}
+
+.wish-date {
+  flex-shrink: 0;
+
+  font-size: 10px;
+  color: #999999;
+
+  padding-top: 2px;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.wish-message {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 7px;
+
+  margin-top: 10px;
+
+  padding: 10px 12px;
+
+  background: #f8f7fb;
+
+  border-radius: 10px;
+
+  color: #444444;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+.wish-message mat-icon {
+  flex-shrink: 0;
+
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+
+  color: #9575cd;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.wish-footer {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  margin-top: 8px;
+
+  font-size: 10px;
+
+  color: #999999;
+}
+
+.wish-footer mat-icon {
+  width: 14px;
+  height: 14px;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-wishes {
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-icon {
+  width: 65px;
+  height: 65px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f6f3ff;
+
+  color: #9575cd;
+
+  margin-bottom: 14px;
+}
+
+.empty-icon mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.empty-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.empty-subtitle {
+  max-width: 280px;
+
+  margin-top: 6px;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  color: #888888;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.wishes-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 14px 20px;
+
+  background: #fafafa;
+
+  border-top: 1px solid #eeeeee;
+}
+
+.footer-message {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  font-size: 11px;
+
+  color: #777777;
+}
+
+.footer-message mat-icon {
+  color: #673ab7;
+
+  font-size: 17px;
+
+  width: 17px;
+  height: 17px;
+}
+
+.done-button {
+  min-width: 85px;
+
+  height: 36px;
+
+  border-radius: 9px !important;
+
+  background: #673ab7 !important;
+
+  color: #ffffff !important;
+
+  font-size: 12px;
+}
+
+.done-button mat-icon {
+  font-size: 17px;
+
+  width: 17px;
+  height: 17px;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.wishes-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.wishes-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wishes-body::-webkit-scrollbar-thumb {
+  background: #d5d0e2;
+  border-radius: 10px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .wishes-dialog {
+    border-radius: 16px;
+  }
+
+  .wishes-dialog-header {
+    padding: 16px;
+  }
+
+  .header-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .header-title {
+    font-size: 16px;
+  }
+
+  .header-subtitle {
+    font-size: 11px;
+  }
+
+  .wishes-summary {
+    margin: 14px;
+  }
+
+  .wishes-body {
+    padding: 8px 14px 14px;
+    max-height: 55vh;
+  }
+
+  .wish-card {
+    padding: 12px;
+  }
+
+  .wish-avatar {
+    width: 42px;
+    height: 42px;
+  }
+
+  .wish-message {
+    font-size: 12px;
+  }
+
+  .wishes-dialog-footer {
+    padding: 12px 14px;
+  }
+
+  .footer-message {
+    display: none;
+  }
+
+  .done-button {
+    width: 100%;
+  }
+}
+
+.employee-wishes-dialog .mat-mdc-dialog-surface {
+  padding: 0 !important;
+
+  border-radius: 20px !important;
+
+  overflow: hidden !important;
+}

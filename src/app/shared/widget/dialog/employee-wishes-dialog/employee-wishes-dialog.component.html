@@ -1,0 +1,247 @@
+<div class="wishes-dialog">
+
+  <!-- =========================================
+       HEADER
+  ========================================== -->
+
+  <div class="wishes-dialog-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+        <mat-icon>
+          {{ occasionIcon }}
+        </mat-icon>
+      </div>
+
+      <div class="header-content">
+
+        <div class="header-title">
+          {{ occasionTitle }}
+        </div>
+
+        <div class="header-subtitle">
+          Wishes received for {{ data.employeeName }}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      mat-icon-button
+      class="close-button"
+      type="button"
+      (click)="close()"
+      aria-label="Close">
+
+      <mat-icon>close</mat-icon>
+
+    </button>
+
+  </div>
+
+
+  <!-- =========================================
+       SUMMARY
+  ========================================== -->
+
+  <div class="wishes-summary">
+
+    <div class="summary-icon">
+
+      <mat-icon>
+        favorite
+      </mat-icon>
+
+    </div>
+
+    <div class="summary-content">
+
+      <div class="summary-title">
+        {{ data.wishes.length }}
+        {{ data.wishes.length === 1 ? 'Wish' : 'Wishes' }}
+        Received
+      </div>
+
+      <div class="summary-subtitle">
+        Your colleagues sent you warm wishes 🎉
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================
+       WISHES LIST
+  ========================================== -->
+
+  <div class="wishes-body">
+
+    <ng-container *ngIf="data.wishes.length > 0; else noWishes">
+
+      <div
+        class="wish-card"
+        *ngFor="let wish of data.wishes">
+
+        <!-- Avatar -->
+
+        <div class="wish-avatar-wrapper">
+
+          <img
+            class="wish-avatar"
+            [src]="wish.senderProfileImage || defaultAvatar"
+            [alt]="wish.senderName"
+            (error)="wish.senderProfileImage = defaultAvatar"
+          />
+
+          <span class="avatar-status"></span>
+
+        </div>
+
+
+        <!-- Wish Content -->
+
+        <div class="wish-details">
+
+          <div class="wish-top-row">
+
+            <div class="sender-info">
+
+              <div class="sender-name">
+                {{ wish.senderName }}
+              </div>
+
+              <div
+                class="sender-designation"
+                *ngIf="
+                  wish.senderDesignation ||
+                  wish.senderDepartment
+                ">
+
+                {{ wish.senderDesignation }}
+
+                <span
+                  *ngIf="
+                    wish.senderDesignation &&
+                    wish.senderDepartment
+                  ">
+                  •
+                </span>
+
+                {{ wish.senderDepartment }}
+
+              </div>
+
+            </div>
+
+
+            <div class="wish-date">
+
+              {{ wish.createdAt | date:'dd MMM' }}
+
+            </div>
+
+          </div>
+
+
+          <!-- Message -->
+
+          <div class="wish-message">
+
+            <mat-icon>
+              format_quote
+            </mat-icon>
+
+            <span>
+              {{ wish.message }}
+            </span>
+
+          </div>
+
+
+          <!-- Time -->
+
+          <div class="wish-footer">
+
+            <mat-icon>
+              schedule
+            </mat-icon>
+
+            {{ wish.createdAt | date:'hh:mm a' }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+
+    <!-- =========================================
+         EMPTY STATE
+    ========================================== -->
+
+    <ng-template #noWishes>
+
+      <div class="empty-wishes">
+
+        <div class="empty-icon">
+
+          <mat-icon>
+            favorite_border
+          </mat-icon>
+
+        </div>
+
+        <div class="empty-title">
+          No wishes yet
+        </div>
+
+        <div class="empty-subtitle">
+          Your colleagues haven't sent you any wishes yet.
+        </div>
+
+      </div>
+
+    </ng-template>
+
+  </div>
+
+
+  <!-- =========================================
+       FOOTER
+  ========================================== -->
+
+  <div class="wishes-dialog-footer">
+
+    <div class="footer-message">
+
+      <mat-icon>
+        auto_awesome
+      </mat-icon>
+
+      <span>
+        Thank you for being part of our team!
+      </span>
+
+    </div>
+
+    <button
+      mat-flat-button
+      class="done-button"
+      type="button"
+      (click)="close()">
+
+      <mat-icon>check</mat-icon>
+
+      Done
+
+    </button>
+
+  </div>
+
+</div>

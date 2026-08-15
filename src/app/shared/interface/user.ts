@@ -28,3 +28,24 @@ export interface UserDetails {
   profileImage: string;
   loginUserSecretkey: string;
 }
+
+export interface TodayPerson {
+  empNo: string;
+  name: string;
+  image: string | null;
+  designation: string;
+  department: string;
+  yearsCompleted?: number;
+}
+
+export interface EmployeeWish {
+  _id: string;
+  senderEmpNo: string;
+  senderName: string;
+  senderDesignation: string;
+  senderDepartment: string;
+  senderProfileImage: string | null;
+  message: string;
+  occasionType: 'birthday' | 'anniversary' | 'newJoinee';
+  createdAt: string;
+}

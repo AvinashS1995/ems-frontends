@@ -82,4 +82,8 @@ export const API_ENDPOINTS = {
   SERVICE_PROJETS_ASSIGN_APPROVE_REJECT:
     'project/project-assign-approve-reject',
   SERVICE_TASK_ASSIGN_APPROVE_REJECT: 'project/task-assign-approve-reject',
+  SERVICE_GET_TODAY_CELEBRATIONS_PEOPLE: 'auth/get-today-celebrations-peoples',
+  SERVICE_SEND_EMPLOYEE_WISH: 'auth/today-celebrations-peoples-send-wish',
+  SERVICE_GET_EMPLOYEE_WISHES:
+    'auth/get-today-celebrations-peoples-view-wishes',
 };
