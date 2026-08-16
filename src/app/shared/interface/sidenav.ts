@@ -19,16 +19,18 @@ export interface Notification {
 
 export interface Notification {
   _id: string;
+
   title: string;
   message: string;
+
   module: string;
   event: string;
 
   recipientEmployee: string;
   recipientEmail?: string;
 
-  createdByEmployee?: string;
-  createdByName?: string;
+  createdByEmployee?: string | null;
+  createdByName?: string | null;
 
   icon: string;
   color: string;

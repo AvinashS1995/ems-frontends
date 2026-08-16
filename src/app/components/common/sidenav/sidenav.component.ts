@@ -20,6 +20,8 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SHARED_CUSTOM_PIPES } from '../../../shared/common/shared-pipe';
 import { Subject, takeUntil } from 'rxjs';
+import { NotificationComponent } from '../notification/notification.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sidenav',
@@ -76,6 +78,7 @@ export class SidenavComponent implements OnInit {
     private storageService: StorageService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -271,6 +274,12 @@ export class SidenavComponent implements OnInit {
   }
 
   loadNotifications(): void {
+    if (!this.EmployeeNo) {
+      return;
+    }
+
+    this.isNotificationLoading = true;
+
     const payload = {
       empNo: this.EmployeeNo,
       page: 1,
@@ -282,20 +291,28 @@ export class SidenavComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           if (res?.status === 'success') {
-            const notifications = res.data.notifications || [];
+            const notifications = res.data?.notifications || [];
 
             const formatted = notifications.map((item: Notification) => ({
               ...item,
+
               time: this.getNotificationTime(item.createdAt),
             }));
 
-            // 🔥 Update BehaviorSubject
+            /*
+             * Store notifications in CommonService
+             */
+
             this.commonService.setNotifications(formatted);
           }
+
+          this.isNotificationLoading = false;
         },
 
         error: (error) => {
           console.error('Notification API Error:', error);
+
+          this.isNotificationLoading = false;
         },
       });
   }
@@ -331,7 +348,6 @@ export class SidenavComponent implements OnInit {
       this.markNotificationAsRead(item);
     }
 
-    // Optional navigation
     if (item.route) {
       this.router.navigate([item.route]);
     }
@@ -357,8 +373,23 @@ export class SidenavComponent implements OnInit {
             item.readAt =
               res?.data?.notification?.readAt || new Date().toISOString();
 
-            // Badge update immediately
+            /*
+             * Update badge immediately
+             */
+
             this.unreadCount = Math.max(this.unreadCount - 1, 0);
+
+            /*
+             * Update shared notification list
+             */
+
+            this.commonService.setNotifications([...this.notifications]);
+
+            /*
+             * Update shared unread count
+             */
+
+            this.commonService.setUnreadCount(this.unreadCount);
           }
         },
 
@@ -388,13 +419,33 @@ export class SidenavComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           if (res?.status === 'success') {
+            const readAt = new Date().toISOString();
+
             this.notifications = this.notifications.map((item) => ({
               ...item,
+
               isRead: true,
-              readAt: new Date().toISOString(),
+
+              readAt,
             }));
 
+            /*
+             * Badge immediately becomes 0
+             */
+
             this.unreadCount = 0;
+
+            /*
+             * Update shared notification state
+             */
+
+            this.commonService.setNotifications([...this.notifications]);
+
+            /*
+             * Update shared badge state
+             */
+
+            this.commonService.setUnreadCount(0);
           }
         },
 
@@ -444,11 +495,50 @@ export class SidenavComponent implements OnInit {
     });
   }
 
-  viewAllNotifications() {
-    this.router.navigate(['/notifications']);
+  viewAllNotifications(event?: MouseEvent): void {
+    event?.stopPropagation();
+
+    const dialogRef = this.dialog.open(NotificationComponent, {
+      width: '720px',
+
+      maxWidth: '96vw',
+
+      height: '760px',
+
+      maxHeight: '92vh',
+
+      autoFocus: false,
+
+      restoreFocus: true,
+
+      data: {
+        notifications: this.notifications,
+
+        unreadCount: this.unreadCount,
+      },
+
+      panelClass: 'notifications-dialog-panel',
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      // if (result?.route) {
+
+      //   this.router.navigate([
+      //     result.route,
+      //   ]);
+
+      // }
+
+      /*
+       * Refresh navbar badge and
+       * notification dropdown.
+       */
+
+      this.refreshNotificationData();
+    });
   }
 
-  getSubscribingNotifications() {
+  getSubscribingNotifications(): void {
     this.commonService.notifications$
       .pipe(takeUntil(this.destroy$))
       .subscribe((notifications) => {
@@ -465,11 +555,37 @@ export class SidenavComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((refresh) => {
         if (refresh) {
-          this.refreshNotificationData();
+          this.loadUnreadNotificationCount();
         }
       });
 
-    this.refreshNotificationData();
+    /*
+     * IMPORTANT:
+     *
+     * Load only unread count when
+     * navbar is initialized.
+     *
+     * Notification list will be loaded
+     * when user opens notification menu.
+     */
+
+    this.loadUnreadNotificationCount();
+  }
+
+  onNotificationMenuOpened(): void {
+    /*
+     * User opened notification menu.
+     * Now fetch the latest notifications.
+     */
+
+    this.loadNotifications();
+
+    /*
+     * Also refresh unread count because
+     * another tab/action may have changed it.
+     */
+
+    this.loadUnreadNotificationCount();
   }
 
   refreshNotificationData(): void {

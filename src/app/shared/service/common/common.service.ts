@@ -15,6 +15,7 @@ import * as jwtDecodeNamespace from 'jwt-decode';
 import { UserDetails } from '../../interface/user';
 import { DocumentViewerComponent } from '../../widget/dialog/document-viewer/document-viewer.component';
 import { ImageViewerComponent } from '../../widget/dialog/image-viewer/image-viewer.component';
+import { Notification } from '../../interface/sidenav';
 
 @Injectable({
   providedIn: 'root',

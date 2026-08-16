@@ -442,46 +442,66 @@ button {
 ========================================================= */
 
 .notification-btn {
-  margin-right: 8px !important;
+  width: 44px;
+  height: 44px;
+
+  margin-right: 6px !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50% !important;
+
+  color: #424242;
 }
 
+.notification-btn:hover {
+  background: #f4f6fb;
+}
 
 .notification-btn mat-icon {
   font-size: 24px;
+
+  width: 24px;
+  height: 24px;
 }
 
 
 /* =========================================================
-   NOTIFICATION MENU - DESKTOP
+   NOTIFICATION MENU
 ========================================================= */
 
 ::ng-deep .notification-menu {
   max-width: none !important;
 }
 
-
 ::ng-deep .notification-menu .mat-mdc-menu-panel {
-  width: 420px !important;
+  width: 430px !important;
 
-  min-width: 420px !important;
+  min-width: 430px !important;
 
-  max-width: 420px !important;
+  max-width: 430px !important;
 
   padding: 0 !important;
 
-  border-radius: 14px !important;
+  border-radius: 18px !important;
 
   overflow: hidden;
 
+  background: #ffffff;
+
   box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.18);
+    0 12px 35px rgba(0, 0, 0, 0.16) !important;
 }
 
 
-/* Notification wrapper */
+/* =========================================================
+   WRAPPER
+========================================================= */
 
 .notification-wrapper {
-  width: 420px;
+  width: 430px;
 
   max-width: 100%;
 
@@ -491,16 +511,20 @@ button {
 
   flex-direction: column;
 
+  overflow: hidden;
+
   box-sizing: border-box;
 }
 
 
 /* =========================================================
-   NOTIFICATION HEADER
+   HEADER
 ========================================================= */
 
 .notification-header {
-  width: 100%;
+  min-height: 72px;
+
+  padding: 14px 18px;
 
   display: flex;
 
@@ -508,70 +532,131 @@ button {
 
   justify-content: space-between;
 
-  gap: 15px;
+  gap: 12px;
 
-  padding: 16px 18px;
+  background: #ffffff;
 
   box-sizing: border-box;
 }
 
 
-.notification-header-info {
-  min-width: 0;
+/* Header title */
+
+.notification-title-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
 }
 
+
+/* Header icon */
+
+.notification-title-icon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #eef4ff;
+
+  color: #3949ab;
+}
+
+.notification-title-icon mat-icon {
+  font-size: 21px;
+
+  width: 21px;
+  height: 21px;
+}
+
+
+/* Title */
 
 .notification-header h3 {
   margin: 0;
 
-  font-size: 18px;
+  color: #202124;
+
+  font-size: 17px;
+
+  line-height: 1.3;
 
   font-weight: 600;
-
-  color: #222222;
 }
 
+
+/* Unread text */
 
 .notification-header p {
-  margin: 4px 0 0;
+  margin: 3px 0 0;
+
+  color: #8a8f98;
 
   font-size: 12px;
 
-  color: #757575;
-}
-
-
-/* Mark all button */
-
-.mark-all-btn {
-  flex: 0 0 auto;
-
-  min-width: auto;
-
-  height: 34px;
-
-  padding: 0 12px;
-
-  border-radius: 7px;
-
-  font-size: 12px;
+  line-height: 1.2;
 }
 
 
 /* =========================================================
-   NOTIFICATION BODY
+   MARK ALL
+========================================================= */
+
+.mark-all-btn {
+  min-width: auto !important;
+
+  height: 34px;
+
+  padding: 0 10px !important;
+
+  border-radius: 8px !important;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  color: #3949ab !important;
+
+  font-size: 12px;
+
+  font-weight: 500;
+}
+
+.mark-all-btn:hover {
+  background: #f1f4ff !important;
+}
+
+.mark-all-btn mat-icon {
+  width: 17px;
+  height: 17px;
+
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   BODY
 ========================================================= */
 
 .notification-body {
   width: 100%;
 
-  max-height: 380px;
+  max-height: 390px;
 
   overflow-y: auto;
 
   overflow-x: hidden;
 
-  box-sizing: border-box;
+  background: #ffffff;
 }
 
 
@@ -581,9 +666,12 @@ button {
   width: 5px;
 }
 
+.notification-body::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 .notification-body::-webkit-scrollbar-thumb {
-  background: #c7c7c7;
+  background: #d5d8df;
 
   border-radius: 10px;
 }
@@ -596,7 +684,9 @@ button {
 .notification-card {
   width: 100%;
 
-  min-width: 0;
+  min-height: 84px;
+
+  padding: 13px 17px;
 
   box-sizing: border-box;
 
@@ -606,29 +696,42 @@ button {
 
   gap: 12px;
 
-  padding: 13px 18px;
-
   position: relative;
 
   cursor: pointer;
 
+  border-bottom: 1px solid #f0f1f4;
+
+  background: #ffffff;
+
   transition:
-    background 0.2s ease;
+    background 0.18s ease,
+    transform 0.18s ease;
 }
 
+
+/* Last card */
+
+.notification-card:last-child {
+  border-bottom: none;
+}
+
+
+/* Hover */
 
 .notification-card:hover {
-  background: #f5f7fb;
+  background: #f7f9fc;
 }
 
+
+/* Unread */
 
 .notification-card.unread {
-  background: #eef5ff;
+  background: #f4f7ff;
 }
 
-
 .notification-card.unread:hover {
-  background: #e5f0ff;
+  background: #edf3ff;
 }
 
 
@@ -642,7 +745,7 @@ button {
 
   flex: 0 0 42px;
 
-  border-radius: 50%;
+  border-radius: 12px;
 
   display: flex;
 
@@ -652,19 +755,18 @@ button {
   box-sizing: border-box;
 }
 
-
 .notification-icon mat-icon {
-  color: #1565c0;
+  width: 21px;
+  height: 21px;
 
   font-size: 21px;
 
-  width: 21px;
-  height: 21px;
+  color: #3949ab;
 }
 
 
 /* =========================================================
-   NOTIFICATION CONTENT
+   CONTENT
 ========================================================= */
 
 .notification-content {
@@ -672,33 +774,37 @@ button {
 
   min-width: 0;
 
-  padding-right: 8px;
+  padding-right: 12px;
 }
 
 
-.notification-content .title {
-  font-size: 14px;
+/* Title */
+
+.notification-title {
+  color: #24262b;
+
+  font-size: 13.5px;
+
+  line-height: 1.35;
 
   font-weight: 600;
 
-  color: #222222;
-
-  line-height: 1.3;
+  white-space: nowrap;
 
   overflow: hidden;
 
   text-overflow: ellipsis;
-
-  white-space: nowrap;
 }
 
 
-.notification-content .message {
+/* Message */
+
+.notification-message {
   margin-top: 4px;
 
-  font-size: 12px;
+  color: #656a73;
 
-  color: #616161;
+  font-size: 12px;
 
   line-height: 1.45;
 
@@ -712,20 +818,37 @@ button {
 }
 
 
-.notification-content .time {
-  margin-top: 5px;
+/* =========================================================
+   TIME
+========================================================= */
 
-  font-size: 11px;
+.notification-meta {
+  margin-top: 6px;
 
-  color: #9e9e9e;
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  color: #9aa0a6;
+
+  font-size: 10.5px;
+}
+
+.notification-meta mat-icon {
+  width: 13px;
+  height: 13px;
+
+  font-size: 13px;
 }
 
 
 /* =========================================================
-   UNREAD DOT
+   UNREAD INDICATOR
 ========================================================= */
 
-.unread-dot {
+.unread-indicator {
   width: 8px;
   height: 8px;
 
@@ -733,46 +856,23 @@ button {
 
   border-radius: 50%;
 
-  background: #1976d2;
+  background: #3949ab;
 
-  margin-top: 6px;
+  margin-top: 5px;
+
+  box-shadow:
+    0 0 0 3px rgba(57, 73, 171, 0.10);
 }
 
 
 /* =========================================================
-   NOTIFICATION FOOTER
-========================================================= */
-
-.notification-footer {
-  width: 100%;
-
-  padding: 12px 16px;
-
-  box-sizing: border-box;
-
-  display: flex;
-
-  justify-content: center;
-}
-
-
-.notification-footer button {
-  width: 100%;
-
-  height: 40px;
-
-  border-radius: 8px;
-
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   NOTIFICATION EMPTY STATE
+   EMPTY STATE
 ========================================================= */
 
 .notification-empty {
-  min-height: 180px;
+  min-height: 220px;
+
+  padding: 30px 20px;
 
   display: flex;
 
@@ -782,226 +882,265 @@ button {
 
   justify-content: center;
 
-  color: #999999;
-
   text-align: center;
+
+  box-sizing: border-box;
 }
 
 
-.notification-empty mat-icon {
-  width: 40px;
+.empty-icon {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #f3f5f9;
+
+  color: #9aa0a6;
+}
+
+.empty-icon mat-icon {
+  width: 30px;
+  height: 30px;
+
+  font-size: 30px;
+}
+
+
+.empty-title {
+  margin-top: 12px;
+
+  color: #454950;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+.empty-message {
+  margin-top: 4px;
+
+  color: #9aa0a6;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.notification-loading {
+  min-height: 200px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  color: #858b95;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.notification-footer {
+  padding: 11px 14px;
+
+  background: #ffffff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+.view-all-notifications-btn {
+  width: 100%;
+
   height: 40px;
 
-  font-size: 40px;
+  border-radius: 9px !important;
 
-  margin-bottom: 8px;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  color: #3949ab !important;
+
+  font-size: 12px;
+
+  font-weight: 600;
 }
 
+.view-all-notifications-btn:hover {
+  background: #f1f4ff !important;
+}
 
-.notification-empty p {
-  margin: 0;
+.view-all-notifications-btn mat-icon {
+  width: 18px;
+  height: 18px;
 
-  font-size: 13px;
+  font-size: 18px;
+
+  transition: transform 0.2s ease;
+}
+
+.view-all-notifications-btn:hover mat-icon {
+  transform: translateX(3px);
 }
 
 
 /* =========================================================
    TABLET
-   481px - 767px
 ========================================================= */
 
 @media (min-width: 481px) and (max-width: 767px) {
 
-  .top-navbar {
-    height: 64px;
-
-    padding: 0 10px;
-  }
-
-
-  .logo img {
-    height: 60px;
-  }
-
-
-  .page-content {
-    height: calc(100vh - 64px);
-
-    padding: 14px;
-  }
-
-
-  /* Notification */
-
   ::ng-deep .notification-menu .mat-mdc-menu-panel {
-    width: 340px !important;
+    width: 360px !important;
 
-    min-width: 340px !important;
+    min-width: 360px !important;
 
-    max-width: 340px !important;
+    max-width: calc(100vw - 24px) !important;
   }
-
 
   .notification-wrapper {
-    width: 340px;
+    width: 360px;
+
+    max-width: calc(100vw - 24px);
   }
 
-
   .notification-body {
-    max-height: 320px;
+    max-height: 350px;
   }
 }
 
 
 /* =========================================================
    MOBILE
-   361px - 480px
 ========================================================= */
 
 @media (min-width: 361px) and (max-width: 480px) {
 
-  .top-navbar {
-    height: 60px;
-
-    padding: 0 8px;
-  }
-
-
-  .logo img {
-    height: 56px;
-  }
-
-
-  .page-content {
-    height: calc(100vh - 60px);
-
-    padding: 12px;
-  }
-
-
-  /* Avatar */
-
-  .avatar-btn {
-    width: 44px;
-    height: 44px;
-  }
-
-
-  .avatar-circle {
-    width: 38px;
-    height: 38px;
-
-    font-size: 14px;
-  }
-
-
-  /* Notification button */
-
-  .notification-btn {
-    margin-right: 4px !important;
-  }
-
-
-  .notification-btn mat-icon {
-    font-size: 22px;
-  }
-
-
-  /* Notification */
-
   ::ng-deep .notification-menu .mat-mdc-menu-panel {
-    width: 320px !important;
+    width: 340px !important;
 
-    min-width: 320px !important;
+    min-width: 340px !important;
 
-    max-width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 20px) !important;
 
-    border-radius: 12px !important;
+    border-radius: 15px !important;
   }
-
 
   .notification-wrapper {
-    width: 320px;
+    width: 340px;
 
-    max-width: calc(100vw - 24px);
+    max-width: calc(100vw - 20px);
   }
-
 
   .notification-header {
-    padding: 12px 14px;
+    min-height: 64px;
 
-    gap: 10px;
+    padding: 11px 13px;
   }
 
+  .notification-title-icon {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 10px;
+  }
+
+  .notification-title-icon mat-icon {
+    font-size: 19px;
+
+    width: 19px;
+    height: 19px;
+  }
 
   .notification-header h3 {
-    font-size: 16px;
+    font-size: 15px;
   }
-
 
   .notification-header p {
-    font-size: 11px;
+    font-size: 10px;
   }
-
 
   .mark-all-btn {
-    height: 30px;
+    height: 31px;
 
-    padding: 0 9px;
+    padding: 0 8px !important;
 
-    font-size: 11px;
+    font-size: 10px;
   }
-
 
   .notification-body {
-    max-height: 300px;
+    max-height: 320px;
   }
 
-
   .notification-card {
-    padding: 10px 13px;
+    min-height: 76px;
+
+    padding: 11px 12px;
 
     gap: 9px;
   }
-
 
   .notification-icon {
     width: 36px;
     height: 36px;
 
     flex-basis: 36px;
-  }
 
+    border-radius: 10px;
+  }
 
   .notification-icon mat-icon {
-    font-size: 18px;
-
     width: 18px;
     height: 18px;
+
+    font-size: 18px;
   }
 
-
-  .notification-content .title {
+  .notification-title {
     font-size: 12px;
   }
 
-
-  .notification-content .message {
-    font-size: 10px;
+  .notification-message {
+    font-size: 10.5px;
   }
 
-
-  .notification-content .time {
-    font-size: 10px;
+  .notification-meta {
+    font-size: 9.5px;
   }
-
 
   .notification-footer {
-    padding: 9px 12px;
+    padding: 9px 11px;
   }
 
-
-  .notification-footer button {
+  .view-all-notifications-btn {
     height: 36px;
 
     font-size: 11px;
@@ -1011,174 +1150,136 @@ button {
 
 /* =========================================================
    SMALL MOBILE
-   <= 360px
 ========================================================= */
 
 @media (max-width: 360px) {
 
-  .top-navbar {
-    height: 56px;
-
-    padding: 0 6px;
-  }
-
-
-  .logo img {
-    height: 52px;
-
-    max-width: 130px;
-
-    object-fit: contain;
-  }
-
-
-  .page-content {
-    height: calc(100vh - 56px);
-
-    padding: 10px;
-  }
-
-
-  /* Mobile menu */
-
-  .mobile-sidenav {
-    width: 270px;
-
-    max-width: 85vw;
-  }
-
-
-  /* Avatar */
-
-  .avatar-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-
-  .avatar-circle {
-    width: 34px;
-    height: 34px;
-
-    font-size: 13px;
-  }
-
-
-  /* Notification */
-
-  .notification-btn {
-    margin-right: 2px !important;
-  }
-
-
-  .notification-btn mat-icon {
-    font-size: 21px;
-  }
-
-
   ::ng-deep .notification-menu .mat-mdc-menu-panel {
-    width: calc(100vw - 32px) !important;
+    width: calc(100vw - 20px) !important;
 
-    min-width: calc(100vw - 32px) !important;
+    min-width: calc(100vw - 20px) !important;
 
-    max-width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 20px) !important;
 
-    border-radius: 11px !important;
+    border-radius: 13px !important;
   }
-
 
   .notification-wrapper {
-    width: calc(100vw - 32px);
+    width: calc(100vw - 20px);
 
-    max-width: calc(100vw - 32px);
+    max-width: calc(100vw - 20px);
   }
-
 
   .notification-header {
-    padding: 10px 12px;
+    min-height: 58px;
 
-    gap: 6px;
+    padding: 9px 10px;
   }
 
-
-  .notification-header h3 {
-    font-size: 14px;
-  }
-
-
-  .notification-header p {
-    font-size: 10px;
-  }
-
-
-  .mark-all-btn {
-    height: 28px;
-
-    padding: 0 7px;
-
-    font-size: 10px;
-  }
-
-
-  .notification-body {
-    max-height: 280px;
-  }
-
-
-  .notification-card {
-    padding: 9px 11px;
-
+  .notification-title-row {
     gap: 8px;
   }
 
+  .notification-title-icon {
+    width: 32px;
+    height: 32px;
 
-  .notification-icon {
-    width: 34px;
-    height: 34px;
-
-    flex-basis: 34px;
+    border-radius: 9px;
   }
 
-
-  .notification-icon mat-icon {
+  .notification-title-icon mat-icon {
     font-size: 17px;
 
     width: 17px;
     height: 17px;
   }
 
+  .notification-header h3 {
+    font-size: 13px;
+  }
 
-  .notification-content .title {
+  .notification-header p {
+    font-size: 9px;
+  }
+
+  .mark-all-btn {
+    height: 28px;
+
+    padding: 0 6px !important;
+
+    font-size: 9px;
+  }
+
+  .mark-all-btn mat-icon {
+    width: 15px;
+    height: 15px;
+
+    font-size: 15px;
+  }
+
+  .notification-body {
+    max-height: 280px;
+  }
+
+  .notification-card {
+    min-height: 70px;
+
+    padding: 9px 10px;
+
+    gap: 8px;
+  }
+
+  .notification-icon {
+    width: 32px;
+    height: 32px;
+
+    flex-basis: 32px;
+
+    border-radius: 9px;
+  }
+
+  .notification-icon mat-icon {
+    width: 16px;
+    height: 16px;
+
+    font-size: 16px;
+  }
+
+  .notification-title {
     font-size: 11px;
   }
 
-
-  .notification-content .message {
-    font-size: 9px;
+  .notification-message {
+    font-size: 9.5px;
 
     line-height: 1.35;
   }
 
-
-  .notification-content .time {
+  .notification-meta {
     font-size: 9px;
+
+    margin-top: 4px;
   }
 
+  .notification-meta mat-icon {
+    width: 11px;
+    height: 11px;
 
-  .unread-dot {
+    font-size: 11px;
+  }
+
+  .unread-indicator {
     width: 6px;
     height: 6px;
 
     flex-basis: 6px;
   }
 
-
   .notification-footer {
-    padding: 8px 10px;
+    padding: 8px 9px;
   }
 
-
-  .notification-footer button {
+  .view-all-notifications-btn {
     height: 34px;
 
     font-size: 10px;
