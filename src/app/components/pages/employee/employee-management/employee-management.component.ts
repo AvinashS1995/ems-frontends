@@ -49,7 +49,7 @@ export const MY_DATE_FORMATS = {
 export class EmployeeManagementComponent {
   private destroy$ = new Subject<void>();
 
-  displayedColumns: string[] = [
+  private readonly baseColumns: string[] = [
     'empno',
     'name',
     'role',
@@ -60,8 +60,8 @@ export class EmployeeManagementComponent {
     'salary',
     'workType',
     'status',
-    'action',
   ];
+  displayedColumns: string[] = [];
   dataSource: Array<any> = [];
 
   employeeFilterForm!: FormGroup;
@@ -81,6 +81,11 @@ export class EmployeeManagementComponent {
   genderTypeList: Array<any> = [];
   departmentTypeList: Array<any> = [];
   reportedByEmployee: Array<any> = [];
+  RoleName: string = '';
+
+  isAdminOrHR = false;
+
+  pageTitle = 'Manage Employees';
 
   constructor(
     private router: Router,
@@ -93,6 +98,7 @@ export class EmployeeManagementComponent {
 
   ngOnInit(): void {
     this.prepareEmployeeFilterForm();
+    this.getCurrentUserRole();
     this.getparam();
     this.getEmployees();
   }
@@ -178,6 +184,23 @@ export class EmployeeManagementComponent {
       status: [''],
       type: [''],
     });
+  }
+
+  getCurrentUserRole(): void {
+    const currentUser = this.commonService.getCurrentUserDetails();
+
+    this.RoleName = currentUser?.role || '';
+
+    this.isAdminOrHR = this.RoleName === 'Admin' || this.RoleName === 'HR';
+
+    this.pageTitle = this.isAdminOrHR ? 'Manage Employees' : 'Employee List';
+    this.setDisplayedColumns();
+  }
+
+  setDisplayedColumns(): void {
+    this.displayedColumns = this.isAdminOrHR
+      ? [...this.baseColumns, 'action']
+      : [...this.baseColumns];
   }
 
   addEmployee(employeeTypeData?: any) {
